@@ -7,12 +7,15 @@
  */
 
 import { Router } from "express";
+import { z } from "zod";
 import type { Response, NextFunction } from "express";
 import { requireAuth, type AuthRequest } from "../middleware/auth";
 import { idempotency } from "../middleware/idempotency";
 import { AppError, ErrorCode } from "../errors";
 import { getUserBalances } from "../services/ledgerService";
 import { transfer, getTransactionHistory } from "../services/transferService";
+
+const MAX_TRANSFER_MINOR = 10_000_000n; // $100,000 per transaction ceiling
 
 export const accountsRouter = Router();
 
@@ -28,29 +31,36 @@ accountsRouter.get("/balance", requireAuth, async (req: AuthRequest, res: Respon
   }
 });
 
+const transferBodySchema = z.object({
+  toUserId: z.string().min(1),
+  amountMinor: z.union([
+    z.string().regex(/^\d+$/, "amountMinor must be a positive integer string"),
+    z.number().int().positive(),
+  ]),
+  currency: z.enum(["USD", "USDC"]).default("USD"),
+  description: z.string().max(500).optional(),
+});
+
 accountsRouter.post("/transfer", requireAuth, idempotency(), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { toUserId, amountMinor, currency = "USD", description } = req.body as {
-      toUserId?: string;
-      amountMinor?: number | string;
-      currency?: string;
-      description?: string;
-    };
+    const body = transferBodySchema.parse(req.body);
+    const amount = BigInt(body.amountMinor);
 
-    if (!toUserId) throw new AppError(ErrorCode.VALIDATION, "toUserId required");
-    if (amountMinor === undefined || amountMinor === null) throw new AppError(ErrorCode.VALIDATION, "amountMinor required");
-
-    const amount = BigInt(amountMinor);
     if (amount <= 0n) throw new AppError(ErrorCode.VALIDATION, "amountMinor must be positive");
-    if (req.userId === toUserId) throw new AppError(ErrorCode.VALIDATION, "Cannot transfer to yourself");
+    if (amount > MAX_TRANSFER_MINOR) {
+      throw new AppError(ErrorCode.VALIDATION, `Transfer exceeds maximum of ${MAX_TRANSFER_MINOR} minor units`);
+    }
+    if (req.userId === body.toUserId) throw new AppError(ErrorCode.VALIDATION, "Cannot transfer to yourself");
+
+    const { toUserId, currency, description } = body;
 
     const idempotencyKey = req.header("Idempotency-Key")!;
     const result = await transfer({
       fromUserId: req.userId!,
-      toUserId,
+      toUserId: toUserId,
       amountMinor: amount,
-      currency,
-      description,
+      currency: currency,
+      description: description,
       idempotencyKey,
     });
 

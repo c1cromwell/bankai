@@ -54,7 +54,8 @@ export interface CredentialRow {
 export async function issueCredential(
   userId: string,
   tier: number,
-  allowedOps: string[] = [...DEFAULT_ALLOWED_OPS]
+  allowedOps: string[] = [...DEFAULT_ALLOWED_OPS],
+  kycStatus: KycStatus = "PASSED"
 ): Promise<string> {
   const db = getDb();
   const key = getActiveKey();
@@ -88,7 +89,7 @@ export async function issueCredential(
       issuer: `${issuerDid}#${key.kid}`,
       credentialSubject: {
         id: subject,
-        kycStatus: "PASSED" as KycStatus,
+        kycStatus,
         tier,
         allowedOps,
       },

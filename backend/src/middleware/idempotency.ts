@@ -23,11 +23,14 @@ function hashBody(body: unknown): string {
 
 export function idempotency() {
   return async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
-    const key = req.header("Idempotency-Key");
-    if (!key) {
+    const rawKey = req.header("Idempotency-Key");
+    if (!rawKey) {
       next(new AppError(ErrorCode.VALIDATION, "Idempotency-Key header is required for this operation"));
       return;
     }
+    // Scope the stored key to (method + path + user-supplied key) so the same
+    // key value on different endpoints can never replay each other (H-4).
+    const key = `${req.method}:${req.path}:${rawKey}`;
     const userId = req.userId ?? "anonymous";
     const requestHash = hashBody(req.body);
     const db = getDb();

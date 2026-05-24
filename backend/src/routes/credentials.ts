@@ -17,6 +17,7 @@ import { requireAuth, type AuthRequest } from "../middleware/auth";
 import * as vcService from "../services/vcService";
 import * as statusListService from "../services/statusListService";
 import { getActiveKey, issuerDid } from "../services/didService";
+import { getProfile } from "../services/identityService";
 import { SignJWT } from "jose";
 import { config } from "../config";
 import { AppError, ErrorCode } from "../errors";
@@ -24,22 +25,24 @@ import { AppError, ErrorCode } from "../errors";
 export const credentialsRouter = Router();
 
 // POST /api/credentials/issue
-// Body: { tier?: number, allowedOps?: string[] }
+// Tier and allowedOps are derived from the user's actual identity profile —
+// the request body is intentionally ignored to prevent self-escalation (C-3).
 credentialsRouter.post("/issue", requireAuth, async (req: AuthRequest, res, next) => {
   try {
-    const body = z
-      .object({
-        tier: z.number().int().min(0).max(4).default(2),
-        allowedOps: z.array(z.string()).optional(),
-      })
-      .parse(req.body);
+    const profile = await getProfile(req.userId!);
+    if (!profile) throw new AppError(ErrorCode.NOT_FOUND, "Identity profile not found");
 
-    const jwt = await vcService.issueCredential(
-      req.userId!,
-      body.tier,
-      body.allowedOps ?? [...vcService.DEFAULT_ALLOWED_OPS]
-    );
+    const TIER_OPS: Record<number, string[]> = {
+      0: ["balance:read", "profile:read"],
+      1: ["balance:read", "statement:read", "profile:read"],
+      2: ["balance:read", "transfer:low", "statement:read", "profile:read"],
+      3: ["balance:read", "transfer:low", "transfer:high", "statement:read", "profile:read"],
+      4: ["balance:read", "transfer:low", "transfer:high", "statement:read", "profile:read", "lending:read"],
+    };
+    const kycStatus = profile.tier >= 2 ? "PASSED" : profile.tier >= 1 ? "PENDING" : "PENDING";
+    const allowedOps = TIER_OPS[profile.tier] ?? [];
 
+    const jwt = await vcService.issueCredential(req.userId!, profile.tier, allowedOps, kycStatus);
     res.status(201).json({ jwt });
   } catch (e) {
     next(e);

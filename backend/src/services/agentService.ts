@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getDb } from "../db";
 import { AppError, ErrorCode } from "../errors";
 import { logAudit } from "./auditService";
+import { getProfile } from "./identityService";
 
 export interface AgentRow {
   id: string;
@@ -33,13 +34,34 @@ export interface CreateAgentInput {
   expires_at?: string;
 }
 
-const DEFAULT_PERMISSIONS = ["balance:read", "statement:read"];
+const DEFAULT_PERMISSIONS = ["balance:read", "profile:read"]; // safe for all tiers (Tier 0 minimum)
 const MAX_TRANSFER_MINOR = 100_000; // $1,000.00
+
+const TIER_OPS: Record<number, string[]> = {
+  0: ["balance:read", "profile:read"],
+  1: ["balance:read", "statement:read", "profile:read"],
+  2: ["balance:read", "transfer:low", "statement:read", "profile:read"],
+  3: ["balance:read", "transfer:low", "transfer:high", "statement:read", "profile:read"],
+  4: ["balance:read", "transfer:low", "transfer:high", "statement:read", "profile:read", "lending:read"],
+};
+
+async function assertPermissionsWithinTier(userId: string, permissions: string[]): Promise<void> {
+  const profile = await getProfile(userId);
+  const allowed = new Set(TIER_OPS[profile?.tier ?? 0] ?? []);
+  const forbidden = permissions.filter((p) => !allowed.has(p));
+  if (forbidden.length > 0) {
+    throw new AppError(
+      ErrorCode.FORBIDDEN,
+      `Permissions exceed your identity tier: ${forbidden.join(", ")}`
+    );
+  }
+}
 
 export async function createAgent(userId: string, input: CreateAgentInput): Promise<AgentRow> {
   const db = getDb();
   const id = uuidv4();
   const permissions = input.permissions ?? DEFAULT_PERMISSIONS;
+  await assertPermissionsWithinTier(userId, permissions);
   const transferLimit = Math.min(input.transfer_limit_minor ?? 50_000, MAX_TRANSFER_MINOR);
 
   await db.execute(
@@ -80,7 +102,11 @@ export async function updateAgent(
 
   if (patch.name !== undefined) { fields.push("name = ?"); vals.push(patch.name); }
   if (patch.description !== undefined) { fields.push("description = ?"); vals.push(patch.description); }
-  if (patch.permissions !== undefined) { fields.push("permissions = ?"); vals.push(JSON.stringify(patch.permissions)); }
+  if (patch.permissions !== undefined) {
+    await assertPermissionsWithinTier(userId, patch.permissions);
+    fields.push("permissions = ?");
+    vals.push(JSON.stringify(patch.permissions));
+  }
   if (patch.transfer_limit_minor !== undefined) {
     fields.push("transfer_limit_minor = ?");
     vals.push(Math.min(patch.transfer_limit_minor, MAX_TRANSFER_MINOR));

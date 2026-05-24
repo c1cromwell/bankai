@@ -39,25 +39,30 @@ export async function transfer(input: TransferInput): Promise<TransferResult> {
   }
 
   const db = getDb();
-  const ledgerKey = `transfer:${input.idempotencyKey}`;
 
-  // Fast-path idempotency: if the journal already exists, return its transaction.
-  const existingJournal = await db.queryOne<{ id: string }>(
-    "SELECT id FROM ledger_journals WHERE idempotency_key = ?",
-    [ledgerKey]
-  );
-  if (existingJournal) {
-    const existingTx = await db.queryOne<{ id: string }>(
-      "SELECT id FROM transactions WHERE journal_id = ? AND user_id = ? AND type = 'transfer_out'",
-      [existingJournal.id, input.fromUserId]
-    );
-    return { journalId: existingJournal.id, transactionId: existingTx?.id ?? existingJournal.id };
-  }
+  // Verify recipient exists before touching any ledger accounts (C-2).
+  const toUser = await db.queryOne<{ id: string }>("SELECT id FROM users WHERE id = ?", [input.toUserId]);
+  if (!toUser) throw new AppError(ErrorCode.NOT_FOUND, "Recipient not found");
 
   const fromAccountId = await getOrCreateUserAccount(input.fromUserId, "user_cash", input.currency);
   const toAccountId = await getOrCreateUserAccount(input.toUserId, "user_cash", input.currency);
 
+  const ledgerKey = `transfer:${input.idempotencyKey}`;
+
   return db.transaction(async (tx) => {
+    // Idempotency check inside the transaction eliminates the TOCTOU race (C-4).
+    const existingJournal = await tx.queryOne<{ id: string }>(
+      "SELECT id FROM ledger_journals WHERE idempotency_key = ?",
+      [ledgerKey]
+    );
+    if (existingJournal) {
+      const existingTx = await tx.queryOne<{ id: string }>(
+        "SELECT id FROM transactions WHERE journal_id = ? AND user_id = ? AND type = 'transfer_out'",
+        [existingJournal.id, input.fromUserId]
+      );
+      return { journalId: existingJournal.id, transactionId: existingTx?.id ?? existingJournal.id };
+    }
+
     // Balance check inside the transaction — no TOCTOU for concurrent requests.
     const balance = await getBalance(fromAccountId, tx);
     if (balance < input.amountMinor) {

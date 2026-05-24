@@ -43,6 +43,10 @@ async function bootstrap(): Promise<void> {
   await bootstrapSystemAccounts();
 
   const app = express();
+  // Trust one hop of reverse-proxy so req.ip is the real client IP (not spoofable
+  // via X-Forwarded-For when sitting behind a load balancer). Adjust the count
+  // to match your deployment topology; 0 = no proxy trust in local dev.
+  app.set("trust proxy", config.isProd ? 1 : 0);
   app.use(httpLogger);
   app.use(cors({ origin: config.CORS_ORIGIN.split(",").map((s) => s.trim()) }));
   app.use(express.json());
@@ -68,8 +72,18 @@ async function bootstrap(): Promise<void> {
     res.json(getJWKS());
   });
 
-  // Prometheus metrics
-  app.get("/metrics", async (_req, res) => {
+  // Prometheus metrics — restricted to internal/token-authenticated callers (H-5).
+  app.get("/metrics", (req, res, next) => {
+    const token = config.METRICS_TOKEN;
+    if (token) {
+      const auth = req.header("authorization");
+      if (auth !== `Bearer ${token}`) {
+        res.status(403).json({ error: "Forbidden" });
+        return;
+      }
+    }
+    next();
+  }, async (_req, res) => {
     res.setHeader("Content-Type", registry.contentType);
     res.send(await registry.metrics());
   });

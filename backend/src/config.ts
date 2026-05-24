@@ -58,6 +58,8 @@ const schema = z.object({
   HEDERA_OPERATOR_KEY: z.string().optional(),
   HEDERA_USDC_TOKEN_ID: z.string().optional(),
 
+  METRICS_TOKEN: z.string().optional(),
+
   AUTH_MAX_FAILURES: z.coerce.number().int().positive().default(5),
   AUTH_LOCKOUT_MINUTES: z.coerce.number().int().positive().default(30),
   API_RATE_LIMIT_PER_MIN: z.coerce.number().int().positive().default(100),

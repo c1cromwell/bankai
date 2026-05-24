@@ -22,7 +22,7 @@ import * as authService from "../services/authService";
 
 export const authRouter = Router();
 
-authRouter.post("/register", async (req: Request, res: Response, next: NextFunction) => {
+authRouter.post("/register", authLimiter(), async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!config.ALLOW_PASSWORD_AUTH) {
       throw new AppError(ErrorCode.NOT_IMPLEMENTED, "Password auth not enabled");
@@ -66,7 +66,7 @@ authRouter.post("/login/password", authLimiter(), async (req: Request, res: Resp
   }
 });
 
-authRouter.post("/webauthn/register/start", requireAuth, async (req: AuthRequest, res: Response, next: NextFunction) => {
+authRouter.post("/webauthn/register/start", requireAuth, authLimiter(), async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const user = await authService.getUserById(req.userId!);
     if (!user) throw new AppError(ErrorCode.NOT_FOUND, "User not found");

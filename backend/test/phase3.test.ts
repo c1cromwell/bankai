@@ -304,17 +304,26 @@ describe("Phase 3: Internal agents", () => {
     expect(result).toBeNull();
   });
 
-  it("updateAgent patches name and permissions", async () => {
+  it("updateAgent patches name and permissions (within Tier 0 allowed ops)", async () => {
     const { updateAgent, getAgent } = await import("../src/services/agentService");
     const updated = await updateAgent(agentUserId, agentId, {
       name: "Renamed Bot",
-      permissions: ["balance:read", "statement:read"],
+      permissions: ["balance:read", "profile:read"],
     });
     expect(updated.name).toBe("Renamed Bot");
-    expect(JSON.parse(updated.permissions)).toContain("statement:read");
+    expect(JSON.parse(updated.permissions)).toContain("profile:read");
 
     const fetched = await getAgent(agentUserId, agentId);
     expect(fetched?.name).toBe("Renamed Bot");
+  });
+
+  it("updateAgent rejects permissions that exceed user tier", async () => {
+    const { updateAgent } = await import("../src/services/agentService");
+    const { AppError } = await import("../src/errors");
+    // agentUserId is Tier 0 — statement:read is Tier 1
+    await expect(
+      updateAgent(agentUserId, agentId, { permissions: ["balance:read", "statement:read"] })
+    ).rejects.toBeInstanceOf(AppError);
   });
 
   it("updateAgent caps transfer_limit_minor at MAX (100_000)", async () => {

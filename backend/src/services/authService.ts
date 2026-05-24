@@ -156,7 +156,7 @@ export async function verifyPasskeyRegistration(
     expectedChallenge: challengeRow.challenge,
     expectedOrigin: config.RP_ORIGIN,
     expectedRPID: config.RP_ID,
-    requireUserVerification: false,
+    requireUserVerification: true,
   });
 
   if (!verification.verified || !verification.registrationInfo) {
@@ -189,11 +189,10 @@ export async function generatePasskeyAuthenticationOptions(email: string) {
 
   const options = await generateAuthenticationOptions({
     rpID: config.RP_ID,
-    allowCredentials: passkeys.map((pk) => ({
-      id: pk.credential_id,
-      transports: JSON.parse(pk.transports ?? "[]"),
-    })),
-    userVerification: "preferred",
+    // Do not populate allowCredentials in the start response — it would reveal
+    // whether the email is registered (H-2 user enumeration oracle).
+    allowCredentials: [],
+    userVerification: "required",
   });
 
   const challengeId = uuidv4();
@@ -244,7 +243,7 @@ export async function verifyPasskeyAuthentication(
       counter: passkey.counter,
       transports: JSON.parse(passkey.transports ?? "[]"),
     },
-    requireUserVerification: false,
+    requireUserVerification: true,
   });
 
   if (!verification.verified) {

@@ -43,7 +43,8 @@ export function requireAuth(req: AuthRequest, _res: Response, next: NextFunction
 }
 
 export function getClientIp(req: Request): string {
-  const fwd = req.header("x-forwarded-for");
-  if (fwd) return fwd.split(",")[0]!.trim();
-  return req.socket.remoteAddress ?? "";
+  // Use Express's req.ip which respects app.set("trust proxy", N). When behind a
+  // trusted reverse proxy this gives the real client IP without allowing spoofing
+  // via a raw X-Forwarded-For header (M-1). Falls back to socket address.
+  return (req as Request & { ip?: string }).ip ?? req.socket.remoteAddress ?? "unknown";
 }
