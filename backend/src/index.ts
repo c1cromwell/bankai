@@ -29,6 +29,8 @@ import { identityRouter } from "./routes/identity";
 import { agentsRouter } from "./routes/agents";
 import { accountsRouter } from "./routes/accounts";
 import { bootstrapSystemAccounts } from "./services/ledgerService";
+import { initHedera } from "./services/hederaService";
+import { hederaRouter } from "./routes/hedera";
 
 async function bootstrap(): Promise<void> {
   installBigIntJSONSerializer();
@@ -41,6 +43,7 @@ async function bootstrap(): Promise<void> {
 
   await initTokenFactory();
   await bootstrapSystemAccounts();
+  await initHedera();
 
   const app = express();
   // Trust one hop of reverse-proxy so req.ip is the real client IP (not spoofable
@@ -99,9 +102,11 @@ async function bootstrap(): Promise<void> {
   // ---- Phase 4 routes ----
   app.use("/api/accounts", accountsRouter);
 
+  // ---- Phase 5 routes ----
+  app.use("/api/hedera", hederaRouter);
+
   // ---- Feature routes mounted in later phases ----
   // app.use("/api/ledger", ledgerRouter);              // Phase 4 (direct ledger admin)
-  // app.use("/api/hedera", hederaRouter);              // Phase 5
   // app.use("/api/smartchat", requireTier(2), smartchatRouter); // Phase 6
   // app.use("/mcp", mcpRouter);                        // Phase 7
   // ... etc.

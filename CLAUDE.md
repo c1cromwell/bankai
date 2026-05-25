@@ -26,7 +26,7 @@ The build proceeds **phase by phase**. The full plan is in `docs/REBUILD-PLAN-v2
 - [x] **Phase 2** — DID & Verifiable Credentials: persisted RS256 keypair, key rotation, W3C VC JWT issuance, BitstringStatusList revocation, credentials routes
 - [x] **Phase 3** — Auth (WebAuthn passkeys), tiered identity ladder, internal agents
 - [x] **Phase 4** — Double-entry ledger (the single source of truth for balances)
-- [ ] **Phase 5** — Hedera integration (on-chain USDC, paymaster, on-device signing)
+- [x] **Phase 5** — Hedera integration (on-chain USDC, paymaster, ledger mirroring)
 - [ ] **Phase 6** — SmartChat (RFC 8693 token exchange)
 - [ ] **Phase 7** — MCP server & external agents (VP signature verification — security-critical)
 - [ ] **Phase 8** — React frontend

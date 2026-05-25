@@ -143,17 +143,21 @@ export async function getOrCreateUserAccount(
       [accountId, userId, kind, currency, new Date().toISOString()]
     );
 
-    // Seed opening balance from the legacy accounts table.
+    // Seed opening balance from the legacy accounts table (USD only).
+    // Non-USD currencies (USDC, etc.) have no legacy balance column; their
+    // opening ledger balance is always 0 until funded by a deposit journal.
     const legacyRow =
-      kind === "user_cash"
-        ? await tx.queryOne<{ balance_minor: string | number }>(
-            "SELECT balance_minor FROM accounts WHERE user_id = ?",
-            [userId]
-          )
-        : await tx.queryOne<{ balance_minor: string | number }>(
-            "SELECT balance_minor FROM savings_accounts WHERE user_id = ?",
-            [userId]
-          );
+      currency !== "USD"
+        ? null
+        : kind === "user_cash"
+          ? await tx.queryOne<{ balance_minor: string | number }>(
+              "SELECT balance_minor FROM accounts WHERE user_id = ?",
+              [userId]
+            )
+          : await tx.queryOne<{ balance_minor: string | number }>(
+              "SELECT balance_minor FROM savings_accounts WHERE user_id = ?",
+              [userId]
+            );
 
     const openingBalance = legacyRow ? BigInt(legacyRow.balance_minor) : 0n;
 
@@ -197,6 +201,7 @@ export async function bootstrapSystemAccounts(): Promise<void> {
     { kind: "bank_settlement", currency: "USDC" },
     { kind: "fee", currency: "USD" },
     { kind: "external_clearing", currency: "USD" },
+    { kind: "external_clearing", currency: "USDC" },
   ];
 
   for (const { kind, currency } of required) {
