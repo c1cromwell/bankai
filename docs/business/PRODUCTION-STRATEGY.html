@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Production Deployment &amp; Technology Strategy — BankAI</title>
+<style>/* BankAI strategy-doc print theme — "Quiet Premium": monochrome surfaces, a
+   single jade accent, type-led hierarchy. Tuned for Letter PDF + standalone HTML. */
+
+:root {
+  --ink: #14171a;
+  --ink-2: #3a4147;
+  --ink-3: #6b747c;
+  --line: #e3e6e8;
+  --line-2: #f0f2f3;
+  --accent: #1f7a5a;      /* jade */
+  --accent-weak: #e9f4ef;
+  --accent-ink: #145239;
+  --warn: #9a6b00;
+  --warn-weak: #fbf3e0;
+  --surface: #f7f8f8;
+  --max: 760px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  font-size: 11.2pt;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+/* ---- Cover ---------------------------------------------------------------- */
+.cover {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 64px;
+  page-break-after: always;
+  border-left: 6px solid var(--accent);
+}
+.cover .mark {
+  display: inline-grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 12px;
+  background: var(--accent); color: #fff;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-weight: 800; font-size: 24px; margin-bottom: 30px;
+}
+.cover h1 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 33pt; line-height: 1.08; letter-spacing: -0.02em;
+  margin: 0 0 14px; color: var(--ink); border: 0; padding: 0;
+}
+.cover .sub { font-size: 14pt; color: var(--ink-2); margin: 0 0 34px; max-width: 30em; }
+.cover .meta { font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 9.5pt; color: var(--ink-3); letter-spacing: 0.02em; text-transform: uppercase; }
+.cover .meta b { color: var(--ink); font-weight: 600; }
+
+.disclaimer {
+  margin-top: 30px; padding: 14px 16px;
+  background: var(--warn-weak); border: 1px solid #efe2bf; border-radius: 8px;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 8.6pt; line-height: 1.5; color: #6c4f10; max-width: 40em;
+}
+
+/* ---- Headings ------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
+}
+h1 { font-size: 21pt; margin: 0 0 6px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h2 {
+  font-size: 15.5pt; margin: 30px 0 10px; padding-top: 6px;
+  border-top: 1px solid var(--line); padding-top: 16px;
+  page-break-after: avoid;
+}
+h3 { font-size: 12.5pt; margin: 20px 0 6px; color: var(--accent-ink); page-break-after: avoid; }
+h4 { font-size: 11pt; margin: 16px 0 4px; color: var(--ink-2); }
+
+p { margin: 0 0 11px; }
+strong { color: var(--ink); font-weight: 700; }
+em { color: var(--ink-2); }
+a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-weak); }
+
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin: 3px 0; }
+li::marker { color: var(--accent); }
+
+hr { border: 0; border-top: 1px solid var(--line); margin: 26px 0; }
+
+blockquote {
+  margin: 12px 0; padding: 10px 16px;
+  background: var(--accent-weak); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+  color: var(--accent-ink);
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10pt;
+}
+blockquote p { margin: 0; }
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9.4pt; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 1px 5px; color: var(--accent-ink);
+}
+pre {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; overflow-x: auto; page-break-inside: avoid;
+}
+pre code { background: none; border: 0; padding: 0; color: var(--ink-2); font-size: 8.8pt; line-height: 1.5; }
+
+/* ---- Tables --------------------------------------------------------------- */
+table {
+  width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 9.6pt;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  page-break-inside: avoid;
+}
+thead th {
+  text-align: left; background: var(--ink); color: #fff; font-weight: 600;
+  padding: 7px 10px; font-size: 8.8pt; letter-spacing: 0.01em;
+}
+tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+tbody tr:nth-child(even) td { background: var(--line-2); }
+
+/* ---- TOC ------------------------------------------------------------------ */
+.toc { page-break-after: always; padding-top: 8px; }
+.toc h2 { border: 0; padding: 0; margin: 0 0 12px; }
+.toc ol { list-style: none; padding: 0; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 5px 0; font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10.5pt; }
+.toc li.lvl-3 { padding-left: 24px; font-size: 9.6pt; color: var(--ink-2); }
+.toc a { border: 0; color: var(--ink); }
+.toc li.lvl-2 a::before { content: counter(toc) ".  "; color: var(--accent); font-weight: 700; }
+
+/* ---- Section number badges via h2 ---------------------------------------- */
+.content { counter-reset: h2; }
+.content h2 { counter-increment: h2; }
+.content h2::before {
+  content: counter(h2); display: inline-grid; place-items: center;
+  width: 24px; height: 24px; margin-right: 10px; border-radius: 6px;
+  background: var(--accent-weak); color: var(--accent-ink);
+  font-size: 11pt; font-weight: 700; vertical-align: middle;
+}
+
+@page { margin: 18mm 0; }
+@media print {
+  .wrap { padding: 0 18mm; }
+  h2, h3, h4 { page-break-after: avoid; }
+  table, pre, blockquote, figure { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<section class="cover">
+  <div class="mark">B</div>
+  <h1>Production Deployment &amp; Technology Strategy</h1>
+  <p class="sub">Ship lean, run it as an AI-operated bank, harden into a fraud-resistant, compliance-ready platform — grounded in the existing BankAI architecture.</p>
+  <div class="meta">BankAI &nbsp;·&nbsp; Confidential — Founder &nbsp;·&nbsp; <b>June 6, 2026</b></div>
+  <div class="disclaimer">Strategic guidance only — not legal, financial, tax, or investment advice. Securities, money-transmission, and corporate-formation decisions must be reviewed by licensed counsel and a CPA before you act. Sections flagged “⚖ see counsel” are where this matters most.</div>
+</section>
+<div class="wrap">
+  <nav class="toc"><h2>Contents</h2><ol><li class="lvl-2"><a href="#1-cloud-recommendation-cost-envelope">1. Cloud — recommendation &amp; cost envelope</a></li><li class="lvl-3"><a href="#stage-0-lean-launch-recommended-now">Stage 0 — lean launch (recommended now)</a></li><li class="lvl-3"><a href="#stage-1-consolidate-on-one-hyperscaler-when-trafficcompliance-demands">Stage 1 — consolidate on one hyperscaler (when traffic/compliance demands)</a></li><li class="lvl-3"><a href="#rough-cost-envelope-by-scale">Rough cost envelope by scale</a></li><li class="lvl-2"><a href="#2-reference-production-architecture">2. Reference production architecture</a></li><li class="lvl-2"><a href="#3-the-automation-fabric-agents-mcp-skills-to-run-the-bank">3. The automation fabric — agents, MCP &amp; skills to run the bank</a></li><li class="lvl-3"><a href="#two-planes">Two planes</a></li><li class="lvl-3"><a href="#internal-operating-agent-catalog">Internal operating-agent catalog</a></li><li class="lvl-3"><a href="#skills-claude-agent-sdk-mcp-tools">Skills (Claude Agent SDK / MCP tools)</a></li><li class="lvl-2"><a href="#4-identity-vault-a-neo4j-graph-of-users-associations">4. Identity Vault — a Neo4j graph of users &amp; associations</a></li><li class="lvl-2"><a href="#5-fraud-detection-best-of-breed-built-on-your-orchestration-engine">5. Fraud detection — best-of-breed, built on your orchestration engine</a></li><li class="lvl-2"><a href="#6-constellation-network-digital-evidence-a-later-phase-evaluation">6. Constellation Network &quot;Digital Evidence&quot; — a later-phase evaluation</a></li><li class="lvl-2"><a href="#7-mobile-launch-ios-first">7. Mobile — launch iOS first</a></li><li class="lvl-2"><a href="#8-marketing-go-to-market">8. Marketing &amp; go-to-market</a></li><li class="lvl-2"><a href="#9-tech-gaps-to-close-additive-checklist">9. Tech gaps to close (additive checklist)</a></li><li class="lvl-2"><a href="#10-phased-production-roadmap-aligned-to-the-compliance-ramp">10. Phased production roadmap (aligned to the compliance ramp)</a></li></ol></nav>
+  <main class="content">
+<h1 id="production-deployment-technology-strategy">Production Deployment &amp; Technology Strategy</h1>
+<p>How to ship BankAI to real users cheaply, run it as an AI-operated bank, and harden it into a
+fraud-resistant, compliance-ready platform — grounded in what&#39;s already built in the repo (Hedera
+settlement, the double-entry ledger, DID/VC + OID4VP + MCP, the risk-adaptive onboarding orchestrator,
+and the Phase 15 internal-agent-ops design).</p>
+<blockquote>
+<p><strong>How to read this.</strong> Recommendations are decisive and tagged <strong>STAGE 0</strong> (lean launch),
+<strong>STAGE 1</strong> (scale), or <strong>STAGE 2</strong> (licensed) so the tech rollout lines up with the three-phase
+compliance ramp in the <em>Corporate Structure</em> document. Costs are 2025–2026 planning estimates.</p>
+</blockquote>
+<hr>
+<h2 id="1-cloud-recommendation-cost-envelope">1. Cloud — recommendation &amp; cost envelope</h2>
+<p><strong>Verdict:</strong> don&#39;t put a hyperscaler bill on a pre-revenue product. <strong>Start on a lean managed PaaS,
+designed so the Stage-1 move to a single hyperscaler is a deploy-target change, not a rewrite.</strong></p>
+<h3 id="stage-0-lean-launch-recommended-now">Stage 0 — lean launch (recommended now)</h3>
+<p>The app is a stateless Node/TS API + Postgres + a few managed data services. Run it for tens of
+dollars a month:</p>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Pick</th>
+<th>Why / cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API (Node/Express/TS)</td>
+<td><strong>Render</strong> or <strong>Fly.io</strong></td>
+<td>Git-push deploys, autoscale-to-cheap, private networking. ~$7–25/mo</td>
+</tr>
+<tr>
+<td>Postgres (prod <code>DATABASE_URL</code>)</td>
+<td><strong>Neon</strong> (serverless) or <strong>Supabase</strong></td>
+<td>Branching, scale-to-zero, backups. Free→$20/mo. The code already abstracts SQLite↔Postgres</td>
+</tr>
+<tr>
+<td>Graph (Identity Vault)</td>
+<td><strong>Neo4j Aura</strong></td>
+<td>Managed, free tier → serverless. $0→$65/mo</td>
+</tr>
+<tr>
+<td>Cache / queue</td>
+<td><strong>Upstash Redis</strong></td>
+<td>Per-request pricing, ~$0 at low volume</td>
+</tr>
+<tr>
+<td>Secrets / KMS</td>
+<td><strong>Infisical</strong> or the PaaS secret store → cloud KMS at Stage 1</td>
+<td>Closes the <code>private_key_hex</code> gap (see §2)</td>
+</tr>
+<tr>
+<td>Object storage</td>
+<td><strong>Cloudflare R2</strong></td>
+<td>No egress fees</td>
+</tr>
+<tr>
+<td>CDN / WAF / DNS</td>
+<td><strong>Cloudflare</strong></td>
+<td>Free WAF + DDoS in front of everything</td>
+</tr>
+</tbody></table>
+<p><strong>Stage-0 monthly burn: ~$0–150</strong> depending on traffic. That&#39;s the whole point — stay near zero
+until usage justifies more.</p>
+<h3 id="stage-1-consolidate-on-one-hyperscaler-when-trafficcompliance-demands">Stage 1 — consolidate on one hyperscaler (when traffic/compliance demands)</h3>
+<p>When you need VPC isolation, SOC 2 scope, managed Temporal/Conductor, and a data/ML platform, pick
+<strong>one</strong> cloud and commit:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>AWS</strong> <em>(recommended default)</em></th>
+<th><strong>GCP</strong> <em>(pick if ML/graph dominates)</em></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Compliance ecosystem</td>
+<td>Broadest; most BaaS banks, custodians, KYC vendors run here</td>
+<td>Strong, slightly thinner fintech-partner set</td>
+</tr>
+<tr>
+<td>Managed Postgres</td>
+<td>RDS / Aurora</td>
+<td>Cloud SQL / AlloyDB (excellent)</td>
+</tr>
+<tr>
+<td>Containers/orchestration</td>
+<td>EKS / ECS Fargate (host Temporal + Conductor)</td>
+<td>GKE Autopilot (cheapest managed k8s)</td>
+</tr>
+<tr>
+<td>ML / fraud</td>
+<td>SageMaker</td>
+<td><strong>Vertex AI</strong> (best-in-class, cheaper to start)</td>
+</tr>
+<tr>
+<td>KMS / HSM</td>
+<td>KMS + CloudHSM (for the Hedera paymaster)</td>
+<td>Cloud KMS + HSM</td>
+</tr>
+<tr>
+<td>Cost at scale</td>
+<td>Closeable with Savings Plans</td>
+<td>Often 10–25% cheaper for data+ML</td>
+</tr>
+</tbody></table>
+<p><strong>Recommendation:</strong> default to <strong>AWS at Stage 1</strong> — a money business benefits most from AWS&#39;s
+compliance breadth and the fact that your future partner banks/custodians (Corporate doc, Phase B)
+overwhelmingly live there, easing private-link integrations and vendor SOC 2 alignment. Choose <strong>GCP</strong>
+only if the fraud-ML and Identity-Vault graph workloads become the cost center — Vertex AI + AlloyDB
+are a genuinely better value for that shape. <strong>Do not split across both.</strong></p>
+<h3 id="rough-cost-envelope-by-scale">Rough cost envelope by scale</h3>
+<table>
+<thead>
+<tr>
+<th>Users</th>
+<th>Stage</th>
+<th>Monthly infra (ballpark)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0–1k</td>
+<td>Stage 0 (PaaS)</td>
+<td><strong>$50–250</strong></td>
+</tr>
+<tr>
+<td>~1k–10k</td>
+<td>Stage 0→1</td>
+<td><strong>$300–1,500</strong></td>
+</tr>
+<tr>
+<td>~100k</td>
+<td>Stage 1 (AWS/GCP, HA)</td>
+<td><strong>$4k–12k</strong> + data/ML + SOC 2 tooling</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="2-reference-production-architecture">2. Reference production architecture</h2>
+<p>The repo is already production-shaped (env-driven config that fails fast on insecure prod settings,
+Postgres-or-SQLite via <code>DATABASE_URL</code>, append-only ledger/audit triggers, RS256 token factory,
+pino + prom-client). Stage-1 wraps it in the standard hardening:</p>
+<ul>
+<li><strong>Network:</strong> single VPC, private subnets for the DB/graph/Temporal; only the API + Cloudflare are
+public. mTLS / private link to partner-bank and custodian APIs at Phase B.</li>
+<li><strong>Secrets &amp; keys — close the known gap. ⚠ priority.</strong> The repo documents that Phase 5 stores
+<code>private_key_hex</code> server-side (Hedera paymaster + any server-held keys). Move these to <strong>cloud
+KMS/HSM</strong>: envelope-encrypt at rest, never log (pino redaction already strips secrets/tokens/VC/VP),
+and for the Hedera <strong>treasury/paymaster</strong> use an HSM-backed key and a <strong>multisig</strong> so no single
+server compromise drains funds. User keys remain on-device (Secure Enclave) — never regress that.</li>
+<li><strong>CI/CD:</strong> GitHub Actions → typecheck + the full vitest suite (131 pass / 3 todo) + the <strong>Playwright
+web E2E</strong> (21 tests) as a required gate → deploy. Migrations run forward-only (already idempotent).</li>
+<li><strong>Observability (already emitting):</strong> scrape the five prom-client counters (<code>ledger_post_total</code>,
+<code>vp_verify_total{result}</code>, <code>mcp_call_total{tool,result}</code>, <code>hedera_tx_total{result}</code>,
+<code>http_request_duration</code>) into <strong>Grafana Cloud</strong> (free tier) with alerts; ship pino logs to a
+retained store; add request-id tracing (already threaded).</li>
+<li><strong>Ledger integrity:</strong> the append-only <code>ledger_entries</code>/<code>ledger_journals</code>/<code>audit_logs</code>/
+<code>mcp_audit_logs</code> triggers are the spine — keep them; add <strong>point-in-time-recovery</strong> backups and a
+periodic <strong>balanced-journal invariant</strong> job (the invariant tests already encode the rule).</li>
+<li><strong>DR/backups:</strong> automated PITR on Postgres + Neo4j, cross-region snapshot copies at Stage 1,
+a documented restore runbook, and quarterly restore drills.</li>
+<li><strong>Hedera mainnet cutover:</strong> testnet → mainnet with the paymaster HSM/multisig above, plus the
+reconciliation job in §9 (the deferred on-chain↔ledger invariant <code>n</code>).</li>
+</ul>
+<hr>
+<h2 id="3-the-automation-fabric-agents-mcp-skills-to-run-the-bank">3. The automation fabric — agents, MCP &amp; skills to run the bank</h2>
+<p>This is the differentiator: <strong>an AI-operated bank</strong> where, per the Phase 15 invariant already
+designed in <code>docs/PHASE-15-INTERNAL-AGENT-OPS.md</code>, <strong>agents decide, deterministic code executes, and
+humans gate</strong> anything irreversible. The runtime target is already locked: <strong>Temporal</strong> for
+money-critical workflows, <strong>Conductor (OSS)</strong> for agent orchestration. Build the catalog on the
+existing seam (<code>signalService</code>, <code>riskOrchestratorService</code>, <code>orchestratorModel</code>, the <code>agent_runs</code>
+table, <code>tokenFactory</code>, <code>rbac</code>).</p>
+<h3 id="two-planes">Two planes</h3>
+<ul>
+<li><strong>External plane (built — Phase 7):</strong> the <strong>MCP server</strong> lets <em>third-party</em> AI agents operate on a
+user&#39;s behalf under user-granted, VP-verified, scope-intersected, 90-second tokens. Already
+verified end-to-end (scoped-token mint, <code>SCOPE_DENIED</code>, balanced-journal transfer,
+<code>REPLAY_DETECTED</code>). This is a moat — keep investing here.</li>
+<li><strong>Internal plane (Phase 15 design → build):</strong> operating agents that run the bank. Per the security
+model, internal skills are <strong>read / recommend / draft only</strong> — no agent gets direct money, state,
+regulator, or infra tools; a deterministic runner executes and a human gates.</li>
+</ul>
+<h3 id="internal-operating-agent-catalog">Internal operating-agent catalog</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Reads</th>
+<th>Produces (draft/recommend)</th>
+<th>Human gate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Onboarding risk</strong> <em>(exists)</em></td>
+<td>Signals, device/email/IP/behavior</td>
+<td>Tier + risk decision rationale</td>
+<td>Auto-approve low risk; human on review-required</td>
+</tr>
+<tr>
+<td><strong>Compliance triage</strong></td>
+<td>Audit logs, sanctions hits, txn patterns</td>
+<td>SAR/CTR draft, case summary</td>
+<td>Compliance officer files</td>
+</tr>
+<tr>
+<td><strong>Dispute / chargeback</strong></td>
+<td>Ledger, MCP audit, comms</td>
+<td>Resolution recommendation + draft response</td>
+<td>Ops approves payout/reversal</td>
+</tr>
+<tr>
+<td><strong>Treasury ops</strong></td>
+<td>Balances, on-chain + ledger</td>
+<td>Rebalance / paymaster top-up proposal</td>
+<td>Human signs the multisig</td>
+</tr>
+<tr>
+<td><strong>Reconciliation</strong></td>
+<td>On-chain state vs ledger</td>
+<td>Break report + proposed adjusting entry</td>
+<td>Human approves any journal</td>
+</tr>
+<tr>
+<td><strong>Support copilot</strong></td>
+<td>User state, docs, history</td>
+<td>Drafted reply, next-best-action</td>
+<td>Agent/human sends</td>
+</tr>
+</tbody></table>
+<h3 id="skills-claude-agent-sdk-mcp-tools">Skills (Claude Agent SDK / MCP tools)</h3>
+<p>Mirror the repo&#39;s own dogfooding pattern — it already ships operational skills (<code>e2e-validator</code>,
+<code>bankai-mcp-test-harness</code>) that drive the system as a real client. Extend that idea to <strong>ops skills</strong>
+(reconciliation report, compliance-case summarizer, incident triage, release validator) so routine
+operations and CI are agent-automatable, while every state change still flows through the
+deterministic runner with its audit trail.</p>
+<p><strong>Build sequence:</strong> Conductor + the runner contract → onboarding-risk (already real) → reconciliation
+&amp; compliance-triage (highest ops leverage) → treasury &amp; dispute → support copilot.</p>
+<hr>
+<h2 id="4-identity-vault-a-neo4j-graph-of-users-associations">4. Identity Vault — a Neo4j graph of users &amp; associations</h2>
+<p>A property graph is the right model for <em>relationships</em>, which is exactly where fraud and identity
+truth live. It complements (does not replace) the Postgres ledger.</p>
+<p><strong>Core schema (nodes → relationships):</strong></p>
+<pre><code>(:User)-[:OWNS]-&gt;(:Device)            (:User)-[:USED]-&gt;(:IP)
+(:User)-[:HOLDS]-&gt;(:Credential{VC})   (:User)-[:FUNDS_WITH]-&gt;(:Instrument)
+(:User)-[:TRANSACTED_WITH]-&gt;(:User)   (:User)-[:NAMES]-&gt;(:Beneficiary)
+(:User)-[:SHARES]-&gt;(:Attribute)       (:Wallet)-[:BOUND_TO]-&gt;(:DidKey)
+</code></pre>
+<p><strong>Fed from what already exists</strong> — no new capture layer:</p>
+<ul>
+<li>onboarding <strong>signals</strong> (device fingerprint, email/IP/behavior scores) → device/IP/attribute edges;</li>
+<li>the <strong>ledger</strong> → <code>TRANSACTED_WITH</code> edges with weights;</li>
+<li><strong>MCP audit logs</strong> + VP/holder-binding → wallet↔DID↔credential edges;</li>
+<li>KYC/VC issuance → credential and shared-attribute edges.</li>
+</ul>
+<p><strong>What it unlocks:</strong> synthetic-identity rings (many users → one device/instrument), shared-device and
+shared-beneficiary fraud, collusion clusters, and &quot;who is this account actually connected to&quot; for
+compliance. Graph features (community, centrality, shortest-path-to-known-bad) feed the fraud model in §5.</p>
+<p><strong>Hosting &amp; guardrails:</strong> <strong>Neo4j Aura</strong> (managed) at Stage 0/1 — don&#39;t self-host a database you&#39;ll
+stake fraud decisions on. Treat it as <strong>PII</strong>: field-level encryption for identifiers, strict access
+control, a documented <strong>retention/erasure</strong> policy (GDPR/CCPA right-to-delete must cascade), and
+<strong>no raw PII in graph properties</strong> you don&#39;t need — store hashes/refs where possible.</p>
+<hr>
+<h2 id="5-fraud-detection-best-of-breed-built-on-your-orchestration-engine">5. Fraud detection — best-of-breed, built on your orchestration engine</h2>
+<p>The brief is right: <strong>capture every good transaction and signal across the entire user lifecycle</strong>,
+and learn normal so anomalies stand out. Build it <em>on top of the orchestration engine already in the
+product</em>, not as a bolt-on.</p>
+<p><strong>Pipeline:</strong></p>
+<ol>
+<li><strong>Capture (lifecycle-wide):</strong> every onboarding signal, login, device, ledger journal, MCP call,
+marketplace action → an event stream. The append-only audit/ledger tables are the durable spine;
+add a streaming tap (Redis/Kafka-lite) for real-time.</li>
+<li><strong>Feature store:</strong> rolling user/device/graph features (velocity, novelty, peer-comparison, the
+Neo4j graph features from §4). Online (low-latency) + offline (training) views.</li>
+<li><strong>Scoring (layered):</strong><ul>
+<li><strong>Rules</strong> (deterministic, explainable) — velocity caps, sanctions, impossible-travel, the
+existing &gt;$500 MFA gate and per-agent rate limits;</li>
+<li><strong>ML anomaly</strong> — unsupervised baseline (isolation forest / autoencoder) for &quot;this is weird,&quot;
+plus a supervised model as labels accumulate;</li>
+<li><strong>Graph signals</strong> — proximity to known-bad clusters.</li>
+</ul>
+</li>
+<li><strong>Inline decision:</strong> score <strong>synchronously</strong> on the money path (the ledger/MCP transfer flow
+already mints short-lived tokens and posts balanced journals — the natural choke point). Allow /
+step-up (MFA) / hold / block, each an auditable event.</li>
+<li><strong>Feedback loop:</strong> confirmed fraud/good labels flow back into the Identity Vault and retrain — the
+lifecycle-learning the brief describes.</li>
+</ol>
+<p><strong>Build vs buy:</strong> <strong>build the orchestration + rules + graph layer in-house</strong> (it&#39;s your moat and it
+sits on infra you own), and <strong>buy the model/monitoring layer</strong> if speed matters — <strong>Unit21</strong> or
+<strong>Hawk AI</strong> (AML/txn monitoring with case management) or <strong>Sift</strong> (consumer fraud). Recommendation:
+in-house rules+graph from day one; add a vendor for AML case management at Phase B when the regulator
+expects it; keep the ML model in <strong>Vertex AI/SageMaker</strong> so you own the IP.</p>
+<hr>
+<h2 id="6-constellation-network-digital-evidence-a-later-phase-evaluation">6. Constellation Network &quot;Digital Evidence&quot; — a later-phase evaluation</h2>
+<p><strong>What it is:</strong> Constellation&#39;s Hypergraph / Digital Evidence lets you notarize data and produce
+tamper-evident, independently-verifiable attestations of records and their lineage.</p>
+<p><strong>Where it could fit:</strong> as an <em>external anchor</em> over your already-append-only <code>audit_logs</code> /
+<code>mcp_audit_logs</code> / ledger — periodically committing cryptographic proofs so a regulator or
+counterparty can verify the audit trail wasn&#39;t altered, without trusting your database. It pairs
+naturally with the VC/DID evidence the product already issues.</p>
+<table>
+<thead>
+<tr>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Independent, tamper-evident compliance attestations</td>
+<td>Adds a vendor + chain dependency</td>
+</tr>
+<tr>
+<td>Strengthens regulator/auditor trust story</td>
+<td>Your DB triggers already give strong internal immutability</td>
+</tr>
+<tr>
+<td>Aligns with the DID/VC, on-chain ethos</td>
+<td>Unproven ROI until a regulator/partner asks for it</td>
+</tr>
+</tbody></table>
+<p><strong>Recommendation: defer to Phase B/C (post-launch).</strong> Internal append-only triggers + KMS + good
+backups are sufficient for launch. Revisit Constellation when a <strong>partner bank, auditor, or
+regulator</strong> specifically wants third-party-verifiable evidence — then it&#39;s a differentiator, not
+overhead. Track it; don&#39;t build it into v1.</p>
+<hr>
+<h2 id="7-mobile-launch-ios-first">7. Mobile — launch iOS first</h2>
+<p><strong>Recommendation: iOS first, Android fast-follow.</strong></p>
+<ul>
+<li>The repo&#39;s <strong>SwiftUI wallet (Phase 10)</strong> is already the furthest-along native surface
+(Secure-Enclave P-256 signing key, VC-in-Keychain, <code>did:key</code> encoder matching the backend,
+OID4VP/OID4VCI deep links) — less new work to ship.</li>
+<li><strong>Secure Enclave</strong> is the cleanest expression of the locked non-custodial key model and the
+passkey-first story; Android Keystore is equivalent but you&#39;ve already invested in the iOS path.</li>
+<li>US-first demographics + higher iOS engagement/ARPU + App Store trust suit a finance app&#39;s first
+cohort.</li>
+<li>App Store review for crypto/finance is strict but predictable; lead with the non-custodial,
+no-customer-funds (Phase A) framing.</li>
+</ul>
+<p><strong>Then Android:</strong> the architecture is explicitly &quot;native build, keys in Secure Enclave / <strong>Android
+Keystore</strong>&quot; — the second platform is a known, planned port, not a redesign. (Note the documented
+gap: the iOS source is reviewed-but-unverified — it needs an Xcode build/sign/submit pass before any
+store submission.)</p>
+<hr>
+<h2 id="8-marketing-go-to-market">8. Marketing &amp; go-to-market</h2>
+<p><strong>Positioning (and the legal guardrail):</strong> you are an <strong>AI-operated, tokenization-first money app</strong> —
+<strong>not</strong> &quot;a bank.&quot; Honor the Corporate-doc naming rule: never imply you hold deposits or are chartered.
+Lead with the wedge that&#39;s actually novel: <strong>AI agents that act on your money under cryptographic,
+user-granted permission</strong>, and <strong>tokenized real-world assets</strong> you can hold in a non-custodial wallet.</p>
+<ul>
+<li><strong>Wedge:</strong> the agent + MCP experience (let your AI assistant check balances, move money, and trade
+under scoped, revocable, audited permission) is a genuinely differentiated story in 2026.</li>
+<li><strong>Early segment:</strong> crypto-comfortable, AI-forward early adopters and RWA-curious investors —
+not the mass market. Invite-only <strong>waitlist</strong> with referral mechanics to manufacture scarcity and
+control onboarding risk.</li>
+<li><strong>Compliance-safe messaging:</strong> &quot;tokenized assets,&quot; &quot;non-custodial wallet,&quot; &quot;agentic finance&quot; — never
+&quot;deposits,&quot; &quot;FDIC,&quot; &quot;bank account,&quot; or investment-return promises. Every investment surface carries
+the &quot;not advice / not an offering&quot; disclaimer the product already models.</li>
+<li><strong>Content &amp; community:</strong> build in public on the agent/MCP + DID/VC tech; developer-credible
+content earns the early crypto/AI crowd. Position the MCP server as a platform third parties can
+build on.</li>
+<li><strong>Narrative:</strong> &quot;the first bank run by AI agents — that you actually control.&quot; Differentiation, not
+feature parity.</li>
+</ul>
+<hr>
+<h2 id="9-tech-gaps-to-close-additive-checklist">9. Tech gaps to close (additive checklist)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Gap</th>
+<th>Priority</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>KMS / HSM for server-held keys</strong></td>
+<td>⚠ Stage 1</td>
+<td>The documented <code>private_key_hex</code> gap; treasury multisig</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>On-chain ↔ ledger reconciliation</strong></td>
+<td>Stage 1</td>
+<td>The deferred invariant <code>n</code>; powers the reconciliation agent (§3)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Data warehouse + analytics</strong></td>
+<td>Stage 1</td>
+<td>BigQuery/Redshift; product + risk analytics</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Feature store</strong></td>
+<td>Stage 1</td>
+<td>Underpins §5 fraud ML (Feast or managed)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Model registry + monitoring</strong></td>
+<td>Stage 1</td>
+<td>Versioning, drift, explainability for fraud models</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Incident response + on-call</strong></td>
+<td>Stage 0→1</td>
+<td>Runbooks, paging, status comms</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>SOC 2 readiness automation</strong></td>
+<td>Phase B</td>
+<td>Vanta/Drata; partners will require SOC 2 Type II</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Public status page</strong></td>
+<td>Stage 0</td>
+<td>Trust signal; ~free</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>WAF / DDoS / bot defense</strong></td>
+<td>Stage 0</td>
+<td>Cloudflare in front (already in the stack)</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Secrets rotation + key ceremony</strong></td>
+<td>Stage 1</td>
+<td>Especially the Hedera treasury keys</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Dedicated staging env</strong></td>
+<td>Stage 0</td>
+<td>Mirror of prod; the E2E suite already targets it</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>Rate-limit hardening at the edge</strong></td>
+<td>Stage 0</td>
+<td>The app limiter exists; add edge limits too</td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>Backup restore drills</strong></td>
+<td>Stage 1</td>
+<td>Test DR quarterly, not just configure it</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="10-phased-production-roadmap-aligned-to-the-compliance-ramp">10. Phased production roadmap (aligned to the compliance ramp)</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Stage 0 — Lean launch</strong></th>
+<th><strong>Stage 1 — Scale</strong></th>
+<th><strong>Stage 2 — Licensed</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Compliance phase (Corp doc)</td>
+<td>A (non-custodial)</td>
+<td>B (partnered, MSB)</td>
+<td>C (own licenses)</td>
+</tr>
+<tr>
+<td>Cloud</td>
+<td>Render/Fly + Neon + Aura</td>
+<td>AWS (or GCP) single VPC</td>
+<td>Multi-AZ HA, audited</td>
+</tr>
+<tr>
+<td>Keys</td>
+<td>On-device + Infisical</td>
+<td><strong>KMS/HSM + treasury multisig</strong></td>
+<td>HSM key ceremonies</td>
+</tr>
+<tr>
+<td>Agents</td>
+<td>Onboarding-risk live; MCP external</td>
+<td>+ reconciliation, compliance-triage, treasury</td>
+<td>Full AI-ops with regulator-grade audit</td>
+</tr>
+<tr>
+<td>Fraud</td>
+<td>Rules + graph (in-house)</td>
+<td>+ ML anomaly + AML vendor</td>
+<td>Tuned models + case management</td>
+</tr>
+<tr>
+<td>Identity Vault</td>
+<td>Neo4j Aura, core schema</td>
+<td>Graph features into fraud model</td>
+<td>Regulator-facing link analysis</td>
+</tr>
+<tr>
+<td>Mobile</td>
+<td><strong>iOS</strong> (verify Xcode build)</td>
+<td>+ Android</td>
+<td>Both, hardened</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td>Append-only triggers + KMS</td>
+<td>Evaluate Constellation</td>
+<td>Constellation if a partner needs it</td>
+</tr>
+<tr>
+<td>Compliance tooling</td>
+<td>ToS/AML policy + OFAC</td>
+<td>SOC 2 (Vanta/Drata)</td>
+<td>Exams, MTL/transfer-agent</td>
+</tr>
+</tbody></table>
+<p><strong>The throughline:</strong> every stage spends only what the prior stage&#39;s traction earns. You launch on
+~$100/mo of PaaS as a non-custodial software product; you bring KMS, ML fraud, a second mobile
+platform, and SOC 2 only when partners and scale require them; and you reserve the expensive
+hyperscaler + licensing posture for when revenue justifies it — the same lean-now / hardened-later
+logic that drives the corporate structure.</p>
+<hr>
+<p><em>Companion document: Corporate Structure &amp; Compliance Strategy (the lean Wyoming-LLC → Delaware-C-corp
+path and the Phase A/B/C compliance ramp this roadmap aligns to).</em></p>
+
+  </main>
+</div>
+</body></html>

@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corporate Structure &amp; Compliance Strategy — BankAI</title>
+<style>/* BankAI strategy-doc print theme — "Quiet Premium": monochrome surfaces, a
+   single jade accent, type-led hierarchy. Tuned for Letter PDF + standalone HTML. */
+
+:root {
+  --ink: #14171a;
+  --ink-2: #3a4147;
+  --ink-3: #6b747c;
+  --line: #e3e6e8;
+  --line-2: #f0f2f3;
+  --accent: #1f7a5a;      /* jade */
+  --accent-weak: #e9f4ef;
+  --accent-ink: #145239;
+  --warn: #9a6b00;
+  --warn-weak: #fbf3e0;
+  --surface: #f7f8f8;
+  --max: 760px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  font-size: 11.2pt;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+/* ---- Cover ---------------------------------------------------------------- */
+.cover {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 64px;
+  page-break-after: always;
+  border-left: 6px solid var(--accent);
+}
+.cover .mark {
+  display: inline-grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 12px;
+  background: var(--accent); color: #fff;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-weight: 800; font-size: 24px; margin-bottom: 30px;
+}
+.cover h1 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 33pt; line-height: 1.08; letter-spacing: -0.02em;
+  margin: 0 0 14px; color: var(--ink); border: 0; padding: 0;
+}
+.cover .sub { font-size: 14pt; color: var(--ink-2); margin: 0 0 34px; max-width: 30em; }
+.cover .meta { font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 9.5pt; color: var(--ink-3); letter-spacing: 0.02em; text-transform: uppercase; }
+.cover .meta b { color: var(--ink); font-weight: 600; }
+
+.disclaimer {
+  margin-top: 30px; padding: 14px 16px;
+  background: var(--warn-weak); border: 1px solid #efe2bf; border-radius: 8px;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 8.6pt; line-height: 1.5; color: #6c4f10; max-width: 40em;
+}
+
+/* ---- Headings ------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
+}
+h1 { font-size: 21pt; margin: 0 0 6px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h2 {
+  font-size: 15.5pt; margin: 30px 0 10px; padding-top: 6px;
+  border-top: 1px solid var(--line); padding-top: 16px;
+  page-break-after: avoid;
+}
+h3 { font-size: 12.5pt; margin: 20px 0 6px; color: var(--accent-ink); page-break-after: avoid; }
+h4 { font-size: 11pt; margin: 16px 0 4px; color: var(--ink-2); }
+
+p { margin: 0 0 11px; }
+strong { color: var(--ink); font-weight: 700; }
+em { color: var(--ink-2); }
+a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-weak); }
+
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin: 3px 0; }
+li::marker { color: var(--accent); }
+
+hr { border: 0; border-top: 1px solid var(--line); margin: 26px 0; }
+
+blockquote {
+  margin: 12px 0; padding: 10px 16px;
+  background: var(--accent-weak); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+  color: var(--accent-ink);
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10pt;
+}
+blockquote p { margin: 0; }
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9.4pt; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 1px 5px; color: var(--accent-ink);
+}
+pre {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; overflow-x: auto; page-break-inside: avoid;
+}
+pre code { background: none; border: 0; padding: 0; color: var(--ink-2); font-size: 8.8pt; line-height: 1.5; }
+
+/* ---- Tables --------------------------------------------------------------- */
+table {
+  width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 9.6pt;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  page-break-inside: avoid;
+}
+thead th {
+  text-align: left; background: var(--ink); color: #fff; font-weight: 600;
+  padding: 7px 10px; font-size: 8.8pt; letter-spacing: 0.01em;
+}
+tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+tbody tr:nth-child(even) td { background: var(--line-2); }
+
+/* ---- TOC ------------------------------------------------------------------ */
+.toc { page-break-after: always; padding-top: 8px; }
+.toc h2 { border: 0; padding: 0; margin: 0 0 12px; }
+.toc ol { list-style: none; padding: 0; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 5px 0; font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10.5pt; }
+.toc li.lvl-3 { padding-left: 24px; font-size: 9.6pt; color: var(--ink-2); }
+.toc a { border: 0; color: var(--ink); }
+.toc li.lvl-2 a::before { content: counter(toc) ".  "; color: var(--accent); font-weight: 700; }
+
+/* ---- Section number badges via h2 ---------------------------------------- */
+.content { counter-reset: h2; }
+.content h2 { counter-increment: h2; }
+.content h2::before {
+  content: counter(h2); display: inline-grid; place-items: center;
+  width: 24px; height: 24px; margin-right: 10px; border-radius: 6px;
+  background: var(--accent-weak); color: var(--accent-ink);
+  font-size: 11pt; font-weight: 700; vertical-align: middle;
+}
+
+@page { margin: 18mm 0; }
+@media print {
+  .wrap { padding: 0 18mm; }
+  h2, h3, h4 { page-break-after: avoid; }
+  table, pre, blockquote, figure { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<section class="cover">
+  <div class="mark">B</div>
+  <h1>Corporate Structure &amp; Compliance Strategy</h1>
+  <p class="sub">A lean-now, licensed-later blueprint: a Wyoming LLC today, converting to a Delaware C-corp when you raise or license.</p>
+  <div class="meta">BankAI &nbsp;·&nbsp; Confidential — Founder &nbsp;·&nbsp; <b>June 6, 2026</b></div>
+  <div class="disclaimer">Strategic guidance only — not legal, financial, tax, or investment advice. Securities, money-transmission, and corporate-formation decisions must be reviewed by licensed counsel and a CPA before you act. Sections flagged “⚖ see counsel” are where this matters most.</div>
+</section>
+<div class="wrap">
+  <nav class="toc"><h2>Contents</h2><ol><li class="lvl-2"><a href="#1-executive-summary-the-core-legal-thesis">1. Executive summary &amp; the core legal thesis</a></li><li class="lvl-2"><a href="#2-entity-structure-start-as-a-lean-wyoming-llc-convert-into-a-holdco">2. Entity structure — start as a lean Wyoming LLC, convert into a holdco</a></li><li class="lvl-3"><a href="#21-what-to-form-now-do-now">2.1 What to form now (DO NOW)</a></li><li class="lvl-3"><a href="#22-where-this-is-going-defer-phase-bc-convert-then-split-into-a-holdco">2.2 Where this is going (DEFER → Phase B/C): convert, then split into a holdco</a></li><li class="lvl-3"><a href="#23-the-alternative-if-youd-rather-optimize-for-fundability-now">2.3 The alternative (if you&#39;d rather optimize for fundability now)</a></li><li class="lvl-2"><a href="#3-where-to-incorporate">3. Where to incorporate</a></li><li class="lvl-2"><a href="#4-sole-founder-ownership-equity-structure-llc-units">4. Sole-founder ownership &amp; equity structure (LLC units)</a></li><li class="lvl-2"><a href="#5-governance-founding-documents-the-ip-assignment">5. Governance, founding documents &amp; the IP assignment</a></li><li class="lvl-2"><a href="#6-the-phased-compliance-roadmap-the-heart-of-this-document">6. The phased compliance roadmap (the heart of this document)</a></li><li class="lvl-3"><a href="#phase-a-launch-as-non-custodial-software-do-now">Phase A — Launch as non-custodial software (DO NOW)</a></li><li class="lvl-3"><a href="#phase-b-partnered-defer-when-you-need-fiat-or-pooled-custody">Phase B — Partnered (DEFER → when you need fiat or pooled custody)</a></li><li class="lvl-3"><a href="#phase-c-licensed-defer-when-scale-justifies-owning-the-rails">Phase C — Licensed (DEFER → when scale justifies owning the rails)</a></li><li class="lvl-2"><a href="#7-corporate-bank-account-money-movement">7. Corporate bank account &amp; money movement</a></li><li class="lvl-2"><a href="#8-kycaml-bsa-program-even-before-youre-licensed">8. KYC/AML &amp; BSA program (even before you&#39;re licensed)</a></li><li class="lvl-2"><a href="#9-what-youre-missing-the-founder-checklist">9. What you&#39;re missing — the founder checklist</a></li><li class="lvl-2"><a href="#10-90-day-action-checklist-ordered">10. 90-day action checklist (ordered)</a></li><li class="lvl-3"><a href="#appendix-rough-first-year-cost-envelope-bootstrap">Appendix — rough first-year cost envelope (bootstrap)</a></li></ol></nav>
+  <main class="content">
+<h1 id="corporate-structure-compliance-strategy">Corporate Structure &amp; Compliance Strategy</h1>
+<p>A lean-now, licensed-later blueprint for incorporating BankAI as a US tokenization-first
+fintech — the least-compliance entry that still scales cleanly into a fully licensed money
+business.</p>
+<blockquote>
+<p><strong>How to read this.</strong> Every section is tagged <strong>DO NOW</strong>, <strong>DEFER → Phase B/C</strong>, or
+<strong>⚖ see counsel</strong>. Dollar and time figures are planning estimates (2025–2026 US), not quotes.
+This is strategy, not legal advice — the regulated decisions must be run past a fintech attorney
+and a CPA before you file or launch.</p>
+</blockquote>
+<hr>
+<h2 id="1-executive-summary-the-core-legal-thesis">1. Executive summary &amp; the core legal thesis</h2>
+<p><strong>The thesis:</strong> the cheapest legal way into fintech is to <em>not be a money business yet</em>. BankAI&#39;s
+locked architecture already supports this — keys live in the user&#39;s Secure Enclave, the server never
+holds a private key, and tokenization is delivered as <strong>software</strong>. If you never take custody of
+customer funds and never act as the intermediary that moves value, you stay outside the two most
+expensive US regimes (money-transmitter licensing and broker-dealer registration) for as long as
+possible.</p>
+<p>So the strategy is a <strong>three-phase compliance ramp</strong>, with the corporate structure built on day one
+to absorb each phase without re-papering the company:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What you are</th>
+<th>Licensing burden</th>
+<th>Trigger to advance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A — Launch</strong></td>
+<td>Software + non-custodial wallet + tokenization infrastructure</td>
+<td>Minimal: entity, AML <em>policy</em>, terms, IP. <strong>No MTL.</strong></td>
+<td>Live product, first users</td>
+</tr>
+<tr>
+<td><strong>B — Partnered</strong></td>
+<td>Same, plus regulated <strong>partners</strong> (BaaS bank, custodian, transfer agent, KYC vendor) move the money/assets for you</td>
+<td>FinCEN MSB registration likely; partner due-diligence</td>
+<td>You need fiat in/out or pooled custody</td>
+</tr>
+<tr>
+<td><strong>C — Licensed</strong></td>
+<td>You hold your own licenses / charter</td>
+<td>State MTLs (or bank partnership), transfer-agent registration, possibly broker-dealer/ATS</td>
+<td>Scale, unit economics justify owning the rails</td>
+</tr>
+</tbody></table>
+<p><strong>The single most important rule:</strong> the moment you touch customer fiat or hold their crypto for
+them, you are probably a money transmitter in most states. Phase A is engineered to never do that.</p>
+<p><strong>Recommendation at a glance:</strong></p>
+<ul>
+<li><strong>Form a Wyoming LLC now</strong> (<code>BankAI LLC</code>) — the lowest-cost, lowest-admin, most private US entity,
+with pass-through taxation and crypto-friendly statutes. <strong>Convert to a Delaware C-corp later</strong>,
+when you raise institutional capital or stand up the regulated subsidiary (Phase B/C).</li>
+<li><strong>Adopt a real operating agreement</strong> even as a single member — it&#39;s the document partner banks,
+vendors, and a future conversion all lean on.</li>
+<li><strong>Assign the IP</strong> (the code already in this repo) from you personally to the company immediately —
+the single cheapest-now / expensive-later action in this plan.</li>
+<li><strong>Do not market the product as a &quot;bank&quot;</strong> or &quot;banking.&quot; That word is regulated; using it can draw
+a cease-and-desist before you have a single user. (Yes, this affects the product name — see §9.)</li>
+</ul>
+<hr>
+<h2 id="2-entity-structure-start-as-a-lean-wyoming-llc-convert-into-a-holdco">2. Entity structure — start as a lean Wyoming LLC, convert into a holdco</h2>
+<h3 id="21-what-to-form-now-do-now">2.1 What to form now (DO NOW)</h3>
+<p>A <strong>single-member Wyoming LLC</strong>, <code>BankAI LLC</code>, with you as sole member and manager. It is the
+cheapest, fastest, most private US entity, and for a solo bootstrapper it&#39;s the right Phase-A home.
+A single-member LLC is <strong>&quot;disregarded&quot; for federal tax</strong> — its income flows straight to your personal
+return, so there&#39;s no separate corporate tax to file and no double taxation.</p>
+<p>Why the Wyoming LLC for a lean start:</p>
+<ul>
+<li><strong>Minimal cost &amp; admin.</strong> ~$100–150 to form, ~$60/yr to maintain, no state income tax.</li>
+<li><strong>Pass-through taxation.</strong> No double tax; early-stage losses can (subject to rules) offset other
+income. Simple Schedule-C-style reporting while you&#39;re a single member.</li>
+<li><strong>Privacy.</strong> Wyoming doesn&#39;t publicly list LLC members.</li>
+<li><strong>Crypto-forward law.</strong> Wyoming pioneered digital-asset statutes, the DAO LLC, and the SPDI charter.</li>
+<li><strong>Liability shield</strong> for your personal assets — as long as you respect the formalities (separate
+bank account, operating agreement, no commingling).</li>
+</ul>
+<p>The honest tradeoffs vs. a C-corp — and why they don&#39;t bite yet:</p>
+<ul>
+<li><strong>No QSBS.</strong> The §1202 gain exclusion needs a C-corp. You forgo it <em>until you convert</em> — acceptable
+while pre-revenue and pre-raise.</li>
+<li><strong>Equity comp is clunkier.</strong> Adding a co-founder or option holder turns a single-member LLC into a
+partnership, or requires <strong>profits interests</strong> instead of clean stock options. Manageable, but a
+reason to convert before you build a team or raise.</li>
+<li><strong>Investors require conversion.</strong> Institutional money wants a Delaware C-corp; <strong>LLC → C-corp
+conversion</strong> later is a real, lawyer-assisted step (often structured tax-neutrally) costing ~$3–8k.</li>
+</ul>
+<p>So: the WY LLC is the right lean Phase-A vehicle. Treat the <strong>conversion to a Delaware C-corp</strong> as a
+planned future event tied to your first institutional raise or your first regulated subsidiary —
+not something to pay for now.</p>
+<h3 id="22-where-this-is-going-defer-phase-bc-convert-then-split-into-a-holdco">2.2 Where this is going (DEFER → Phase B/C): convert, then split into a holdco</h3>
+<p>When you raise capital or introduce regulated activity, <strong>convert the LLC to a Delaware C-corp</strong>
+(statutory conversion, or an F-reorg/Up-C as counsel advises) and adopt a holdco + opco structure so
+a license never contaminates your software IP:</p>
+<pre><code>                 ┌─────────────────────────┐
+                 │   BankAI, Inc. (Delaware)│  ← parent holdco; owns IP, cap table, brand
+                 └───────────┬─────────────┘
+            ┌────────────────┼──────────────────┐
+            ▼                ▼                  ▼
+   ┌────────────────┐ ┌────────────────┐ ┌──────────────────────┐
+   │ BankAI Tech     │ │ BankAI Markets  │ │ BankAI Transfer/MT   │
+   │ (software/IP)   │ │ (RWA issuance,  │ │ (regulated sub:      │
+   │ non-custodial   │ │  Reg D/A+/CF)   │ │  MTLs / transfer     │
+   │ software/IP home│ │  — Phase B      │ │  agent — Phase C)    │
+   └────────────────┘ └────────────────┘ └──────────────────────┘
+</code></pre>
+<p><em>(Until you convert, &quot;BankAI LLC&quot; simply <strong>is</strong> the software/IP entity — the boxes below collapse
+into the single LLC. The split appears only at conversion.)</em></p>
+<p>The reason: licenses, bonds, regulatory exams, and money-movement liability sit in the regulated
+subsidiary. If that entity ever has a problem, your core technology and IP — the valuable asset — are
+insulated in a separate box owned by the parent. You <strong>don&#39;t pay for this complexity until the
+revenue or the regulator forces it.</strong> ⚖ see counsel when you spin up the first subsidiary.</p>
+<h3 id="23-the-alternative-if-youd-rather-optimize-for-fundability-now">2.3 The alternative (if you&#39;d rather optimize for fundability now)</h3>
+<p>If raising institutional money or pursuing licensing <em>soon</em> is likely, you can <strong>skip straight to a
+Delaware C-corp</strong> and avoid a later conversion — at the cost of higher run-rate, double taxation, and
+more admin than a bootstrapper needs in Phase A. For BankAI&#39;s lean, pre-revenue start, the <strong>Wyoming
+LLC is the recommended default</strong>, converting when the money or the regulator makes the C-corp worth
+it.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Wyoming LLC <em>(recommended now)</em></th>
+<th>Delaware C-corp</th>
+<th>Offshore token entity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Setup cost</td>
+<td>~$100–500</td>
+<td>~$500–1,500 (DIY–lawyer)</td>
+<td>$$$ + ongoing</td>
+</tr>
+<tr>
+<td>Annual cost</td>
+<td>~$60–150</td>
+<td>~$400–900</td>
+<td>high</td>
+</tr>
+<tr>
+<td>Taxation</td>
+<td>Pass-through (simplest)</td>
+<td>Double (corp + dividends)</td>
+<td>Complex (CFC/PFIC)</td>
+</tr>
+<tr>
+<td>Stock/options</td>
+<td>Units / profits interests</td>
+<td>Native, clean</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>QSBS</td>
+<td>❌ (gained on conversion)</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Fundraising-ready</td>
+<td>Convert first</td>
+<td>✅ best</td>
+<td>Complicates US raise</td>
+</tr>
+<tr>
+<td>Regulator/bank credibility</td>
+<td>Good</td>
+<td>✅ high</td>
+<td>Scrutiny / de-risking</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td><strong>Your lean Phase-A start</strong></td>
+<td>Imminent raise/licensing</td>
+<td>Not recommended US-first</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-where-to-incorporate">3. Where to incorporate</h2>
+<p><strong>Wyoming for the LLC now. Delaware when you convert. Wyoming again on the radar for a future charter.</strong></p>
+<ul>
+<li><strong>Wyoming (now)</strong> — the LLC home: no state income tax, member privacy, low fees, and the most
+crypto-forward statutes in the US (digital-asset law, the <strong>DAO LLC</strong>, and the <strong>Special Purpose
+Depository Institution (SPDI)</strong> charter — a long-term option for a crypto-native, custody-capable
+&quot;bank-like&quot; entity without FDIC deposit-taking). You&#39;ll <strong>foreign-qualify</strong> in your home state
+(where you actually work) and pay that state&#39;s fees too — budget for both. If you live in a
+high-tax/high-fee state (e.g., CA), confirm whether you must <em>also</em> register the LLC there. ⚖</li>
+<li><strong>Delaware (on conversion)</strong> — when you raise or issue equity, convert to a <strong>Delaware C-corp</strong>:
+predictable corporate law (Court of Chancery), a playbook every investor/bank/lawyer knows, and
+clean stock mechanics. This is the planned Phase-B/C move, not a day-one cost.</li>
+<li><strong>Offshore (Cayman/BVI/CH/UAE)</strong> — common for token <em>issuance</em> in pure-crypto projects, but for a
+<strong>US-first, US-user</strong> product it adds tax complexity (CFC/PFIC rules), banking friction, and
+regulator suspicion. <strong>Not recommended</strong> for your launch. Revisit only if a token-generation event
+for a protocol token (not the product) is ever on the table. ⚖ see counsel.</li>
+</ul>
+<p><strong>Decision:</strong> form <code>BankAI LLC</code> in Wyoming now; foreign-qualify where you live; plan the <strong>Delaware
+C-corp conversion</strong> for your first raise/regulated subsidiary; keep the <strong>Wyoming SPDI</strong> as the deep
+Phase-C charter option.</p>
+<hr>
+<h2 id="4-sole-founder-ownership-equity-structure-llc-units">4. Sole-founder ownership &amp; equity structure (LLC units)</h2>
+<p>In a single-member LLC your &quot;equity&quot; is <strong>membership units</strong> (or simply a 100% membership interest)
+governed by the <strong>operating agreement</strong> — there is no stock, no authorized-share count, and no
+Delaware franchise tax to engineer. That simplicity is the point of the lean start.</p>
+<p><strong>Recommended starting structure (DO NOW):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Recommendation</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ownership</td>
+<td><strong>100% to you</strong>, the sole member</td>
+<td>Single-member = disregarded entity, simplest tax</td>
+</tr>
+<tr>
+<td>Units (optional)</td>
+<td>Denominate as <strong>10,000,000 units</strong>, all to you</td>
+<td>Makes future grants/conversion clean if you ever add members</td>
+</tr>
+<tr>
+<td>Capital contribution</td>
+<td>Contribute a small amount (e.g., $500–1,000) + the assigned IP</td>
+<td>Establishes your basis and the LLC&#39;s capital</td>
+</tr>
+<tr>
+<td>Tax election</td>
+<td>Default disregarded; <strong>revisit S-corp election</strong> only if profits get large</td>
+<td>Don&#39;t over-optimize taxes pre-revenue</td>
+</tr>
+</tbody></table>
+<p><strong>Operating agreement — your most important governance document. DO NOW.</strong> Even with one member,
+adopt a real operating agreement: it defines ownership, management (you as manager), capital, and —
+critically — how new members or <strong>profits interests</strong> get admitted later. Banks and a future
+conversion both rely on it, and it reinforces the liability shield (an LLC without one is easier to
+&quot;pierce&quot;).</p>
+<p><strong>Incentive equity for future hires/advisors — profits interests.</strong> When you bring people on, an LLC
+grants <strong>profits interests</strong> (a share of <em>future</em> upside, not existing value) rather than stock
+options. They&#39;re tax-efficient if papered correctly — and the moment they get complex is exactly the
+moment to do the <strong>Delaware C-corp conversion</strong> (§2.2) and switch to a normal option pool.</p>
+<p><strong>The 83(b) nuance for an LLC. ⚖ note.</strong> As a sole member owning your interest outright with no
+vesting, the classic founder-stock 83(b) urgency mostly doesn&#39;t apply. But if you ever (a) subject
+your own interest to vesting, or (b) grant <strong>profits interests</strong>, the recipient should file a
+protective <strong>83(b) election within 30 days</strong> of that grant. Keep the 30-day rule on your radar for
+those events — it&#39;s still unfixable if missed.</p>
+<p><strong>SAFE-ready / raise posture.</strong> You can technically raise into an LLC, but most investors want a
+Delaware C-corp and a SAFE. So the plan is: stay lean as the LLC; <strong>convert to a DE C-corp the moment
+a real raise is on the table</strong>, then raise on a standard <strong>SAFE</strong> (the YC standard). Don&#39;t contort the
+LLC to look like a startup it isn&#39;t yet.</p>
+<p><strong>Tooling:</strong> a cap-table tool is overkill for a single-member LLC — a clean operating agreement and a
+folder of signed docs is enough now. Adopt <strong>Carta/Pulley</strong> at conversion, when options and investors
+arrive.</p>
+<hr>
+<h2 id="5-governance-founding-documents-the-ip-assignment">5. Governance, founding documents &amp; the IP assignment</h2>
+<p>Even a single-member LLC needs the real paper — skipping it weakens the liability shield and creates
+problems exactly when you can least afford them (a raise, a partner-bank diligence, an acquisition).</p>
+<p><strong>The document set (DO NOW):</strong></p>
+<ul>
+<li><strong>Articles of Organization</strong> (filed with Wyoming) — the LLC&#39;s name and registered agent.</li>
+<li><strong>Operating Agreement</strong> — ownership, you as <strong>manager</strong>, capital, and the rules for admitting
+future members / profits interests (§4). The cornerstone document; don&#39;t skip it because you&#39;re solo.</li>
+<li><strong>EIN</strong> from the IRS (free; needed for the bank account — a single-member LLC still gets its own EIN).</li>
+<li><strong>Member resolution / consent</strong> (optional but tidy) — authorize the bank account and the IP
+assignment.</li>
+<li><strong>IP / Invention Assignment</strong> — <em>you</em> sign one assigning your work to the LLC (see below).</li>
+</ul>
+<p><strong>The IP assignment — do this immediately. ⚖ DO NOW.</strong>
+Right now, <em>you personally</em> wrote the code sitting in this repository — which means <strong>you</strong>, not the
+company, may own it. Before any value accrues, execute a <strong>Technology/IP Assignment Agreement</strong>
+transferring all of it (code, designs, the BankAI marks, domains, the architecture docs) to
+<code>BankAI LLC</code>. This is the #1 thing acquirers and investors diligence, it survives the future C-corp
+conversion intact, and it&#39;s trivially cheap to fix today and expensive to fix later. Make sure any
+contractor or contributor (now or ever) signs an assignment too — work-for-hire alone is not enough
+for IP.</p>
+<hr>
+<h2 id="6-the-phased-compliance-roadmap-the-heart-of-this-document">6. The phased compliance roadmap <em>(the heart of this document)</em></h2>
+<h3 id="phase-a-launch-as-non-custodial-software-do-now">Phase A — Launch as non-custodial software (DO NOW)</h3>
+<p><strong>Goal: deliver real product value while staying outside money-transmitter and broker-dealer scope.</strong></p>
+<p>What keeps you out of scope:</p>
+<ul>
+<li><strong>Non-custodial by architecture.</strong> Keys are generated and held in the user&#39;s Secure Enclave; the
+server never holds a user&#39;s private key (a <em>locked</em> architecture decision in this repo). You are
+not holding customer funds, so you are generally not a money transmitter under FinCEN&#39;s framework
+for non-custodial wallet software.</li>
+<li><strong>Tokenization framed as software.</strong> You build the rails; you are not the issuer of record taking
+in investor money. The repo&#39;s demo securities are explicitly labeled &quot;not a real offering&quot; — keep
+that posture until an entity is set up to issue properly (Phase B).</li>
+<li><strong>Partner out everything that touches money.</strong> No fiat on/off-ramp run by you. If users need to
+buy crypto, route them to a licensed third party (e.g., an embedded on-ramp like MoonPay/Stripe
+Crypto/Coinbase) under <em>their</em> license, not yours.</li>
+</ul>
+<p><strong>What you CAN do in Phase A:</strong> non-custodial wallet, DID/VC identity, tokenized-asset <em>viewing</em> and
+<em>peer-to-peer</em> transfers the user signs themselves, the AI agent/MCP experience operating under
+user-granted, user-signed authorizations (already built), and a marketplace UI that <em>links to</em> but
+does not <em>operate</em> the trade as principal.</p>
+<p><strong>What you CANNOT do in Phase A:</strong> hold customer USD or crypto, run an exchange/order book as
+intermediary, issue and sell securities to the public, or move money between users as the middleman.</p>
+<p><strong>The securities reality of tokenized RWAs. ⚖ see counsel — this is the sharpest edge.</strong>
+A tokenized building, fund, or business interest is almost certainly a <strong>security</strong>. Selling it in
+the US requires either registration or an exemption:</p>
+<table>
+<thead>
+<tr>
+<th>Exemption</th>
+<th>Who can invest</th>
+<th>Raise cap</th>
+<th>Marketing</th>
+<th>Fit for BankAI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Reg D 506(c)</strong></td>
+<td>Accredited only (verified)</td>
+<td>Unlimited</td>
+<td>Public solicitation OK</td>
+<td>Best early path; pair with accreditation checks</td>
+</tr>
+<tr>
+<td><strong>Reg A+ (Tier 2)</strong></td>
+<td>Anyone</td>
+<td>$75M/yr</td>
+<td>Public</td>
+<td>Costly &quot;mini-IPO&quot;; later phase</td>
+</tr>
+<tr>
+<td><strong>Reg CF</strong></td>
+<td>Anyone</td>
+<td>$5M/yr</td>
+<td>Via funding portal</td>
+<td>Needs a registered portal partner</td>
+</tr>
+</tbody></table>
+<p>Your repo already models the compliance gating (tier/jurisdiction/holder-cap, the Compliance Module),
+which maps cleanly onto Reg D accreditation + holder caps — but the <em>legal</em> offering wrapper must be
+built with a securities attorney before you sell anything real.</p>
+<p><strong>Phase A compliance you DO still need (cheap, do it now):</strong></p>
+<ul>
+<li>A written <strong>AML/KYC policy</strong> and a named compliance officer (you), even pre-license — it&#39;s table
+stakes for partner diligence and good hygiene. The repo&#39;s identity ladder + VC issuance + append-only
+audit log are most of the technical substrate.</li>
+<li><strong>OFAC/sanctions screening</strong> at onboarding (screen every user against SDN lists).</li>
+<li><strong>Terms of Service, Privacy Policy, E-Sign consent, risk disclosures.</strong></li>
+</ul>
+<h3 id="phase-b-partnered-defer-when-you-need-fiat-or-pooled-custody">Phase B — Partnered (DEFER → when you need fiat or pooled custody)</h3>
+<p>When users need to move real dollars or you need to custody pooled assets, plug in regulated partners
+rather than becoming regulated yourself:</p>
+<ul>
+<li><strong>BaaS / partner bank</strong> (e.g., Column, Lead Bank, Unit/Treasury Prime as middleware) — for FBO
+accounts, ACH, debit, fiat rails. <em>They</em> hold the banking license; you ride it.</li>
+<li><strong>Qualified custodian</strong> for crypto/RWA custody (e.g., Anchorage, BitGo, Fireblocks-backed).</li>
+<li><strong>Transfer agent</strong> for tokenized securities cap-table-of-record.</li>
+<li><strong>KYC/AML vendor</strong> (Persona, Alloy, Footprint) to industrialize identity + sanctions + ongoing
+monitoring.</li>
+</ul>
+<p><strong>Trigger:</strong> the first time money or pooled custody flows through <em>you</em>, you very likely must
+<strong>register as a FinCEN Money Services Business (MSB)</strong> (a federal registration, ~free, biennial) and
+your written AML program becomes mandatory, not optional. ⚖ see counsel on the exact trigger.</p>
+<h3 id="phase-c-licensed-defer-when-scale-justifies-owning-the-rails">Phase C — Licensed (DEFER → when scale justifies owning the rails)</h3>
+<p>The expensive, defensible end state, pursued only when unit economics justify it:</p>
+<ul>
+<li><strong>State Money Transmitter Licenses (MTLs)</strong> — the big one. ~$50–150k+ to get a meaningful US
+footprint, surety bonds per state, minimum net worth, multi-year timeline. Most fintechs <strong>partner
+instead</strong> (Phase B) for years; only bring MTLs in-house when margin demands it.</li>
+<li><strong>Broker-dealer / ATS</strong> — if you want to operate secondary trading of tokenized securities as
+principal/venue, you need a registered broker-dealer and likely an <strong>ATS</strong> (Alternative Trading
+System). Realistically a partnership (e.g., with a licensed BD/ATS) long before you own one.</li>
+<li><strong>Transfer-agent registration</strong> — SEC Form TA-1 if you become the official record-keeper for
+securities holders.</li>
+<li><strong>Wyoming SPDI charter</strong> — the long-horizon &quot;crypto bank&quot; option for custody at scale.</li>
+</ul>
+<hr>
+<h2 id="7-corporate-bank-account-money-movement">7. Corporate bank account &amp; money movement</h2>
+<p><strong>DO NOW:</strong> open a corporate account at a <strong>fintech-friendly bank</strong> once you have the EIN + formation
+docs:</p>
+<ul>
+<li><strong>Mercury</strong> — the startup default; good API, treasury, crypto-tolerant. Strong first choice.</li>
+<li><strong>Brex</strong> — cards + spend management; good if you want corporate cards early.</li>
+<li><strong>Column / regional banks</strong> — relevant later as actual banking <em>partners</em> (Phase B), distinct from
+your operating account.</li>
+</ul>
+<p>What they&#39;ll ask for: EIN, Articles of Organization + operating agreement, your ID,
+beneficial-ownership info, and a description of the business. <strong>Be precise and honest</strong> that you&#39;re building crypto/tokenization
+software — vague or evasive answers get accounts frozen (&quot;de-risked&quot;). A clean &quot;non-custodial
+software, no customer funds in Phase A&quot; story is bankable; &quot;we move customer crypto&quot; without licenses
+is not.</p>
+<p><strong>The commingling rule (non-negotiable):</strong> the moment any customer-adjacent funds exist, they live in
+<strong>separate FBO/escrow accounts</strong>, never your operating account. Commingling customer money with
+corporate money is how fintechs get shut down and founders get personal liability. In Phase A you
+avoid this entirely by not holding customer funds.</p>
+<hr>
+<h2 id="8-kycaml-bsa-program-even-before-youre-licensed">8. KYC/AML &amp; BSA program (even before you&#39;re licensed)</h2>
+<p>Build the program early — it&#39;s cheap as policy, expensive as a retrofit, and every partner bank will
+demand to see it.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>What it is</th>
+<th>Repo substrate that maps to it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Written AML/BSA policy</strong></td>
+<td>Your documented program</td>
+<td>— (author it; ~$2–5k with counsel or a template)</td>
+</tr>
+<tr>
+<td><strong>Designated compliance officer</strong></td>
+<td>A named human (you, initially)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>CIP / KYC</strong></td>
+<td>Verify identity at onboarding</td>
+<td>Tiered identity ladder, DID/VC issuance, risk-adaptive onboarding</td>
+</tr>
+<tr>
+<td><strong>Sanctions/OFAC screening</strong></td>
+<td>Screen against SDN/blocklists</td>
+<td>Onboarding signal scoring hook</td>
+</tr>
+<tr>
+<td><strong>Transaction monitoring</strong></td>
+<td>Flag suspicious patterns</td>
+<td>The ledger + orchestration engine (basis for the fraud system in the tech plan)</td>
+</tr>
+<tr>
+<td><strong>SAR/CTR readiness</strong></td>
+<td>File Suspicious Activity / Currency Transaction Reports when required</td>
+<td>Append-only <code>audit_logs</code> / <code>mcp_audit_logs</code> give the immutable trail</td>
+</tr>
+<tr>
+<td><strong>Recordkeeping</strong></td>
+<td>Retain records 5 yrs</td>
+<td>Append-only ledger + audit logs</td>
+</tr>
+</tbody></table>
+<p>The point: your existing technical primitives (append-only audit, identity ladder, VC, signal
+scoring) are already ~70% of a credible AML program&#39;s <em>evidence layer</em>. What&#39;s missing is the
+<strong>written policy + named officer + screening vendor</strong>, which is mostly paperwork and a tool.</p>
+<hr>
+<h2 id="9-what-youre-missing-the-founder-checklist">9. What you&#39;re missing — the founder checklist</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Item</th>
+<th>Priority</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>EIN</strong></td>
+<td>DO NOW</td>
+<td>Free from IRS; gates the bank account</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Registered agent</strong> in Wyoming</td>
+<td>DO NOW</td>
+<td>~$50–125/yr (Wyoming Agents, Northwest, etc.)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Foreign qualification</strong> in your home state</td>
+<td>DO NOW</td>
+<td>Where you actually operate; confirm if a high-fee state requires LLC registration too</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>⚠ &quot;Bank&quot; naming risk</strong></td>
+<td>DO NOW</td>
+<td>&quot;Bank&quot;/&quot;banking&quot; are <strong>regulated terms</strong>; using them without a charter invites cease-and-desist. Consider a market-facing brand that avoids implying you <em>are</em> a bank (&quot;BankAI&quot; the company is fine; marketing copy saying &quot;your bank&quot; is not). ⚖ see counsel</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Trademark</strong> the brand</td>
+<td>Soon</td>
+<td>USPTO search + file; the name/marks should be company-owned (via §5 IP assignment)</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Terms of Service / Privacy Policy / E-Sign / risk disclosures</strong></td>
+<td>DO NOW</td>
+<td>Before any user signs up</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Data protection: GLBA + state privacy (CCPA/CPRA etc.)</strong></td>
+<td>DO NOW</td>
+<td>Fintech data is sensitive; GLBA safeguards apply once you&#39;re financial</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Cyber + tech E&amp;O insurance</strong></td>
+<td>Phase B</td>
+<td>Partners will require it; also basic prudence</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Cap-table tool</strong> (Carta/Pulley)</td>
+<td>At conversion</td>
+<td>Overkill for a single-member LLC; adopt when options/investors arrive</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Accounting + R&amp;D tax credits</strong></td>
+<td>Soon</td>
+<td>A startup CPA; the federal R&amp;D credit can offset payroll tax — real money for a dev-heavy build</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Beneficial Ownership (BOI)</strong> reporting</td>
+<td>Check status</td>
+<td>FinCEN BOI rules have shifted; confirm current applicability ⚖</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>Business insurance / D&amp;O</strong></td>
+<td>Phase B</td>
+<td>Especially before taking on any investor</td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>&quot;Not advice&quot; disclaimers</strong> in-product</td>
+<td>DO NOW</td>
+<td>Especially around tokenized-asset/investment surfaces</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="10-90-day-action-checklist-ordered">10. 90-day action checklist (ordered)</h2>
+<p><strong>Days 1–14 — exist as a company</strong></p>
+<ol>
+<li>Pick the exact legal name; clear it (Wyoming name check + USPTO knockout search).</li>
+<li>File the <strong>Wyoming LLC</strong> (Articles of Organization); appoint a registered agent.</li>
+<li>Get the <strong>EIN</strong>.</li>
+<li>Adopt the <strong>operating agreement</strong> (you as manager); make your <strong>capital contribution</strong>.</li>
+<li>Execute the <strong>IP/Technology Assignment</strong> (repo → <code>BankAI LLC</code>) and sign your invention assignment.</li>
+<li><em>(Only if you grant vesting/profits interests later — file the protective <strong>83(b)</strong> within 30 days
+of that grant. Not triggered by a sole member owning units outright.)</em></li>
+</ol>
+<p><strong>Days 15–45 — be operational &amp; bankable</strong>
+7. Open the <strong>Mercury</strong> (or Brex) business account.
+8. Foreign-qualify in your home state.
+9. Engage a <strong>startup CPA</strong> and (for the regulated questions) a <strong>fintech/securities attorney</strong> —
+   even a few scoped hours now prevents expensive mistakes.</p>
+<p><strong>Days 46–90 — compliance &amp; launch posture</strong>
+11. Draft <strong>ToS / Privacy / E-Sign / risk disclosures</strong>; publish before onboarding users.
+12. Write the <strong>AML/KYC policy</strong>; name yourself compliance officer; wire in <strong>OFAC screening</strong>.
+13. Lock the <strong>Phase-A product scope</strong> to non-custodial / no-customer-funds; document <em>why</em> each
+    feature stays in scope (this doc + counsel sign-off is your defense).
+14. File the <strong>trademark</strong>; finalize the market-facing brand that avoids the &quot;bank&quot; trap.
+15. Decide the <strong>Phase-B trigger</strong> in writing (what user need forces partners + MSB registration) so
+    you advance deliberately, not by accident.</p>
+<hr>
+<h3 id="appendix-rough-first-year-cost-envelope-bootstrap">Appendix — rough first-year cost envelope (bootstrap)</h3>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Estimate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Wyoming LLC formation (DIY–assisted)</td>
+<td>$100–500</td>
+</tr>
+<tr>
+<td>Registered agent</td>
+<td>$50–125/yr</td>
+</tr>
+<tr>
+<td>Wyoming annual report / license tax</td>
+<td>~$60–100/yr</td>
+</tr>
+<tr>
+<td>Home-state foreign qualification</td>
+<td>$100–400</td>
+</tr>
+<tr>
+<td>Operating agreement (template + review)</td>
+<td>$0–1.5k</td>
+</tr>
+<tr>
+<td>Legal (scoped: formation review, IP, AML policy, securities Q&amp;A)</td>
+<td>$3–10k</td>
+</tr>
+<tr>
+<td>Startup CPA (setup + first year)</td>
+<td>$1–3k</td>
+</tr>
+<tr>
+<td>ToS/Privacy (templated + reviewed)</td>
+<td>$0.5–3k</td>
+</tr>
+<tr>
+<td><strong>Total realistic Year-1</strong></td>
+<td><strong>~$5–18k</strong> (LLC keeps the floor lower than a C-corp)</td>
+</tr>
+</tbody></table>
+<p>Compare that to Phase-C licensing ($50–150k+ for MTLs alone) and the logic of the lean ramp is
+obvious: <strong>spend thousands to launch, defer the hundreds-of-thousands until revenue earns it.</strong></p>
+<hr>
+<p><em>Next document: the Production Deployment &amp; Technology Strategy — cloud, the agent/MCP/skills
+automation fabric, the Neo4j Identity Vault, the fraud system on your orchestration engine,
+Constellation digital evidence, iOS-vs-Android, and GTM.</em></p>
+
+  </main>
+</div>
+</body></html>

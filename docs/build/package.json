@@ -1,0 +1,14 @@
+{
+  "name": "bankai-docs-build",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Markdown → styled HTML → PDF pipeline for BankAI strategy docs",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "marked": "^12.0.0",
+    "playwright": "^1.60.0"
+  }
+}
