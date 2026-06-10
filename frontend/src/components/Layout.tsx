@@ -25,10 +25,10 @@ const SECONDARY = [
 ];
 
 function useTheme(): [string, () => void] {
-  const [theme, setTheme] = useState<string>(() => localStorage.getItem("bankai_theme") ?? "dark");
+  const [theme, setTheme] = useState<string>(() => localStorage.getItem("argus_theme") ?? "dark");
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("bankai_theme", theme);
+    localStorage.setItem("argus_theme", theme);
   }, [theme]);
   return [theme, () => setTheme((t) => (t === "dark" ? "light" : "dark"))];
 }
@@ -87,7 +87,7 @@ export function Layout() {
           <span className="mark">
             B<span className="streak-dot" title="Active streak" />
           </span>
-          BankAI
+          Argus Financial Partners
         </div>
 
         {PRIMARY.map((item) => (

@@ -1,4 +1,4 @@
-# BankAI Backend — Conventions
+# Argus Financial Partners Backend — Conventions
 
 These rules are enforced across the codebase. Read before contributing.
 

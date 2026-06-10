@@ -140,11 +140,11 @@ async function bootstrap(): Promise<void> {
   app.use(errorHandler);
 
   app.listen(config.PORT, () => {
-    logger.info({ port: config.PORT, dialect: getDb().dialect, env: config.NODE_ENV }, "BankAI backend listening");
+    logger.info({ port: config.PORT, dialect: getDb().dialect, env: config.NODE_ENV }, "Argus Financial Partners backend listening");
   });
 }
 
 bootstrap().catch((e) => {
-  logger.error(e, "Failed to start BankAI backend");
+  logger.error(e, "Failed to start Argus Financial Partners backend");
   process.exit(1);
 });

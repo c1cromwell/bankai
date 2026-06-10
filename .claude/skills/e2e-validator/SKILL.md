@@ -1,14 +1,14 @@
 ---
 name: e2e-validator
-description: Run BankAI's end-to-end validation pass across user journeys and channels. Use when asked to validate BankAI end-to-end, run the E2E suite, execute the Phase 8 validation gate, run the Phase 16 comprehensive validation, or produce a journey × channel pass/fail report. Takes a scope arg (through-phase-8 | full).
+description: Run Argus Financial Partners's end-to-end validation pass across user journeys and channels. Use when asked to validate Argus Financial Partners end-to-end, run the E2E suite, execute the Phase 8 validation gate, run the Phase 16 comprehensive validation, or produce a journey × channel pass/fail report. Takes a scope arg (through-phase-8 | full).
 ---
 
-# BankAI E2E Validator
+# Argus Financial Partners E2E Validator
 
 Orchestrates the **hybrid** end-to-end validation defined in `docs/E2E-VALIDATION.md`: a deterministic
 floor first, then agent/MCP-driven journeys, then a single pass/fail report.
 
-This skill is the thing a human (or you) invokes. It depends on the **`bankai-mcp-test-harness`** skill to
+This skill is the thing a human (or you) invokes. It depends on the **`argus-mcp-test-harness`** skill to
 drive the NL/SmartChat and external-agent (OID4VP+MCP) journeys as a real client.
 
 ## Scope
@@ -27,7 +27,7 @@ Default to `through-phase-8` if no scope is given and Phases 9+ are not yet buil
 2. **Deterministic floor (always first).** Run `cd backend && npm run typecheck && npx vitest run e2e`.
    If this fails on any §4 money-critical invariant, stop and report FAIL — the gate is blocked.
 3. **Agent/MCP journeys.** Ensure a dev server is up (`npm run dev` on :3001). Use the
-   `bankai-mcp-test-harness` skill to drive J5 (SmartChat NL → 90s token → transfer, incl. the >$500 MFA
+   `argus-mcp-test-harness` skill to drive J5 (SmartChat NL → 90s token → transfer, incl. the >$500 MFA
    gate), J6 (external agent OID4VP → VP-verify → MCP scoped op), and the NL "buy/subscribe" path of J7.
 4. **PENDING handling.** A journey whose phase isn't built yet is **PENDING** (skipped), not FAIL.
 5. **Report.** Emit a table mirroring §3 of `docs/E2E-VALIDATION.md` (PASS / FAIL / PENDING per journey)
@@ -37,6 +37,6 @@ Default to `through-phase-8` if no scope is given and Phases 9+ are not yet buil
 ## References
 
 - Runbook & journey definitions: `docs/E2E-VALIDATION.md`
-- Plan anchors: `docs/BANKAI-PLAN.md` sub-step 8.12 and Phase 16
+- Plan anchors: `docs/ARGUS-PLAN.md` sub-step 8.12 and Phase 16
 - Deterministic suite: `backend/test/e2e.test.ts`
 - Per-phase invariants to reuse: `backend/test/phaseN.test.ts`

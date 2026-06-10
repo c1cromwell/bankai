@@ -1,4 +1,4 @@
-# Bank AI — Full-Stack Architecture Plan
+# Argus Financial Partners — Full-Stack Architecture Plan
 
 ## Context
 
@@ -21,7 +21,7 @@
 ## Monorepo Structure
 
 ```
-bankai/                              ← root (pnpm workspaces + Turborepo)
+argus/                              ← root (pnpm workspaces + Turborepo)
 ├── CLAUDE.md                        ← update with full architecture
 ├── package.json                     ← root workspace config
 ├── pnpm-workspace.yaml
@@ -269,7 +269,7 @@ Extends the existing CLI token architecture to all surfaces:
 | Token | TTL | Scope | Storage |
 |---|---|---|---|
 | Session (access) | 15 min | scoped by KYC tier | Memory / Redis |
-| Refresh | 7 days | `token:refresh` | Hashed in DB; raw in `~/.bankai/credentials` (CLI) or httpOnly cookie (web) / `expo-secure-store` (mobile) |
+| Refresh | 7 days | `token:refresh` | Hashed in DB; raw in `~/.argus/credentials` (CLI) or httpOnly cookie (web) / `expo-secure-store` (mobile) |
 | Transaction | 90 sec | single action, bound to amount + account + idempotency key | Memory only |
 | Step-up | 5 min | `stepup:<action>`, single-use | Memory only |
 | Enrollment | 30 min | `enrollment:write` | Memory only |
@@ -357,7 +357,7 @@ Signed with platform key in AWS KMS. DID anchored via Hedera Consensus Service (
 ### Python agent retains all existing tools:
 `get_balance`, `initiate_transfer`, `schedule_bill_pay`, `list_transactions`, `update_profile`, `list_payees`, `list_external_accounts`, `request_step_up`, `get_agent_activity`
 
-### New tools added to `apps/agent/bankai/agent/tools.py`:
+### New tools added to `apps/agent/argus/agent/tools.py`:
 ```python
 "get_portfolio_summary"    # calls WalletModule HTTP → owned RWA tokens + USDC balance
 "list_marketplace_assets"  # calls MarketplaceModule → active asset listings
@@ -393,7 +393,7 @@ GET  /agent/health
 - React Native Expo: tab navigation, mock login, portfolio + marketplace screens
 - Hardhat project: RWAToken + RWAMarketplace deploy to Base Sepolia (mock USDC)
 - Docker Compose for local development (PostgreSQL, Redis, Python agent, NestJS)
-- **Milestone:** `bankai chat` CLI works, web shows mock portfolio, mobile shows mock assets, contract deploys on Sepolia
+- **Milestone:** `argus chat` CLI works, web shows mock portfolio, mobile shows mock assets, contract deploys on Sepolia
 
 ### Phase 2 — Real Auth + KYC + Wallets (Weeks 7–12)
 **Goal:** Real user onboarding with production-grade auth and Persona KYC.
@@ -502,7 +502,7 @@ GET  /agent/health
 ### Security-critical files (must be reviewed carefully)
 - `apps/backend/src/auth/jwt/jwt-step-up.guard.ts` — enforces step-up token before mutating ops
 - `apps/backend/src/marketplace/settlement.service.ts` — calls `RWAMarketplace.settleOrder`, must validate transaction token before submitting
-- `apps/agent/bankai/agent/executor.py` — existing; add new marketplace tool pre-condition checks
+- `apps/agent/argus/agent/executor.py` — existing; add new marketplace tool pre-condition checks
 - `packages/contracts/contracts/Compliance.sol` — transfer restriction enforcement
 
 ---
@@ -516,7 +516,7 @@ docker-compose up -d
 npx prisma migrate dev
 
 # CLI agent still works
-cd apps/agent && python -m bankai enroll && python -m bankai chat
+cd apps/agent && python -m argus enroll && python -m argus chat
 
 # FastAPI wrapper
 curl http://localhost:8001/agent/health

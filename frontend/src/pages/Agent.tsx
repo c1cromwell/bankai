@@ -120,7 +120,7 @@ export function Agent() {
       <div className="row" style={{ marginTop: 12, paddingBottom: 8 }}>
         <input
           className="grow"
-          placeholder="Message BankAI…"
+          placeholder="Message Argus Financial Partners…"
           value={input}
           disabled={busy}
           onChange={(e) => setInput(e.target.value)}

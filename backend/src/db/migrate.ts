@@ -35,7 +35,7 @@ async function applyAppendOnlyTriggers(db: Db): Promise<void> {
   } else {
     // Postgres: a shared trigger function, then per-table triggers (drop-then-create for idempotency).
     await db.exec(`
-      CREATE OR REPLACE FUNCTION bankai_block_modification() RETURNS trigger AS $$
+      CREATE OR REPLACE FUNCTION argus_block_modification() RETURNS trigger AS $$
       BEGIN
         RAISE EXCEPTION '% is append-only', TG_TABLE_NAME;
       END;
@@ -46,7 +46,7 @@ async function applyAppendOnlyTriggers(db: Db): Promise<void> {
         DROP TRIGGER IF EXISTS ${t}_no_modify ON ${t};
         CREATE TRIGGER ${t}_no_modify
           BEFORE UPDATE OR DELETE ON ${t}
-          FOR EACH ROW EXECUTE FUNCTION bankai_block_modification();
+          FOR EACH ROW EXECUTE FUNCTION argus_block_modification();
       `);
     }
   }

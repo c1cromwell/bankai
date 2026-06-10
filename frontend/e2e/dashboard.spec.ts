@@ -24,8 +24,8 @@ test.describe("Dashboard", () => {
   });
 
   test("a Tier-2 member sees the agent CTA, not the verify CTA", async ({ page }) => {
-    // alex is Tier 2, so the primary action is "Send or ask BankAI".
-    await expect(page.getByRole("button", { name: "Send or ask BankAI" })).toBeVisible();
+    // alex is Tier 2, so the primary action is "Send or ask Argus Financial Partners".
+    await expect(page.getByRole("button", { name: "Send or ask Argus Financial Partners" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Verify your identity" })).toHaveCount(0);
   });
 });

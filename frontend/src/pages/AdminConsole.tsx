@@ -68,7 +68,7 @@ export function AdminConsole() {
   return (
     <div className="page">
       <header className="bar">
-        <h1>BankAI Admin · Identities</h1>
+        <h1>Argus Financial Partners Admin · Identities</h1>
         <div>
           <button className="ghost" onClick={simulate} disabled={busy}>
             {busy ? "Generating…" : "Generate simulated identities"}

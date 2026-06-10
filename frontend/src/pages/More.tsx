@@ -19,7 +19,7 @@ export function More() {
     const cur = document.documentElement.getAttribute("data-theme") ?? "dark";
     const next = cur === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("bankai_theme", next);
+    localStorage.setItem("argus_theme", next);
   }
 
   return (

@@ -1,4 +1,4 @@
-# BankAI Web E2E (Playwright)
+# Argus Financial Partners Web E2E (Playwright)
 
 Browser-driven end-to-end tests for the React customer portal. This is the
 "browser-driver" the validation runbook says is missing — it drives the **real

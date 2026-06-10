@@ -1,9 +1,9 @@
 {
-  "name": "bankai-docs-build",
+  "name": "argus-docs-build",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Markdown → styled HTML → PDF pipeline for BankAI strategy docs",
+  "description": "Markdown → styled HTML → PDF pipeline for Argus Financial Partners strategy docs",
   "scripts": {
     "render": "node render.mjs"
   },

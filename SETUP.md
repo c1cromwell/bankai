@@ -1,6 +1,6 @@
-# BankAI — Setup Guide
+# Argus Financial Partners — Setup Guide
 
-Step-by-step setup for working on BankAI with Claude Code. macOS-first (you'll need macOS for the iOS wallet later); notes for Linux/Windows where they differ.
+Step-by-step setup for working on Argus Financial Partners with Claude Code. macOS-first (you'll need macOS for the iOS wallet later); notes for Linux/Windows where they differ.
 
 ## 0. Prerequisites
 
@@ -40,19 +40,19 @@ claude --version
 
 ## 2. Get the project onto your machine
 
-1. Download the `bankai.zip` bundle (the file presented alongside this guide in the chat).
+1. Download the `argus.zip` bundle (the file presented alongside this guide in the chat).
 2. Unzip it to wherever you keep code, e.g.:
    ```bash
    cd ~/code
-   unzip ~/Downloads/bankai.zip
-   cd bankai
+   unzip ~/Downloads/argus.zip
+   cd argus
    ```
 3. Initialize git (recommended):
    ```bash
    git init && git add -A && git commit -m "Phase 0 + 1 foundation"
    ```
 
-> If you already have an existing `bankai` repo from the original prototype, don't overwrite it. Unzip this somewhere separate and copy `backend/`, `CLAUDE.md`, and `docs/` in, reconciling by hand. The v2 `backend/` is a clean rebuild, so the safest path is to treat it as the new source of truth for the backend.
+> If you already have an existing `argus` repo from the original prototype, don't overwrite it. Unzip this somewhere separate and copy `backend/`, `CLAUDE.md`, and `docs/` in, reconciling by hand. The v2 `backend/` is a clean rebuild, so the safest path is to treat it as the new source of truth for the backend.
 
 ## 3. Authenticate Claude Code
 
@@ -65,10 +65,10 @@ On first launch it opens your browser to authenticate with your Anthropic accoun
 ## 4. Open the project in Claude Code
 
 ```bash
-cd ~/code/bankai
+cd ~/code/argus
 claude
 ```
-Claude Code automatically reads `CLAUDE.md` at the project root — that file tells it what BankAI is, the current build status, the commands, and the non-negotiable conventions. You do **not** need to run `/init` (the CLAUDE.md already exists).
+Claude Code automatically reads `CLAUDE.md` at the project root — that file tells it what Argus Financial Partners is, the current build status, the commands, and the non-negotiable conventions. You do **not** need to run `/init` (the CLAUDE.md already exists).
 
 Good first thing to type in the Claude Code session:
 ```

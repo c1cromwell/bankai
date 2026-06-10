@@ -1,5 +1,5 @@
 /**
- * BankAI API client (Phase 9 — full customer portal).
+ * Argus Financial Partners API client (Phase 9 — full customer portal).
  *
  * Two independent token stores:
  *   - the ADMIN token (getToken/setToken/clearToken) used by the Phase 5A admin
@@ -15,8 +15,8 @@ import { newIdempotencyKey } from "../lib/idempotency";
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:3001/api";
 
-const ADMIN_TOKEN_KEY = "bankai_admin_token";
-const USER_TOKEN_KEY = "bankai_user_token";
+const ADMIN_TOKEN_KEY = "argus_admin_token";
+const USER_TOKEN_KEY = "argus_user_token";
 
 // ---- Admin token (unchanged surface used by AdminLogin/AdminConsole) --------
 export function getToken(): string | null {

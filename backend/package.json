@@ -1,8 +1,8 @@
 {
-  "name": "bankai-backend",
+  "name": "argus-backend",
   "version": "2.0.0",
   "private": true,
-  "description": "BankAI backend — Hedera-aligned, production-hardened rebuild (Phase 0 + Phase 1 foundation)",
+  "description": "Argus Financial Partners backend — Hedera-aligned, production-hardened rebuild (Phase 0 + Phase 1 foundation)",
   "type": "commonjs",
   "main": "dist/index.js",
   "scripts": {

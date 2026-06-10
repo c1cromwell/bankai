@@ -11,7 +11,7 @@
 import "dotenv/config";
 import { z } from "zod";
 
-const KNOWN_DEV_JWT_SECRET = "bankai_dev_secret_change_in_production";
+const KNOWN_DEV_JWT_SECRET = "argus_dev_secret_change_in_production";
 
 const boolish = z
   .string()
@@ -35,7 +35,7 @@ const schema = z.object({
   JWT_SECRET: z.string().min(1),
 
   DATABASE_URL: z.string().optional(),
-  SQLITE_PATH: z.string().default("./data/bankai.db"),
+  SQLITE_PATH: z.string().default("./data/argus.db"),
   REDIS_URL: z.string().optional(),
 
   ALLOW_PASSWORD_AUTH: boolish,
@@ -50,7 +50,7 @@ const schema = z.object({
     ),
 
   RP_ID: z.string().default("localhost"),
-  RP_NAME: z.string().default("BankAI"),
+  RP_NAME: z.string().default("Argus Financial Partners"),
   RP_ORIGIN: z.string().default("http://localhost:5173"),
 
   IDV_PROVIDER: z.enum(["simulated", "persona"]).default("simulated"),

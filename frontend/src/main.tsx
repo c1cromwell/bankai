@@ -22,7 +22,7 @@ import { AdminConsole } from "./pages/AdminConsole";
 import "./styles.css";
 
 // Apply the persisted theme before first paint.
-document.documentElement.setAttribute("data-theme", localStorage.getItem("bankai_theme") ?? "dark");
+document.documentElement.setAttribute("data-theme", localStorage.getItem("argus_theme") ?? "dark");
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

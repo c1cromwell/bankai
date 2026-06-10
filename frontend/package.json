@@ -1,9 +1,9 @@
 {
-  "name": "bankai-frontend",
+  "name": "argus-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "BankAI customer portal — Quiet Premium design system (Phase 9)",
+  "description": "Argus Financial Partners customer portal — Quiet Premium design system (Phase 9)",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

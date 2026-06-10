@@ -55,7 +55,7 @@ export function Register() {
     <div className="center">
       <div className="card pad-lg narrow" style={{ width: "100%" }}>
         <div className="brand" style={{ padding: "0 0 18px" }}>
-          <span className="mark">B</span> BankAI
+          <span className="mark">B</span> Argus Financial Partners
         </div>
 
         {step === "form" ? (

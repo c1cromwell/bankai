@@ -75,7 +75,7 @@ export function Dashboard() {
             </button>
           ) : (
             <button className="lg" onClick={() => navigate("/agent")}>
-              Send or ask BankAI
+              Send or ask Argus Financial Partners
             </button>
           )}
           <button className="ghost" onClick={() => navigate("/invest")}>Invest</button>

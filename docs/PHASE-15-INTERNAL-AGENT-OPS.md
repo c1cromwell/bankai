@@ -1,7 +1,7 @@
 # Phase 15 — Internal Agent Operations (Design)
 
 **Status: design only — not built.** This is the implementation-ready elaboration of
-the Phase 15 block in `BANKAI-PLAN.md`, grounded in the code that already exists so
+the Phase 15 block in `ARGUS-PLAN.md`, grounded in the code that already exists so
 each sub-phase can be picked up directly. Prerequisites are met: Phase 7 (MCP +
 presentation gate) and Phase 12 (RBAC, per-agent-DID rate limit, metrics) are in.
 

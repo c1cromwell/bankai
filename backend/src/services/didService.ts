@@ -7,8 +7,8 @@
  * tokens signed with it remain verifiable.
  *
  * DIDs:
- *   - Platform issuer: did:web:bankai.com  (fragment #<kid> per key)
- *   - User subject:    did:web:bankai.com:users:<userId>  (deterministic, no key needed)
+ *   - Platform issuer: did:web:argusfinancial.com  (fragment #<kid> per key)
+ *   - User subject:    did:web:argusfinancial.com:users:<userId>  (deterministic, no key needed)
  * In Phase 5 both migrate to did:hedera:mainnet:<accountId>.
  */
 
@@ -89,11 +89,11 @@ export async function rotateKey(): Promise<ActiveKey> {
 }
 
 /** Platform issuer DID. Fragment #<kid> is appended by callers when needed. */
-export const issuerDid = "did:web:bankai.com";
+export const issuerDid = "did:web:argusfinancial.com";
 
 /** User subject DID — deterministic from userId (Phase 5 migrates to did:hedera). */
 export function userDid(userId: string): string {
-  return `did:web:bankai.com:users:${userId}`;
+  return `did:web:argusfinancial.com:users:${userId}`;
 }
 
 // ---------------------------------------------------------------------------

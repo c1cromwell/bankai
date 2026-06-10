@@ -11,7 +11,7 @@ export default defineConfig({
       ALLOW_PASSWORD_AUTH: "true",
       RP_ID: "localhost",
       RP_ORIGIN: "http://localhost:5173",
-      RP_NAME: "BankAI Test",
+      RP_NAME: "Argus Financial Partners Test",
     },
   },
 });

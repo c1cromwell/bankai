@@ -41,7 +41,7 @@ const TOOLS: ToolDef[] = [
   { name: "get_balance", description: "Read the user's cash and savings balances.", requiredScope: "balance:read" },
   { name: "get_transactions", description: "List the user's recent transactions.", requiredScope: "statement:read" },
   { name: "get_profile", description: "Read the user's identity tier and status.", requiredScope: "profile:read" },
-  { name: "transfer_funds", description: "Transfer funds to another BankAI user.", requiredScope: "transfer:low" },
+  { name: "transfer_funds", description: "Transfer funds to another Argus Financial Partners user.", requiredScope: "transfer:low" },
 ];
 const TOOL_BY_NAME = new Map(TOOLS.map((t) => [t.name, t]));
 

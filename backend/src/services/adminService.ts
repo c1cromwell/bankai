@@ -27,7 +27,7 @@ import {
 import { SIM_PROFILES, DEFAULT_SIM_PROFILES } from "../sim/profiles";
 import type { AdminRole } from "../middleware/rbac";
 
-const SEED_ADMIN_EMAIL = "admin@bankai.com";
+const SEED_ADMIN_EMAIL = "admin@argusfinancial.com";
 const SEED_ADMIN_PASSWORD = "Admin1234!";
 
 interface AdminRow {

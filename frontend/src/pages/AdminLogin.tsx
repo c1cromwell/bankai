@@ -4,7 +4,7 @@ import { api, setToken } from "../api/client";
 
 export function AdminLogin() {
   const nav = useNavigate();
-  const [email, setEmail] = useState("admin@bankai.com");
+  const [email, setEmail] = useState("admin@argusfinancial.com");
   const [password, setPassword] = useState("Admin1234!");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -27,7 +27,7 @@ export function AdminLogin() {
   return (
     <div className="center">
       <form className="card" onSubmit={submit} style={{ width: 360 }}>
-        <h1>BankAI Admin</h1>
+        <h1>Argus Financial Partners Admin</h1>
         <p className="muted">Risk-adaptive onboarding console</p>
         <label>Email</label>
         <input value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -43,7 +43,7 @@ export function AdminLogin() {
           onClick={async () => {
             try {
               await api.seed();
-              setError("Seeded admin@bankai.com / Admin1234!");
+              setError("Seeded admin@argusfinancial.com / Admin1234!");
             } catch (err) {
               setError((err as Error).message);
             }
