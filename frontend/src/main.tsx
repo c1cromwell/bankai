@@ -16,6 +16,7 @@ import { InternalAgents } from "./pages/InternalAgents";
 import { AgentPermissions } from "./pages/AgentPermissions";
 import { Activity } from "./pages/Activity";
 import { Wallet } from "./pages/Wallet";
+import { Trade } from "./pages/Trade";
 import { More } from "./pages/More";
 import { AdminLogin } from "./pages/AdminLogin";
 import { AdminConsole } from "./pages/AdminConsole";
@@ -63,6 +64,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/agents" element={<InternalAgents />} />
               <Route path="/permissions" element={<AgentPermissions />} />
               <Route path="/activity" element={<Activity />} />
+              <Route path="/trade" element={<Trade />} />
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/more" element={<More />} />
             </Route>

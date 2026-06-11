@@ -39,6 +39,7 @@ import { mcpRouter } from "./routes/mcp";
 import { myAgentsRouter } from "./routes/myAgents";
 import { marketplaceRouter } from "./routes/marketplace";
 import { marketplaceAdminRouter } from "./routes/marketplaceAdmin";
+import { tradingRouter } from "./routes/trading";
 import { requireAuth } from "./middleware/auth";
 import { requireTier } from "./middleware/requireTier";
 
@@ -142,6 +143,9 @@ async function bootstrap(): Promise<void> {
   // admin surface for issuance + listing lifecycle (mounted under /api/admin).
   app.use("/api/marketplace", marketplaceRouter);
   app.use("/api/admin", marketplaceAdminRouter);
+
+  // ---- Phase 17 Stage 1 — trading (isolated; service-gated by TRADING_ENABLED) ----
+  app.use("/api/trading", tradingRouter);
 
   // Error handler LAST
   app.use(errorHandler);

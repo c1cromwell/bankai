@@ -311,6 +311,30 @@ export interface OrderResult {
   journalId: string | null;
 }
 
+// Trading (Phase 17 Stage 1 — isolated; 503 TRADING_DISABLED when off)
+export interface Instrument {
+  symbol: string;
+  kind: string;
+  displayName: string;
+  currency: string;
+  lastPriceMinor: string;
+  minOptionsLevel: number;
+}
+export interface TradeOrder {
+  id: string;
+  symbol: string;
+  side: "buy" | "sell";
+  type: "market" | "limit";
+  qtyBase: string;
+  status: string;
+  rejectReason: string | null;
+  createdAt: string;
+}
+export interface TradePosition {
+  symbol: string;
+  qtyBase: string;
+}
+
 // Hedera
 export interface HederaAccount {
   hederaAccountId: string;
@@ -438,6 +462,13 @@ export const userApi = {
     umoney<OrderResult>(`/marketplace/assets/${assetId}/subscribe`, { qtyBase }, key),
   order: (assetId: string, side: "buy" | "sell", qtyBase: string, key: string) =>
     umoney<OrderResult>("/marketplace/orders", { assetId, side, qtyBase }, key),
+
+  // --- trading (Phase 17 Stage 1) ---
+  instruments: () => uget<Instrument[]>("/trading/instruments"),
+  tradeOrders: (limit = 25) => uget<TradeOrder[]>(`/trading/orders?limit=${limit}`),
+  positions: () => uget<TradePosition[]>("/trading/positions"),
+  placeTrade: (body: { symbol: string; side: "buy" | "sell"; type?: "market" | "limit"; qtyBase: string; limitPriceMinor?: string }, key: string) =>
+    umoney<TradeOrder>("/trading/orders", body, key),
 
   // --- hedera (conditional; 404/NOT_IMPLEMENTED when disabled) ---
   hederaAccount: () => uget<HederaAccount>("/hedera/account"),
