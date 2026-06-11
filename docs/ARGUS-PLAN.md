@@ -37,7 +37,7 @@
 - [ ] **Phase 16** — Comprehensive end-to-end validation (journey × channel matrix; hybrid agent/MCP + deterministic backbone) — **design + scaffolding; runbook in `docs/E2E-VALIDATION.md`**
 
 **Long-term roadmap (toward the full vision — gated on regulated partners/licensing, none built):**
-- [ ] **Phase 17** — Trading & brokerage (equities, options, crypto spot; market data; order routing) → **Corp C** (broker-dealer/clearing partner)
+- [~] **Phase 17** — Trading & brokerage (equities, options, crypto spot; market data; order routing) → **Corp C** (broker-dealer/clearing partner). **Design delivered: `docs/PHASE-17-TRADING-BROKERAGE.md`** — SLA-isolation architecture (trading bulkheaded; settles into the ledger async + idempotently; can be shed to protect money-critical SLOs). No runtime code.
 - [ ] **Phase 18** — Tokenization production (real-estate + securities for real money; audited ERC-3643, real HTS, transfer agent, **ATS** resale) → **Corp B/C**
 - [ ] **Phase 19** — Full-bank rails (fiat on/off-ramp, FBO accounts, ACH/wire, cards, statements, partner-bank deposits) → **Corp B** (BaaS partner + FinCEN MSB)
 - [ ] **Phase 20** — Production hardening & scale (KMS/HSM custody, ledger⇄chain reconciliation, fraud Stages 2–4, Temporal/Conductor orchestration, data warehouse) → **Corp B/C**
@@ -1188,6 +1188,11 @@ items once a device target and a staging environment exist.
 > truth for cash and positions; on-chain/partner systems mirror it, never replace it.**
 
 ## Phase 17 — Trading & brokerage (equities, options, crypto spot) → **Corp C**
+
+> **Design delivered — `docs/PHASE-17-TRADING-BROKERAGE.md`.** Centerpiece: trading is a bulkheaded,
+> separately-scaled domain that the core bank never blocks on; it touches the ledger **only at settlement**,
+> async + idempotent via the `external_clearing` seam, and is kill-switchable/shed-able so it can never
+> breach the money-critical (Class A) SLOs. Includes an isolated, simulated **Stage-1** slice buildable now.
 
 Bring Robinhood-class trading to the same agent-operable surface. New `securities`/`positions`/`orders`
 domain, **distinct from** the Phase-8 tokenized-RWA marketplace (that is issuance/holdings; this is
