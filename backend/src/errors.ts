@@ -40,6 +40,9 @@ export enum ErrorCode {
   // Fraud / risk (Stage 1 fraud seam)
   FRAUD_BLOCKED = "FRAUD_BLOCKED",
 
+  // Account frozen by fraud remediation (Phase 20 fraud add-on callback)
+  ACCOUNT_FROZEN = "ACCOUNT_FROZEN",
+
   // Trading (Phase 17 Stage 1 seam)
   TRADING_DISABLED = "TRADING_DISABLED",
 
@@ -75,6 +78,7 @@ const DEFAULT_HTTP_STATUS: Record<ErrorCode, number> = {
   [ErrorCode.REPLAY_DETECTED]: 409,
   [ErrorCode.COMPLIANCE_BLOCKED]: 403,
   [ErrorCode.FRAUD_BLOCKED]: 403,
+  [ErrorCode.ACCOUNT_FROZEN]: 403,
   [ErrorCode.TRADING_DISABLED]: 503,
   [ErrorCode.PAY_DISABLED]: 503,
   [ErrorCode.RECONCILIATION_HOLD]: 503,

@@ -44,6 +44,7 @@ import { escrowRouter } from "./routes/escrow";
 import { escrowAdminRouter } from "./routes/escrowAdmin";
 import { payRouter } from "./routes/pay";
 import { reconciliationAdminRouter } from "./routes/reconciliationAdmin";
+import { internalRemediationRouter } from "./routes/internalRemediation";
 import { initReconciliation, startReconciliationLoop, runReconciliation } from "./services/reconciliationService";
 import { requireAuth } from "./middleware/auth";
 import { requireTier } from "./middleware/requireTier";
@@ -173,6 +174,11 @@ async function bootstrap(): Promise<void> {
 
   // ---- Phase 20 — ledger⇄chain reconciliation (RBAC admin surface) ----
   app.use("/api/admin", reconciliationAdminRouter);
+
+  // ---- Phase 20 fraud add-on — remediation callbacks from the fraud engine ----
+  // Service-bearer auth (FRAUD_ENGINE_API_KEY), not user sessions. The engine calls
+  // these to freeze/flag on a severe async decision. Mounted OUTSIDE /api/* RBAC.
+  app.use("/api/internal/remediation", internalRemediationRouter);
 
   // Error handler LAST
   app.use(errorHandler);

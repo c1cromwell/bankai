@@ -4,7 +4,9 @@
 **Date:** 2026-06-09
 **Verdict:** **No — and by design.** `FraudEngine.md` is a production-scale, event-driven *target* architecture. The current repo is the TypeScript/Node prototype. Essentially none of the FraudEngine *platform* exists yet, and the prototype was never scoped to implement it. This document maps the gap precisely and proposes a phased path.
 
-> **Update (2026-06-09): Stage 1 is now built.** The in-process fraud seam (§5 Stage 1) ships in `backend/src/services/fraudService.ts` + the append-only `fraud_decisions` table, screening the money path inside `transferService`. This **closes §4** (there is now a transaction-time fraud check). Stages 2–4 (Kafka/Flink/model-serving) remain v2 and unbuilt. The component table below still reflects the *platform* gap, which is unchanged.
+> **Update (2026-06-09): Stage 1 is now built.** The in-process fraud seam (§5 Stage 1) ships in `backend/src/services/fraudService.ts` + the append-only `fraud_decisions` table, screening the money path inside `transferService`. This **closes §4** (there is now a transaction-time fraud check).
+
+> **Update (2026-06-13): Stages 2–4 are now built as a standalone add-on (`fraud-engine/`).** The full platform — event backbone + schema registry, per-user feature store + enrichment, a `rules-v1` ensemble plus a `seq-v0` sequence model (Transformer stand-in), a model **registry + serving** layer with **config-driven routing and shadow/canary**, an append-only decision topic, an analyst **case queue**, an **async remediation** loop that calls back into Argus to **freeze/flag**, and a **label → retrain** loop — runs in `fraud-engine/` as a separate Node/TS service that imports **nothing** from `backend/`. Argus uses it over HTTP via a hybrid integration: an in-Argus triage decides blocking-vs-fire-and-forget; the remote score is advisory, the local deterministic gate + account-freeze are authoritative. Each layer is a prototype-scale stand-in behind an interface that maps 1:1 to the north-star tech (Kafka/Flink/Triton/MLflow/lakehouse), which remain the production graduation — see `fraud-engine/README.md`. The component table below describes the *production platform* gap; the **add-on implements the architecture, not the production infrastructure**.
 
 > Scope note: this is an analysis deliverable. No runtime code was changed. Findings reflect the repo at the commit this file was added.
 
@@ -84,14 +86,14 @@ Onboarding-only `signalService` + `riskOrchestratorService`; compliance gating o
 - ✅ Only **funded** transfers are screened (an unfunded attempt stays `INSUFFICIENT_FUNDS`); the in-transaction balance check remains authoritative for TOCTOU.
 - **Closes §4.** Tests: `backend/test/fraud.test.ts` (10) — pure scorer, allow/block/shadow on the money path, append-only enforcement, unfunded skip. Full suite 141 pass / 3 todo.
 
-### Stage 2 — Stream backbone *(v2 — locked-architecture review required)*
-Introduce Kafka/Redpanda + Schema Registry; make `risk_event` a real topic with an Avro/Protobuf schema; move scoring into a dedicated consumer. Decisions published to an output topic; products/orchestrator consume it.
+### Stage 2 — Stream backbone — ✅ **BUILT as `fraud-engine/` (2026-06-13)**
+`bus/eventBus.ts` (`EventBus` interface + `InProcessEventBus`, consumer groups, topics) is the broker analog; `bus/schemaRegistry.ts` validates versioned event schemas on ingest. `POST /v1/events` ingests; scoring runs in a decision pipeline; decisions publish to a `decisions` topic consumed by the remediation service. **Production graduation:** swap `InProcessEventBus` for a Kafka/Redpanda client behind the same interface; add cross-process exactly-once.
 
-### Stage 3 — Stateful enrichment + feature store *(v2)*
-Flink (or equivalent) for per-user-partitioned sequence state; online feature store for sub-10 ms lookups.
+### Stage 3 — Stateful enrichment + feature store — ✅ **BUILT**
+`features/featureStore.ts` (`SqliteFeatureStore`) holds per-user sequence state (velocity window, trailing max, distinct payees, recent-amount sequence, last geo/device); `features/enrichment.ts` joins the snapshot before scoring. **Production graduation:** replace the SQLite store with a Tecton/Redis online store + Flink-partitioned state behind the `FeatureStore` interface.
 
-### Stage 4 — Transformer serving + registry + shadow/canary *(v2)*
-Model serving (Triton/vLLM/managed); MLflow-style registry; config-driven routing; shadow/canary/promote; lakehouse-fed retraining. This is the full FraudEngine.md target.
+### Stage 4 — Model serving + registry + shadow/canary — ✅ **BUILT**
+`models/registry.ts` (versions + `prod|shadow|canary|retired`), `models/serving.ts` (`ModelServer` + `ServingBackend` seam), `router/router.ts` (config-driven prod ensemble + shadow + hash-bucketed canary, live promotion), and `learning/retrain.ts` (labels → drift → registered shadow candidate). `rules-v1` is the prod floor; `seq-v0` is the served sequence model (Transformer stand-in). **Production graduation:** register a real Triton/vLLM endpoint as a `ServingBackend`, back the registry with MLflow, and feed retraining from a real lakehouse. This is the full FraudEngine.md target architecture, with the heavy infra as the remaining swap.
 
 ---
 

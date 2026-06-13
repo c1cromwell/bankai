@@ -54,6 +54,21 @@ export const fraudDecisionTotal = new client.Counter({
   registers: [registry],
 });
 
+// Phase 20 fraud add-on — call-outs to the standalone fraud engine + freeze callbacks.
+export const fraudRemoteCallTotal = new client.Counter({
+  name: "fraud_remote_call_total",
+  help: "Calls to the standalone fraud engine",
+  labelNames: ["mode", "result"], // mode: sync|async ; result: ok|degraded|error
+  registers: [registry],
+});
+
+export const accountHoldTotal = new client.Counter({
+  name: "account_hold_total",
+  help: "Account holds placed/released via fraud remediation",
+  labelNames: ["action", "source"], // action: place|release|flag ; source: fraud_engine|admin
+  registers: [registry],
+});
+
 // Phase 17 — trading (Class-B SLO surface; kept distinct from Class-A money metrics).
 export const tradingOrderTotal = new client.Counter({
   name: "trading_order_total",

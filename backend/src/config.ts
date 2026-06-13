@@ -12,6 +12,7 @@ import "dotenv/config";
 import { z } from "zod";
 
 const KNOWN_DEV_JWT_SECRET = "argus_dev_secret_change_in_production";
+const KNOWN_DEV_FRAUD_KEY = "fraud_dev_key_change_in_production";
 
 const boolish = z
   .string()
@@ -90,6 +91,22 @@ const schema = z.object({
   FRAUD_ENGINE_ENABLED: boolishDefaultTrue,
   FRAUD_ENGINE_ENFORCE: boolishDefaultTrue,
 
+  // Phase 20 — comprehensive fraud platform as a standalone ADD-ON service
+  // (the `fraud-engine/` deployable; Stages 2–4 of FraudEngine.md). Argus talks
+  // to it ONLY over HTTP via fraudClient — no shared code. A lightweight local
+  // triage (the rules-v0 scorer) decides whether each money event is screened
+  // synchronously (blocking) or emitted fire-and-forget; the remote score is
+  // ADVISORY, the local deterministic gate + account freeze remain authoritative.
+  //   FRAUD_ENGINE_URL       — base URL of the fraud engine (unset ⇒ client inert; local-only).
+  //   FRAUD_ENGINE_API_KEY   — shared service bearer (engine validates it; engine reuses it to call back).
+  //   FRAUD_REMOTE_ENABLED   — master switch for any call-out (default on, but inert without a URL).
+  //   FRAUD_REMOTE_REQUIRED  — fail CLOSED when the engine is unreachable on the blocking path
+  //                            (default off ⇒ degrade open: a missing engine never blocks money).
+  FRAUD_ENGINE_URL: z.string().url().optional(),
+  FRAUD_ENGINE_API_KEY: z.string().optional(),
+  FRAUD_REMOTE_ENABLED: boolishDefaultTrue,
+  FRAUD_REMOTE_REQUIRED: boolish,
+
   // Phase 17 Stage 1 — trading & brokerage seam. Off by default — a kill-switch that
   // disables all trading without touching the bank (docs/PHASE-17-TRADING-BROKERAGE.md).
   // The Stage-1 broker is SIMULATED only and must never run in production (see productionFatals).
@@ -153,6 +170,16 @@ export function productionFatals(c: z.infer<typeof schema>): string[] {
   }
   if (!c.ADMIN_JWT_SECRET || c.ADMIN_JWT_SECRET === c.JWT_SECRET) {
     fatal.push("ADMIN_JWT_SECRET must be set and distinct from JWT_SECRET in production.");
+  }
+  // When the backend is actually wired to a fraud engine, the shared service key
+  // must be strong (it also authenticates the engine's freeze callbacks). Enabled
+  // without a URL is inert and allowed, so existing deploys are unaffected.
+  if (c.FRAUD_REMOTE_ENABLED && c.FRAUD_ENGINE_URL) {
+    if (!c.FRAUD_ENGINE_API_KEY || c.FRAUD_ENGINE_API_KEY === KNOWN_DEV_FRAUD_KEY) {
+      fatal.push("FRAUD_ENGINE_URL is set but FRAUD_ENGINE_API_KEY is missing or the known dev default.");
+    } else if (c.FRAUD_ENGINE_API_KEY.length < 32) {
+      fatal.push("FRAUD_ENGINE_API_KEY must be at least 32 characters in production.");
+    }
   }
   return fatal;
 }

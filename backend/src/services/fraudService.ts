@@ -23,8 +23,22 @@ import { getDb, type Db } from "../db";
 import { AppError, ErrorCode } from "../errors";
 import { logAudit } from "./auditService";
 import { fraudDecisionTotal } from "../observability/metrics";
+import { getFraudClient, type RemoteDecision } from "./fraudClient";
 
 export type FraudAction = "allow" | "flag" | "challenge" | "block";
+
+/** Severity ordering — used to merge the local (advisory) and remote (advisory)
+ *  opinions: the effective action is the MORE severe of the two, so the remote
+ *  engine can only RAISE scrutiny, never silently un-block. */
+const SEVERITY: Record<string, number> = { allow: 0, flag: 1, challenge: 2, block: 3, freeze: 4 };
+
+/** Map a remote action onto the sync money-gate vocabulary: an inline transfer
+ *  cannot be "frozen" (that is a standing, async remediation) — it blocks. */
+function clampSync(action: string): FraudAction {
+  if (action === "freeze") return "block";
+  if (action === "allow" || action === "flag" || action === "challenge" || action === "block") return action;
+  return "allow";
+}
 
 /** The model identifier recorded with every decision. Rules today; a served
  *  Transformer version later (FraudEngine.md target). */
@@ -205,10 +219,34 @@ async function recordDecision(
 }
 
 /**
- * Screen a transfer before settlement. Always records a decision (when the engine
- * is enabled); throws FRAUD_BLOCKED only when the action is `block` AND enforcement
- * is on (otherwise shadow mode — recorded, not acted on). Returns the decision so
- * callers may surface flag/challenge in their own flow.
+ * Merge the local (rules-v0) and remote (fraud-engine) opinions. Both are
+ * advisory; the effective action is the MORE severe of the two, so the engine
+ * can only raise scrutiny. The remote model version is recorded so a decision is
+ * traceable to whatever scored it.
+ */
+function mergeDecision(local: FraudDecision, remote: RemoteDecision): FraudDecision {
+  const remoteAction = clampSync(remote.action);
+  const action = (SEVERITY[remoteAction] ?? 0) > (SEVERITY[local.action] ?? 0) ? remoteAction : local.action;
+  return {
+    action,
+    score: Math.max(local.score, remote.score),
+    reasons: [...local.reasons, ...remote.reasons.map((r) => ({ code: `remote:${r.code}`, weight: r.weight }))],
+    modelVersion: `${local.modelVersion}+${remote.modelVersion}`,
+  };
+}
+
+/**
+ * Screen a transfer before settlement. The in-Argus triage (the local rules-v0
+ * scorer) classifies the event:
+ *   - non-benign (any elevated signal) → screened SYNCHRONOUSLY against the
+ *     standalone fraud engine; the merged action gates settlement (blocking path).
+ *   - benign                           → emitted FIRE-AND-FORGET so the engine
+ *     still ingests/scores it (and may later call back to freeze) without adding
+ *     latency to the money path.
+ *
+ * Throws FRAUD_BLOCKED only when the effective action is `block` AND enforcement
+ * is on (otherwise shadow mode — recorded, not acted on). The remote score is
+ * ADVISORY; this deterministic gate is the only thing that blocks money here.
  *
  * Callers must only screen FUNDED transfers (skip on insufficient funds) so an
  * unfunded attempt fails as INSUFFICIENT_FUNDS, not as fraud.
@@ -218,11 +256,33 @@ export async function screenTransfer(ev: TransferRiskEvent): Promise<FraudDecisi
     return { action: "allow", score: 0, reasons: [], modelVersion: FRAUD_MODEL_VERSION };
   }
 
+  // 1) Local deterministic scorer — both the enforcement floor and the triage classifier.
   const features = await gatherFeatures(ev, getDb());
-  const decision = scoreTransferFeatures(ev.amountMinor, features);
+  const local = scoreTransferFeatures(ev.amountMinor, features);
 
-  const willEnforce = decision.action === "block" && config.FRAUD_ENGINE_ENFORCE;
-  await recordDecision(ev, decision, willEnforce);
+  // 2) Triage → blocking (sync) vs fire-and-forget (async) call to the engine.
+  const client = getFraudClient();
+  const remoteEvent = {
+    eventType: ev.eventType,
+    channel: ev.channel,
+    userId: ev.userId,
+    counterpartyId: ev.counterpartyId,
+    amountMinor: ev.amountMinor,
+    currency: ev.currency,
+    idempotencyKey: ev.idempotencyKey,
+  };
+
+  let effective: FraudDecision = local;
+  if (local.action !== "allow") {
+    const remote = await client.scoreSync(remoteEvent);
+    if (remote) effective = mergeDecision(local, remote);
+  } else {
+    await client.emitAsync(remoteEvent);
+  }
+
+  // 3) Deterministic gate on the effective (merged) action.
+  const willEnforce = effective.action === "block" && config.FRAUD_ENGINE_ENFORCE;
+  await recordDecision(ev, effective, willEnforce);
 
   if (willEnforce) {
     throw new AppError(
@@ -231,7 +291,7 @@ export async function screenTransfer(ev: TransferRiskEvent): Promise<FraudDecisi
     );
   }
 
-  return decision;
+  return effective;
 }
 
 export interface FraudDecisionRow {

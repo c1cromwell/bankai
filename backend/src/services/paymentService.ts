@@ -34,6 +34,7 @@ import { config } from "../config";
 import { getDb, type Db } from "../db";
 import { AppError, ErrorCode } from "../errors";
 import { logAudit } from "./auditService";
+import { isAccountFrozen } from "./accountHoldService";
 import { payEventTotal } from "../observability/metrics";
 import {
   hold,
@@ -290,6 +291,10 @@ export async function payIntent(input: {
   tokenJti?: string;
 }): Promise<PaymentIntentRow> {
   assertPayEnabled();
+  // A frozen payer cannot pay (fraud remediation gate — same as transfers).
+  if (await isAccountFrozen(input.payerUserId)) {
+    throw new AppError(ErrorCode.ACCOUNT_FROZEN, "This account is temporarily frozen pending a fraud review. Contact support.");
+  }
   const db = getDb();
   const raw = await getRawIntent(input.intentId);
   const status = effectiveStatus(raw);

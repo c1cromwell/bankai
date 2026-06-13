@@ -11,6 +11,7 @@ import { getDb } from "../db";
 import { AppError, ErrorCode } from "../errors";
 import { logAudit } from "./auditService";
 import { screenTransfer } from "./fraudService";
+import { isAccountFrozen } from "./accountHoldService";
 import {
   getOrCreateUserAccount,
   getBalance,
@@ -42,6 +43,17 @@ export async function transfer(input: TransferInput): Promise<TransferResult> {
   }
 
   const db = getDb();
+
+  // Account freeze (fraud remediation) takes precedence over everything — a frozen
+  // sender cannot move money on any channel, funded or not. The freeze is a
+  // deterministic state Argus owns, set by the fraud engine's async callback or an
+  // admin; the (advisory) remote model can trigger it but never bypass this gate.
+  if (await isAccountFrozen(input.fromUserId)) {
+    throw new AppError(
+      ErrorCode.ACCOUNT_FROZEN,
+      "This account is temporarily frozen pending a fraud review. Contact support."
+    );
+  }
 
   // Verify recipient exists before touching any ledger accounts (C-2).
   const toUser = await db.queryOne<{ id: string }>("SELECT id FROM users WHERE id = ?", [input.toUserId]);
