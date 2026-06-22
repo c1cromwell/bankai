@@ -12,7 +12,7 @@ May Argus list and facilitate purchase of tokenized physical collectibles (grade
 - Custody: partner vault (insured); Argus does not take possession
 - User funds: non-custodial USDC on Hedera
 - Redemption: partner redemption flow; Argus routes UX only
-- KYC: Tier 0/1 for non-security collectibles per Q-ID-003 decision
+- KYC: Tier **1+** required to buy collectibles (all lanes); Tier 0 browse-only (Q-ID-003, 2026-06)
 
 ## Analysis (counsel completes)
 

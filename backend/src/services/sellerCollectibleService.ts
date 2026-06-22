@@ -208,7 +208,7 @@ export async function approveSubmission(id: string, reviewerId: string) {
       listingType: "seller_p2p",
     },
     custodyAttestationUri: `cert:${row.grader}:${row.cert_number}`,
-    minTier: 0,
+    minTier: 1, // Q-ID-003: Tier 1+ required to buy collectibles
     initialSupply: 1n,
   });
 

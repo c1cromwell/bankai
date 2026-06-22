@@ -6,79 +6,79 @@ This document rolls up every open question (`[Q-XXX-NNN]`) flagged across the PR
 
 ### Identity & onboarding
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-ID-001 | Pseudonymous Argus Financial Partners handles (e.g., `@alice`) — supported in v1, and if so, are they network-discoverable or contact-list-only? | Product | Phase 1 |
-| Q-ID-002 | Final IDV vendor selection — Persona, Onfido, or Stripe Identity | Compliance + Eng | Phase 0 end |
-| Q-ID-003 | Tier 0 users in US buying non-security NFTs — allowed with dollar cap, or Tier 1+ required? | Compliance + Legal | Phase 1 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-ID-001 | Pseudonymous Argus Financial Partners handles (e.g., `@alice`) — supported in v1, and if so, are they network-discoverable or contact-list-only? | Product | Phase 1 | Open |
+| Q-ID-002 | Final IDV vendor selection — Persona, Onfido, or Stripe Identity | Compliance + Eng | Phase 0 end | Open |
+| Q-ID-003 | Tier 0 users in US buying non-security NFTs — allowed with dollar cap, or Tier 1+ required? | Compliance + Legal | Phase 1 | **Tier 1+** to buy collectibles (all lanes); Tier 0 browse-only |
 
 ### Wallet & custody
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-WALLET-001 | External security audit firm selection — Trail of Bits, Cure53, or NCC Group? All three are credible; differentiated by Hedera familiarity (Trail of Bits has done Hedera work) and turnaround time | Eng + Compliance | Phase 0 mid |
-| Q-WALLET-002 | Recovery secondary factor — required, or user-configurable? Required gives stronger recovery posture; optional gives smoother onboarding | Product + Compliance | Phase 1 |
-| Q-WALLET-003 | Cross-device key sync mechanism — use iCloud Keychain / Google Password Manager attestation directly, or always require server-side backup retrieval? Direct sync is faster but adds platform dependencies | Engineering | Phase 0 end |
-| Q-WALLET-004 | v2 swap-in evaluation criteria — at what scale/partner-demand threshold do we evaluate moving to Fireblocks Dynamic or equivalent? Need explicit criteria before Phase 2 to prevent later founder-mode swapping | CEO + Eng | Phase 2 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-WALLET-001 | External security audit firm selection — Trail of Bits, Cure53, or NCC Group? All three are credible; differentiated by Hedera familiarity (Trail of Bits has done Hedera work) and turnaround time | Eng + Compliance | Phase 0 mid | Open |
+| Q-WALLET-002 | Recovery secondary factor — required, or user-configurable? Required gives stronger recovery posture; optional gives smoother onboarding | Product + Compliance | Phase 1 | Open |
+| Q-WALLET-003 | Cross-device key sync mechanism — use iCloud Keychain / Google Password Manager attestation directly, or always require server-side backup retrieval? Direct sync is faster but adds platform dependencies | Engineering | Phase 0 end | Open |
+| Q-WALLET-004 | v2 swap-in evaluation criteria — at what scale/partner-demand threshold do we evaluate moving to Fireblocks Dynamic or equivalent? Need explicit criteria before Phase 2 to prevent later founder-mode swapping | CEO + Eng | Phase 2 | Open |
 
 ### Marketplace
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-MK-001 | First-party tokenization partner for v2 — Securitize, Tokeny, or build in-house with a transfer agent partner? | Product + Compliance | v2 planning |
-| Q-MK-002 | Order book vs AMM for secondary collectibles trading | Engineering | Phase 1 |
-| Q-MK-003 | Curated drops in v1 or v2? Strong consumer pull but adds complexity | Product | Phase 2 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-MK-001 | First-party tokenization partner for v2 — Securitize, Tokeny, or build in-house with a transfer agent partner? | Product + Compliance | v2 planning | Open |
+| Q-MK-002 | Order book vs AMM for secondary collectibles trading | Engineering | Phase 1 | v1 fixed-price + seller escrow P2P; order book → v2 |
+| Q-MK-003 | Curated drops in v1 or v2? Strong consumer pull but adds complexity | Product | Phase 2 | Open |
 
 ### Payments & rails
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-PAY-001 | Final partner bank — Column, Lead, or Cross River | CEO + Compliance | Phase 0 end |
-| Q-PAY-002 | Which 3 international corridors at launch — current shortlist Nigeria, Philippines, Brazil; alternatives Mexico, Indonesia, Kenya | CEO + BD | Phase 1 |
-| Q-PAY-003 | International on-ramp vendor — Bridge for most, but per-corridor specialists (Yellow Card for Nigeria, dLocal for LatAm) | BD + Eng | Phase 1 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-PAY-001 | Final partner bank — Column, Lead, or Cross River | CEO + Compliance | Phase 0 end | Open |
+| Q-PAY-002 | Which 3 international corridors at launch — current shortlist Nigeria, Philippines, Brazil; alternatives Mexico, Indonesia, Kenya | CEO + BD | Phase 1 | Deferred (Q-ROADMAP-001 US-first) |
+| Q-PAY-003 | International on-ramp vendor — Bridge for most, but per-corridor specialists (Yellow Card for Nigeria, dLocal for LatAm) | BD + Eng | Phase 1 | Deferred (Q-ROADMAP-001 US-first) |
 
 ### Technical architecture
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-TECH-001 | Self-hosted Conductor OSS vs Orkes Cloud | Engineering | Phase 0 |
-| Q-TECH-002 | Aurora vs CockroachDB for ledger | Engineering | Phase 0 |
-| Q-TECH-003 | Self-hosted Hedera Mirror Node vs managed (Arkhia) | Engineering | Phase 0 |
-| Q-TECH-004 | gRPC + Connect vs REST + OpenAPI for external API | Engineering | Phase 0 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-TECH-001 | Self-hosted Conductor OSS vs Orkes Cloud | Engineering | Phase 0 | Open |
+| Q-TECH-002 | Aurora vs CockroachDB for ledger | Engineering | Phase 0 | Open |
+| Q-TECH-003 | Self-hosted Hedera Mirror Node vs managed (Arkhia) | Engineering | Phase 0 | Open |
+| Q-TECH-004 | gRPC + Connect vs REST + OpenAPI for external API | Engineering | Phase 0 | Open |
 
 ### Agent operations
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-AGENT-001 | LLM provider(s) — Claude primary; do specific skills need specialized models? | Eng + AI | Phase 0 |
-| Q-AGENT-002 | Conductor self-host vs Cloud (duplicate of Q-TECH-001) | | |
-| Q-AGENT-003 | Real-time customer support agent in v1 or v2 | Product + Compliance | Phase 2 |
-| Q-AGENT-004 | Agent access to user PII for support purposes | Compliance + Legal | Phase 1 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-AGENT-001 | LLM provider(s) — Claude primary; do specific skills need specialized models? | Eng + AI | Phase 0 | Open |
+| Q-AGENT-002 | Conductor self-host vs Cloud (duplicate of Q-TECH-001) | | | Open |
+| Q-AGENT-003 | Real-time customer support agent in v1 or v2 | Product + Compliance | Phase 2 | Open |
+| Q-AGENT-004 | Agent access to user PII for support purposes | Compliance + Legal | Phase 1 | No raw PII; masked profile + ledger only |
 
 ### Compliance & jurisdictions
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-COMP-001 | International operating entity jurisdiction — Singapore, BVI, Bermuda, Switzerland | CEO + Legal | Phase 0 |
-| Q-COMP-002 | Wyoming SPDI charter pursuit — immediately or wait for traction | CEO + Compliance | Phase 1 |
-| Q-COMP-003 | Travel Rule provider — Notabene, Sumsub, VerifyVASP | Compliance + Eng | Phase 0 end |
-| Q-COMP-004 | Transaction monitoring vendor — Comply Advantage, Hummingbird, Quantifind | Compliance + Eng | Phase 0 end |
-| Q-COMP-005 | Insurance limits — custodial, crime, E&O, D&O at launch | CFO + Legal | Phase 2 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-COMP-001 | International operating entity jurisdiction — Singapore, BVI, Bermuda, Switzerland | CEO + Legal | Phase 0 | Deferred (Q-ROADMAP-001 US-first) |
+| Q-COMP-002 | Wyoming SPDI charter pursuit — immediately or wait for traction | CEO + Compliance | Phase 1 | Open |
+| Q-COMP-003 | Travel Rule provider — Notabene, Sumsub, VerifyVASP | Compliance + Eng | Phase 0 end | Open |
+| Q-COMP-004 | Transaction monitoring vendor — Comply Advantage, Hummingbird, Quantifind | Compliance + Eng | Phase 0 end | Open |
+| Q-COMP-005 | Insurance limits — custodial, crime, E&O, D&O at launch | CFO + Legal | Phase 2 | Open |
 
 ### Roadmap
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-ROADMAP-001 | True parallel US + international or US-first with international in v1.5 | CEO | Phase 0 |
-| Q-ROADMAP-002 | v2 priority — card, lending, or first-party tokenization first | CEO + Product | Phase 3 |
-| Q-ROADMAP-003 | v2 geographic priority — EU or Asia | CEO + BD | Phase 3 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-ROADMAP-001 | True parallel US + international or US-first with international in v1.5 | CEO | Phase 0 | US-first; international → Phase B |
+| Q-ROADMAP-002 | v2 priority — card, lending, or first-party tokenization first | CEO + Product | Phase 3 | Open |
+| Q-ROADMAP-003 | v2 geographic priority — EU or Asia | CEO + BD | Phase 3 | Open |
 
 ### Brand
 
-| ID | Question | Decision-maker | When needed by |
-|---|---|---|---|
-| Q-BRAND-001 | Final product name — is "Argus Financial Partners" the launch brand? Trademark and domain status | CEO + Legal + Design | Phase 0 |
-| Q-BRAND-002 | Visual identity direction — premium institutional vs friendly consumer | Design + CEO | Phase 0 |
+| ID | Question | Decision-maker | When needed by | Decision |
+|---|---|---|---|---|
+| Q-BRAND-001 | Final product name — is "Argus Financial Partners" the launch brand? Trademark and domain status | CEO + Legal + Design | Phase 0 | Yes — launch brand; trademark TBD |
+| Q-BRAND-002 | Visual identity direction — premium institutional vs friendly consumer | Design + CEO | Phase 0 | Open |
 
 ## Risk register
 
@@ -122,7 +122,7 @@ Material risks to the program with current mitigation posture. Risks are categor
 | Risk | Category | Mitigation |
 |---|---|---|
 | Agent operations don't meet quality bar required for financial product | HIGH | Conservative supervision tiers in v1; ramp auto-approval only with eval data; humans always in loop for material decisions |
-| Parallel US + international launch overwhelms organization | HIGH | Clear region leads; shared platform / different go-to-market; explicit decision points where we'd descope one region |
+| Parallel US + international launch overwhelms organization | HIGH | **Mitigated by Q-ROADMAP-001:** US-first launch; international descoped to Phase B; region leads assigned when intl opens |
 | Hiring difficulty in compliance + crypto-experienced engineering | MEDIUM | Competitive comp; remote-first; relationships with recruiting firms specializing in fintech |
 | Partner bank or corridor partner delivery slips | HIGH | Multiple partners per category; explicit deadlines in contracts; ready to drop a phase if partner can't deliver |
 | Marketing/PR misstep around no-KYC tier creates regulatory attention | HIGH | PR strategy approved by legal; consistent messaging that emphasizes regulatory compliance |
@@ -163,8 +163,18 @@ This section will be populated as decisions are made. Each entry includes the de
 | Mobile: native Swift (iOS) + Kotlin (Android) | Founder | Best UX; team can support both |
 | Web: Next.js 15 (App Router) | Founder | Modern framework with good DX and SSR |
 | Auth: passkey-first with SMS-OTP recovery | Founder | Best modern auth; SMS only as constrained recovery channel |
-| Geography: US and international in parallel | Founder | Bold but defensible given strategic positioning |
-| KYC: tiered ladder with on-demand upgrades | Founder | Maximum onboarding speed; capability unlocks per regulatory threshold |
+| Geography: US-first at launch; international Phase B (supersedes prior parallel-launch intent) | Founder | Reduces org/regulatory load; intl corridors after US product-market fit (Q-ROADMAP-001, 2026-06) |
+| KYC: tiered ladder with on-demand upgrades; **Tier 1+ required to buy collectibles** (Q-ID-003) | Founder | Maximum onboarding speed; Tier 0 browse-only on Collect; purchase gates per regulatory threshold |
 | Marketplace: securities + collectibles + Web3 gaming | Founder | Two-surface approach; collectibles gives consumer pull, securities give AUM |
 | Excluded from v1: COD/traditional publisher gaming items | Claude (recommended) | Legally not possible without publisher cooperation |
 | Argus Financial Partners CLI: repurposed as internal admin console | Founder | Preserves prior work as ops/compliance tooling |
+
+### Resolved open questions (2026-06)
+
+| ID | Decision | Made by | Rationale |
+|---|---|---|---|
+| Q-ROADMAP-001 | US-first only; international → Phase B | Founder | Focus launch scope; align with Phase A compliance ramp |
+| Q-ID-003 | Tier **1+** to buy collectibles (all lanes) | Founder + Compliance | Phone/email verified before any Collect purchase; Tier 0 browse-only |
+| Q-BRAND-001 | *Argus Financial Partners* is launch brand | Founder | Trademark/domain TBD with counsel |
+| Q-MK-002 | v1 fixed-price + seller escrow P2P; order book v2 | Founder + Eng | Matches shipped prototype; AMM not needed for v1 liquidity |
+| Q-AGENT-004 | No agent access to raw PII | Founder + Compliance | Minimize privacy/regulatory exposure; human gate for identity decisions |
