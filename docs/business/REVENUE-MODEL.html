@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revenue Model — Argus Financial Partners</title>
+<style>/* Argus Financial Partners strategy-doc print theme — "Quiet Premium": monochrome surfaces, a
+   single jade accent, type-led hierarchy. Tuned for Letter PDF + standalone HTML. */
+
+:root {
+  --ink: #14171a;
+  --ink-2: #3a4147;
+  --ink-3: #6b747c;
+  --line: #e3e6e8;
+  --line-2: #f0f2f3;
+  --accent: #1f7a5a;      /* jade */
+  --accent-weak: #e9f4ef;
+  --accent-ink: #145239;
+  --warn: #9a6b00;
+  --warn-weak: #fbf3e0;
+  --surface: #f7f8f8;
+  --max: 760px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  font-size: 11.2pt;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+/* ---- Cover ---------------------------------------------------------------- */
+.cover {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 64px;
+  page-break-after: always;
+  border-left: 6px solid var(--accent);
+}
+.cover .mark {
+  display: inline-grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 12px;
+  background: var(--accent); color: #fff;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-weight: 800; font-size: 24px; margin-bottom: 30px;
+}
+.cover h1 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 33pt; line-height: 1.08; letter-spacing: -0.02em;
+  margin: 0 0 14px; color: var(--ink); border: 0; padding: 0;
+}
+.cover .sub { font-size: 14pt; color: var(--ink-2); margin: 0 0 34px; max-width: 30em; }
+.cover .meta { font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 9.5pt; color: var(--ink-3); letter-spacing: 0.02em; text-transform: uppercase; }
+.cover .meta b { color: var(--ink); font-weight: 600; }
+
+.disclaimer {
+  margin-top: 30px; padding: 14px 16px;
+  background: var(--warn-weak); border: 1px solid #efe2bf; border-radius: 8px;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 8.6pt; line-height: 1.5; color: #6c4f10; max-width: 40em;
+}
+
+/* ---- Headings ------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
+}
+h1 { font-size: 21pt; margin: 0 0 6px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h2 {
+  font-size: 15.5pt; margin: 30px 0 10px; padding-top: 6px;
+  border-top: 1px solid var(--line); padding-top: 16px;
+  page-break-after: avoid;
+}
+h3 { font-size: 12.5pt; margin: 20px 0 6px; color: var(--accent-ink); page-break-after: avoid; }
+h4 { font-size: 11pt; margin: 16px 0 4px; color: var(--ink-2); }
+
+p { margin: 0 0 11px; }
+strong { color: var(--ink); font-weight: 700; }
+em { color: var(--ink-2); }
+a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-weak); }
+
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin: 3px 0; }
+li::marker { color: var(--accent); }
+
+hr { border: 0; border-top: 1px solid var(--line); margin: 26px 0; }
+
+blockquote {
+  margin: 12px 0; padding: 10px 16px;
+  background: var(--accent-weak); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+  color: var(--accent-ink);
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10pt;
+}
+blockquote p { margin: 0; }
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9.4pt; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 1px 5px; color: var(--accent-ink);
+}
+pre {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; overflow-x: auto; page-break-inside: avoid;
+}
+pre code { background: none; border: 0; padding: 0; color: var(--ink-2); font-size: 8.8pt; line-height: 1.5; }
+
+/* ---- Tables --------------------------------------------------------------- */
+table {
+  width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 9.6pt;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  page-break-inside: avoid;
+}
+thead th {
+  text-align: left; background: var(--ink); color: #fff; font-weight: 600;
+  padding: 7px 10px; font-size: 8.8pt; letter-spacing: 0.01em;
+}
+tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+tbody tr:nth-child(even) td { background: var(--line-2); }
+
+/* ---- TOC ------------------------------------------------------------------ */
+.toc { page-break-after: always; padding-top: 8px; }
+.toc h2 { border: 0; padding: 0; margin: 0 0 12px; }
+.toc ol { list-style: none; padding: 0; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 5px 0; font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10.5pt; }
+.toc li.lvl-3 { padding-left: 24px; font-size: 9.6pt; color: var(--ink-2); }
+.toc a { border: 0; color: var(--ink); }
+.toc li.lvl-2 a::before { content: counter(toc) ".  "; color: var(--accent); font-weight: 700; }
+
+/* ---- Section number badges via h2 ---------------------------------------- */
+.content { counter-reset: h2; }
+.content h2 { counter-increment: h2; }
+.content h2::before {
+  content: counter(h2); display: inline-grid; place-items: center;
+  width: 24px; height: 24px; margin-right: 10px; border-radius: 6px;
+  background: var(--accent-weak); color: var(--accent-ink);
+  font-size: 11pt; font-weight: 700; vertical-align: middle;
+}
+
+@page { margin: 18mm 0; }
+@media print {
+  .wrap { padding: 0 18mm; }
+  h2, h3, h4 { page-break-after: avoid; }
+  table, pre, blockquote, figure { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<section class="cover">
+  <div class="mark">B</div>
+  <h1>Revenue Model</h1>
+  <p class="sub">How Argus makes money across the full product suite, phased to the Corp A/B/C compliance ramp — growth-first, with benchmarked lines and illustrative scenarios.</p>
+  <div class="meta">Argus Financial Partners &nbsp;·&nbsp; Confidential — Founder &nbsp;·&nbsp; <b>June 25, 2026</b></div>
+  <div class="disclaimer">Strategic guidance only — not legal, financial, tax, or investment advice. Securities, money-transmission, and corporate-formation decisions must be reviewed by licensed counsel and a CPA before you act. Sections flagged “⚖ see counsel” are where this matters most.</div>
+</section>
+<div class="wrap">
+  <nav class="toc"><h2>Contents</h2><ol><li class="lvl-2"><a href="#1-the-revenue-thesis">1. The revenue thesis</a></li><li class="lvl-2"><a href="#2-revenue-by-phase-the-core">2. Revenue by phase (the core)</a></li><li class="lvl-3"><a href="#phase-a-non-custodial-software-no-customer-funds-do-now">Phase A — non-custodial software, no customer funds (DO NOW)</a></li><li class="lvl-3"><a href="#phase-b-partnered-baas-bank-fincen-msb-custodian-the-inflection">Phase B — partnered: BaaS bank + FinCEN MSB + custodian (the inflection)</a></li><li class="lvl-3"><a href="#phase-c-licensed-own-mtls-broker-dealerats-transfer-agent-compounding">Phase C — licensed: own MTLs, broker-dealer/ATS, transfer agent (compounding)</a></li><li class="lvl-2"><a href="#3-the-arpu-stack-unit-economics">3. The ARPU stack &amp; unit economics</a></li><li class="lvl-2"><a href="#4-illustrative-projection-scenarios-illustrative-not-a-forecast">4. Illustrative projection scenarios (illustrative — not a forecast)</a></li><li class="lvl-2"><a href="#5-compliance-coupling-revenue-you-cant-book-until-the-gate-clears">5. Compliance coupling — revenue you can&#39;t book until the gate clears</a></li><li class="lvl-2"><a href="#6-flag-and-avoid-the-edgy-revenue-lines">6. Flag-and-avoid — the edgy revenue lines</a></li><li class="lvl-2"><a href="#7-margin-moat-risks">7. Margin moat &amp; risks</a></li><li class="lvl-2"><a href="#8-the-one-line-model">8. The one-line model</a></li></ol></nav>
+  <main class="content">
+<h1 id="revenue-model-full-product-suite-phased-to-the-compliance-ramp">Revenue Model — full product suite, phased to the compliance ramp</h1>
+<p>How Argus makes money, product by product, gated by the phase that legally unlocks it. Growth-first:
+the collectibles wedge <strong>acquires</strong>, the wallet <strong>retains</strong>, the stack <strong>monetizes</strong> as you cross-sell
+into a trusted base — and the agent-operated cost structure lets you price below incumbents.</p>
+<blockquote>
+<p><strong>How to read this.</strong> Companion to <code>GTM-COLLECTIBLES-LAUNCH.md</code> (which sequenced the <em>marketing</em> waves —
+this sequences the <em>money</em>), <code>LAUNCH-READINESS.md</code> (the prod-fatal switches that gate each line), and
+<code>CORPORATE-STRUCTURE.md</code> (the Corp A/B/C ramp). Tags: <strong>DO NOW</strong>, <strong>DEFER → Corp B/C</strong>, <strong>⚖ see counsel</strong>.</p>
+<p>⚖ <strong>Illustrative — not financial or legal advice.</strong> Fee/take-rate figures are benchmarked planning
+estimates (vs. eBay/Stripe/Chime/Robinhood), not quotes; projections in §4 are <strong>illustrative</strong>, not
+forecasts. Interchange, net-interest-margin, FX, securities, and lending lines each require counsel/CPA
+(<code>CORPORATE-STRUCTURE.md</code> / <code>GO-LIVE-PLAN.md</code>).</p>
+</blockquote>
+<hr>
+<h2 id="1-the-revenue-thesis">1. The revenue thesis</h2>
+<p><strong>Land-and-expand.</strong> Don&#39;t monetize the wedge — monetize the <em>stack</em>. Win users with cheap, high-trust
+collectibles (low take rate vs. eBay) and a zero-interchange rail, then earn as each downstream product
+attaches to a base that already trusts you. Three structural advantages:</p>
+<ul>
+<li><strong>The wedge is sticky and supply-moated</strong> (graded slabs + provenance), so acquisition cost stays low.</li>
+<li><strong>ARPU compounds</strong>: a collector who also holds a USD balance, taps a card, sends cross-border, and buys
+an RWA is worth multiples of a single-product user — and each attach is a <em>new revenue line</em>, not a
+discount.</li>
+<li><strong>The agent-operated cost structure</strong> (PRD target <strong>&lt;$0.50/MAU</strong> operating cost) is a durable <strong>margin</strong>
+advantage: Argus can undercut incumbents on price and still make money, because the back office is
+agents, not headcount.</li>
+</ul>
+<p><strong>The honest spine — revenue follows the licence, not the code:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What you can charge</th>
+<th>Shape</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A (now)</strong></td>
+<td>Software/SaaS only (subscriptions, tokenization, promotion) — <strong>no</strong> transaction take rate</td>
+<td><strong>Thin</strong></td>
+</tr>
+<tr>
+<td><strong>B (partnered)</strong></td>
+<td>Marketplace take rate + interchange + net-interest-margin + FX spread</td>
+<td><strong>Inflection</strong></td>
+</tr>
+<tr>
+<td><strong>C (licensed)</strong></td>
+<td>Brokerage/RWA + lending + <strong>own-rail economics</strong> (recapture the partner share)</td>
+<td><strong>Compounding</strong></td>
+</tr>
+</tbody></table>
+<p>You <strong>cannot book revenue from a switch that&#39;s off</strong> (<code>LAUNCH-READINESS.md</code> §3). The plan is sequenced so
+every line turns on only when its gate clears.</p>
+<hr>
+<h2 id="2-revenue-by-phase-the-core">2. Revenue by phase (the core)</h2>
+<h3 id="phase-a-non-custodial-software-no-customer-funds-do-now">Phase A — non-custodial software, no customer funds (DO NOW)</h3>
+<p>The only thing you can charge for without being a money business is <strong>software/SaaS revenue you keep</strong> —
+<em>not</em> a take rate on a peer sale (that&#39;s intermediation = Corp B). Honestly thin until the marketplace
+goes transactional, consistent with the GTM &quot;audience-now, launch-at-Corp-B&quot; timing.</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Mechanism</th>
+<th>Benchmark</th>
+<th>Gate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Argus Plus/Pro subscription</strong></td>
+<td>Monthly collector tier (price alerts, agent discovery, portfolio view, priority authentication)</td>
+<td>~$5–15/mo (PRD plans tiers; free tier at launch)</td>
+<td>Phase A ✅</td>
+</tr>
+<tr>
+<td><strong>Tokenization / authentication fee</strong></td>
+<td>Flat per-slab fee to mint provenance (a software service, not a sale)</td>
+<td>~$1–5 / slab</td>
+<td>Phase A ✅</td>
+</tr>
+<tr>
+<td><strong>Featured listing / promotion</strong></td>
+<td>Seller pays to boost placement (software)</td>
+<td>flat or tiered</td>
+<td>Phase A ✅</td>
+</tr>
+<tr>
+<td><strong>Provenance / data services</strong></td>
+<td>API/report access to authenticated history</td>
+<td>per-call / tier</td>
+<td>Phase A ✅</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Phase-A monetization is <strong>revenue you collect for software</strong> (Stripe processes <em>your</em> revenue — that&#39;s
+not money transmission). It is <strong>not</strong> a cut of buyer→seller funds; that needs escrow + Corp B.</p>
+</blockquote>
+<h3 id="phase-b-partnered-baas-bank-fincen-msb-custodian-the-inflection">Phase B — partnered: BaaS bank + FinCEN MSB + custodian (the inflection)</h3>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Mechanism</th>
+<th>Benchmark</th>
+<th>Gate (switch)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Collectibles marketplace take rate</strong> ⭐</td>
+<td>Seller fee on each escrow-protected sale</td>
+<td><strong>~2–5%</strong> (vs. eBay ~13%, auction houses ~20%+)</td>
+<td><code>COLLECTIBLES_ESCROW_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>Card interchange</strong></td>
+<td>Share of interchange on debit spend</td>
+<td><strong>~1.0–1.5%</strong> of spend (Durbin-exempt partner BIN)</td>
+<td><code>CARDS_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>Net interest margin / float</strong></td>
+<td>Yield earned on idle USD balances via partner-bank sweep (you keep the spread)</td>
+<td>a few % of balances × NIM</td>
+<td><code>BANK_RAILS_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>FX spread</strong></td>
+<td>Markup on currency conversion (the built <code>FX_SPREAD_BPS</code> ~50bps + cross-border markup)</td>
+<td><strong>~0.5–1.5%</strong></td>
+<td><code>FX_ENABLED</code> / <code>FX_SETTLEMENT_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>Instant/expedited + ACH/wire fees</strong></td>
+<td>Optional fee for instant withdrawal; wire fees</td>
+<td>$ flat per txn</td>
+<td><code>BANK_RAILS_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>Bill-pay</strong></td>
+<td>Small fee or float on scheduled payments</td>
+<td>$ flat / float</td>
+<td><code>BILLPAY_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>Argus Pay</strong></td>
+<td><strong>Zero rail fee</strong> (the wedge — do <strong>not</strong> add interchange) → monetize via <strong>merchant SaaS / premium</strong></td>
+<td>$/merchant/mo</td>
+<td><code>ARGUS_PAY_ENABLED</code> ⚖</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>The marketplace take rate is the flagship Phase-B line; interchange + NIM + FX are the &quot;boring bank&quot;
+lines that turn a marketplace user into a primary-account ARPU. <strong>Argus Pay stays free</strong> — it&#39;s an
+acquisition/retention rail, not a revenue line (the wedge from <code>PAYMENT-NETWORK-STRATEGY.md</code>).</p>
+</blockquote>
+<h3 id="phase-c-licensed-own-mtls-broker-dealerats-transfer-agent-compounding">Phase C — licensed: own MTLs, broker-dealer/ATS, transfer agent (compounding)</h3>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Mechanism</th>
+<th>Benchmark</th>
+<th>Gate (switch)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Brokerage</strong></td>
+<td>Commission/spread + <strong>margin interest</strong> + a <strong>Gold-style subscription</strong></td>
+<td>sub ~$5–10/mo; margin ~5–11% APR</td>
+<td><code>TRADING_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>RWA / tokenized equities</strong></td>
+<td>Issuance fees + secondary-trading take rate + <strong>AUM/management-fee</strong> share + dividend/corporate-action processing</td>
+<td>bps on AUM + take rate</td>
+<td><code>EQUITIES_ENABLED</code> ⚖</td>
+</tr>
+<tr>
+<td><strong>Collateralized lending</strong></td>
+<td>Interest spread on RWA-backed loans</td>
+<td>spread over cost of funds</td>
+<td>(PRD v2) ⚖</td>
+</tr>
+<tr>
+<td><strong>Own-rail economics</strong></td>
+<td>Recapture the partner share once you hold the licences (interchange, MT, custody); the <strong>Wyoming SPDI</strong> custody-at-scale option</td>
+<td>margin recapture</td>
+<td>Corp C ⚖</td>
+</tr>
+<tr>
+<td><strong>Starter (teen/family)</strong></td>
+<td>Family subscription + (gated) interchange on teen cards</td>
+<td>~$5–10/mo/family</td>
+<td><code>TEEN_ENABLED</code> ⚖</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-the-arpu-stack-unit-economics">3. The ARPU stack &amp; unit economics</h2>
+<p>Revenue compounds because each wave adds a line, not a discount. Illustrative <strong>per-user revenue stack</strong>
+(benchmarked, monthly, blended):</p>
+<pre><code>Collector only (Phase A):        subscription (a few $)                              → low single-$ ARPU
++ Marketplace buyer/seller (B):  + take rate × trade volume                          → +$$
++ Primary account (B):           + interchange × spend + NIM × balance + FX spread    → +$$$
++ Investor (C):                  + brokerage/RWA take + AUM share                     → +$$$$
+</code></pre>
+<ul>
+<li><strong>Attach rate is the master lever</strong> — the same MAU is worth 3–5× more when card + balance + FX + RWA
+attach. Growth-first spend should buy <em>attach</em>, not just signups.</li>
+<li><strong>Margin moat:</strong> with operating cost targeted <strong>&lt;$0.50/MAU</strong> (agents, not headcount; PRD), even thin
+per-line take rates clear healthy contribution margin — the structural reason Argus can price under
+Robinhood/Chime/eBay and still profit.</li>
+</ul>
+<hr>
+<h2 id="4-illustrative-projection-scenarios-illustrative-not-a-forecast">4. Illustrative projection scenarios <em>(illustrative — not a forecast)</em></h2>
+<p>No real traction exists yet; these show the <strong>shape</strong> (an S-curve gated by licensing) and the <strong>levers</strong>,
+not a prediction. Inputs are blended-ARPU × MAU × attach; treat the numbers as placeholders.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Year 1 (Phase A)</th>
+<th>Year 2 (Corp B)</th>
+<th>Year 3 (Corp C)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Live revenue lines</td>
+<td>subscriptions, tokenization</td>
+<td>+ marketplace take, interchange, NIM, FX</td>
+<td>+ brokerage/RWA, lending, own-rail</td>
+</tr>
+<tr>
+<td><strong>Low</strong></td>
+<td>nominal (waitlist + founding sellers)</td>
+<td>modest (marketplace ramps)</td>
+<td>meaningful (stack attaches slowly)</td>
+</tr>
+<tr>
+<td><strong>Base</strong></td>
+<td>thin but real</td>
+<td><strong>inflection</strong> (take rate + interchange carry it)</td>
+<td>compounding (ARPU 3–5× via attach)</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>small</td>
+<td>strong marketplace + primary-account attach</td>
+<td>full-stack ARPU + own-rail margin</td>
+</tr>
+</tbody></table>
+<p><strong>Sensitivity (what actually moves the model):</strong> (1) <strong>attach rate</strong> across waves, (2) <strong>marketplace take
+rate</strong> vs. the eBay-beating promise, (3) <strong>MAU</strong> from the guerrilla wedge, (4) <strong>NIM/interchange</strong> terms
+from the partner bank, (5) <strong>Corp-B/C timing</strong> — every Phase-B/C line is zero until its licence lands.</p>
+<hr>
+<h2 id="5-compliance-coupling-revenue-you-cant-book-until-the-gate-clears">5. Compliance coupling — revenue you can&#39;t book until the gate clears</h2>
+<p>Every line is gated by a prod-fatal switch (<code>LAUNCH-READINESS.md</code> §3) and a Corp phase. This reconciles
+1:1 with the GTM rollout waves (<code>GTM-COLLECTIBLES-LAUNCH.md</code> §6).</p>
+<table>
+<thead>
+<tr>
+<th>Revenue line</th>
+<th>Switch</th>
+<th>Phase</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Subscriptions / tokenization / promotion</td>
+<td>(none — software)</td>
+<td><strong>A</strong></td>
+</tr>
+<tr>
+<td>Marketplace take rate</td>
+<td><code>COLLECTIBLES_ESCROW_ENABLED</code></td>
+<td>B ⚖</td>
+</tr>
+<tr>
+<td>Card interchange</td>
+<td><code>CARDS_ENABLED</code></td>
+<td>B ⚖</td>
+</tr>
+<tr>
+<td>NIM / float, ACH/wire/instant</td>
+<td><code>BANK_RAILS_ENABLED</code></td>
+<td>B ⚖</td>
+</tr>
+<tr>
+<td>FX spread</td>
+<td><code>FX_ENABLED</code> / <code>FX_SETTLEMENT_ENABLED</code></td>
+<td>B/C ⚖</td>
+</tr>
+<tr>
+<td>Bill-pay</td>
+<td><code>BILLPAY_ENABLED</code></td>
+<td>B ⚖</td>
+</tr>
+<tr>
+<td>Argus Pay (merchant SaaS only)</td>
+<td><code>ARGUS_PAY_ENABLED</code></td>
+<td>B/C ⚖</td>
+</tr>
+<tr>
+<td>Brokerage</td>
+<td><code>TRADING_ENABLED</code></td>
+<td>C ⚖</td>
+</tr>
+<tr>
+<td>RWA / equities</td>
+<td><code>EQUITIES_ENABLED</code></td>
+<td>B/C ⚖</td>
+</tr>
+<tr>
+<td>Teen/family</td>
+<td><code>TEEN_ENABLED</code></td>
+<td>B/C ⚖</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="6-flag-and-avoid-the-edgy-revenue-lines">6. Flag-and-avoid — the edgy revenue lines</h2>
+<p>Three tempting lines that <strong>conflict with the brand and/or carry regulatory risk</strong>. Recommendation:
+<strong>avoid or defer-with-counsel.</strong></p>
+<ul>
+<li><strong>PFOF (payment for order flow).</strong> Tempting &quot;free trading&quot; economics, but it&#39;s under regulatory scrutiny,
+optically toxic, and <strong>contradicts the PRD anti-positioning</strong> (&quot;not an investing app, no advice,
+marketplace not exchange&quot;). <strong>Avoid</strong> — monetize brokerage via transparent commission/spread + margin +
+subscription instead. ⚖</li>
+<li><strong>Marketed yield-on-balances.</strong> Paying advertised &quot;yield&quot; on customer balances can make the balance look
+like an <strong>unregistered security</strong> (and intersects the GENIUS-Act stablecoin regime). Earn <strong>net interest
+margin</strong> quietly via the partner-bank sweep (§2 Phase B), but <strong>do not market a yield</strong> as a product
+feature without securities counsel. <strong>Defer ⚖.</strong></li>
+<li><strong>Data monetization.</strong> Selling/sharing user behavioral data breaks the <strong>trust moat</strong> that the whole
+authentication/provenance brand is built on, and triggers GLBA/CCPA exposure. <strong>Avoid</strong> — data powers
+<em>your</em> product (discovery, fraud), it is not a product you sell. ⚖</li>
+</ul>
+<hr>
+<h2 id="7-margin-moat-risks">7. Margin moat &amp; risks</h2>
+<p><strong>The moat is margin, not a single line.</strong> The agent-operated back office (support/compliance/ops at
+&lt;$0.50/MAU) lets Argus run thin take rates profitably — the durable advantage incumbents bolt on later
+and can&#39;t match on cost structure.</p>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Take-rate compression</strong> (race to zero vs. eBay/incumbents)</td>
+<td>Win on <strong>trust + provenance + escrow</strong>, not just price; the cost moat protects margin</td>
+</tr>
+<tr>
+<td><strong>Interchange caps / Durbin</strong></td>
+<td>Use a Durbin-exempt partner BIN; don&#39;t over-index on interchange</td>
+</tr>
+<tr>
+<td><strong>Incumbent copy</strong> (Robinhood/PayPal)</td>
+<td>Supply moat + the agent-cost advantage + the one-app cross-sell</td>
+</tr>
+<tr>
+<td><strong>Regulatory shift</strong> (stablecoin/securities)</td>
+<td>Keep the brand-safe lines; flag-and-avoid §6; counsel-gate every regulated line ⚖</td>
+</tr>
+<tr>
+<td><strong>Corp-B/C timing slip</strong></td>
+<td>Revenue is gated on licensing — fund the runway accordingly; the GTM keeps the audience warm with the Phase-A product</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="8-the-one-line-model">8. The one-line model</h2>
+<p><strong>Subsidize the collectibles wedge to acquire a trusted base; monetize the stack — marketplace take,
+interchange, net-interest-margin, FX, then brokerage/RWA and own-rail margin — one compliance unlock at a
+time; and out-margin everyone because the back office is agents, not headcount.</strong></p>
+<hr>
+<p><em>Companion documents: <code>GTM-COLLECTIBLES-LAUNCH.md</code> (the marketing waves these revenue lines attach to),
+<code>LAUNCH-READINESS.md</code> §3 (the prod-fatal switches gating each line), <code>CORPORATE-STRUCTURE.md</code> (Corp A/B/C),
+<code>RAILS-CURRENCY-STRATEGY.md</code> (the FX spread), <code>PAYMENT-NETWORK-STRATEGY.md</code> (the zero-interchange Argus Pay
+wedge), <code>argus_prdv1/00</code>,<code>/02</code> (subscription tiers + fee-structure positioning).</em></p>
+
+  </main>
+</div>
+</body></html>
