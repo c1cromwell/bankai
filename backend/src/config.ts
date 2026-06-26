@@ -166,6 +166,9 @@ const schema = z.object({
   // issuance/auth. CARD_PROCESSOR selects the processor (simulated; marqeta/lithic/stripe stubs).
   CARDS_ENABLED: boolish,
   CARD_PROCESSOR: z.enum(["simulated", "marqeta", "lithic", "stripe"]).default("simulated"),
+  // X-Money response F4 — cashback paid in USDC ("earn an asset you own, not points") on
+  // capture. Basis points of the captured amount; 0 = off, 300 = 3% (match X's card).
+  CARD_CASHBACK_BPS: z.coerce.number().int().nonnegative().max(1_000).default(0),
 
   // Phase 19.3 — bill pay (prototype seam). Off by default; a kill-switch gating payee
   // payments. Rides the BANK_RAIL_PROVIDER (bill pay is a directed payout to a biller).

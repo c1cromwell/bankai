@@ -22,7 +22,7 @@ import { AppError, ErrorCode } from "../errors";
 import { logAudit } from "./auditService";
 import { isAccountFrozen } from "./accountHoldService";
 import { screenTransfer } from "./fraudService";
-import { cardAuthTotal } from "../observability/metrics";
+import { cardAuthTotal, cardCashbackTotal } from "../observability/metrics";
 import { getBalance, getOrCreateUserAccount, getOrCreateSystemAccount, getSystemAccount, postJournal } from "./ledgerService";
 
 export interface CardProcessor {
@@ -189,7 +189,7 @@ async function requireAuth(authId: string, status: string): Promise<CardAuthRow>
 }
 
 /** Capture an authorized purchase: settle the held funds out via external_clearing. */
-export async function capture(authId: string): Promise<{ captured: boolean; settleJournalId: string }> {
+export async function capture(authId: string): Promise<{ captured: boolean; settleJournalId: string; cashbackMinor: string }> {
   assertEnabled();
   const a = await requireAuth(authId, "authorized");
   const amount = BigInt(a.amount_minor);
@@ -206,7 +206,59 @@ export async function capture(authId: string): Promise<{ captured: boolean; sett
   await getDb().execute("UPDATE card_authorizations SET status = 'captured', settle_journal_id = ?, updated_at = ? WHERE id = ?", [settleJournalId, new Date().toISOString(), a.id]);
   cardAuthTotal.inc({ result: "captured" });
   await logAudit({ userId: a.user_id, action: "card.captured", resource: a.id });
-  return { captured: true, settleJournalId };
+
+  // F4 — cashback paid in USDC (an asset you own, not points). Idempotent per auth.
+  const cashbackMinor = await payCashback(a);
+  return { captured: true, settleJournalId, cashbackMinor: cashbackMinor.toString() };
+}
+
+const REWARD_CURRENCY = "USDC";
+
+/**
+ * Pay the cardholder cashback in USDC = captured × CARD_CASHBACK_BPS, from the
+ * card_rewards program account. Idempotent on the auth id; off when the bps is 0.
+ */
+async function payCashback(a: CardAuthRow): Promise<bigint> {
+  const bps = BigInt(config.CARD_CASHBACK_BPS);
+  if (bps <= 0n) return 0n;
+  const cashback = (BigInt(a.amount_minor) * bps) / 10_000n;
+  if (cashback <= 0n) return 0n;
+
+  const rewardsPool = await getOrCreateSystemAccount("card_rewards", REWARD_CURRENCY);
+  const userUsdc = await getOrCreateUserAccount(a.user_id, "user_cash", REWARD_CURRENCY);
+  const journalId = await postJournal(
+    [
+      { ledgerAccountId: rewardsPool, direction: "debit", amountMinor: cashback, currency: REWARD_CURRENCY },
+      { ledgerAccountId: userUsdc, direction: "credit", amountMinor: cashback, currency: REWARD_CURRENCY },
+    ],
+    `Card cashback (${a.id})`,
+    { idempotencyKey: `card:cashback:${a.id}` }
+  );
+  await getDb().execute(
+    "INSERT INTO card_rewards (id, auth_id, user_id, amount_minor, currency, journal_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    [uuidv4(), a.id, a.user_id, cashback.toString(), REWARD_CURRENCY, journalId, new Date().toISOString()]
+  );
+  cardCashbackTotal.inc(Number(cashback));
+  await logAudit({ userId: a.user_id, action: "card.cashback", resource: a.id, details: { cashbackMinor: cashback.toString(), currency: REWARD_CURRENCY } });
+  return cashback;
+}
+
+export interface CardRewardRow {
+  id: string;
+  auth_id: string;
+  amount_minor: string;
+  currency: string;
+  created_at: string;
+}
+
+/** A cardholder's cashback history + total earned (USDC, an asset they own). */
+export async function getCardRewards(userId: string, limit = 50): Promise<{ totalMinor: string; currency: string; rewards: CardRewardRow[] }> {
+  const rewards = await getDb().query<CardRewardRow>(
+    "SELECT id, auth_id, amount_minor, currency, created_at FROM card_rewards WHERE user_id = ? ORDER BY created_at DESC LIMIT ?",
+    [userId, Math.min(Math.max(limit, 1), 200)]
+  );
+  const total = rewards.reduce((s, r) => s + BigInt(r.amount_minor), 0n);
+  return { totalMinor: total.toString(), currency: REWARD_CURRENCY, rewards };
 }
 
 /** Void an uncaptured authorization: release the hold back to the cardholder. */

@@ -17,7 +17,7 @@ import { requireAuth, type AuthRequest } from "../middleware/auth";
 import { requireTier } from "../middleware/requireTier";
 import { idempotency } from "../middleware/idempotency";
 import { AppError, ErrorCode } from "../errors";
-import { issueCard, listCards, authorize, voidAuthorization, listAuthorizations } from "../services/cardService";
+import { issueCard, listCards, authorize, voidAuthorization, listAuthorizations, getCardRewards } from "../services/cardService";
 
 export const cardsRouter = Router();
 
@@ -50,6 +50,15 @@ cardsRouter.get("/", requireAuth, async (req: AuthRequest, res, next) => {
 cardsRouter.get("/authorizations", requireAuth, async (req: AuthRequest, res, next) => {
   try {
     res.json({ authorizations: await listAuthorizations(req.userId!) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// F4 — cashback earned (USDC; an asset you own, not points).
+cardsRouter.get("/rewards", requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    res.json(await getCardRewards(req.userId!));
   } catch (e) {
     next(e);
   }

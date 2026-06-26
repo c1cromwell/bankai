@@ -16,7 +16,7 @@ Each feature is a prototype seam consistent with the repo (swappable provider, k
 | **1** | **Tokenized yield-bearing Treasury** | The anti-6%-APY: "own a yield-bearing **asset**, not a balance someone can freeze" | B/C · `TREASURY_ENABLED` ⚖ | ✅ **built** |
 | **2** | **Self-custody / anti-deplatforming proof** | The #1 wedge made real: self-custody report + signed attestation + portable export | A | ✅ **built** |
 | **3** | **P2P money requests on the native rail** | Differentiate table-stakes P2P (request-to-pay; no Visa/partner) | A→B | ✅ **built** |
-| 4 | Visa-bridge debit card | Match X's card, funded from the USDC balance | B · `CARDS_ENABLED` ⚖ | seam exists |
+| **4** | **Visa-bridge card: native-rail funding + USDC cashback** | Match X's card, but *spend from USDC* + cashback as an asset you own | B · `CARDS_ENABLED` ⚖ | ✅ **built** (bridge) |
 | 5 | Collector / creator drops | Re-aim X's creator-payout hook to tokenized goods | A→B | planned |
 | 6 | Global / cross-border packaging | Reach the audience X (US-only) can't serve | B/C · `FX_*` ⚖ | seam exists (RAILS-CURRENCY) |
 
@@ -97,10 +97,27 @@ once), directed-payer guard, decline/cancel move no money, self-request + insuff
 > phase). Every money-movement feature should note its partner dependency and its path to the native rail.
 > F3 (P2P requests) is already 100% native. F4 (the Visa card) is an explicit *bridge*, not the destination.
 
-## Features 4–6 (subsequent)
+## Feature 4 — Visa-bridge card: native-rail funding + USDC cashback (built; a BRIDGE)
 
-- **F4 — Visa-bridge card:** `CARDS_ENABLED` seam exists; turn on at Corp B with a BIN sponsor + PCI ⚖.
-  Per the North Star, this is a **bridge** for legacy acceptance — migrate volume to the native rail over time.
+**What:** the Phase-19.4 card lifecycle (issue/authorize/capture/void/refund) already exists; F4 adds the
+two X-competitive differentiators:
+- **Spend from the native rail** — a card issued in `USDC` authorizes/holds against the user's **USDC**
+  balance (the card already funds from its `currency`), so spend pulls from the native rail, not a
+  custodial USD balance. *"Spend from assets you own."*
+- **Cashback as an asset you own** — on capture, the program pays `CARD_CASHBACK_BPS` (e.g. 300 = 3%, to
+  match X's card) as **USDC** to the cardholder (idempotent per auth), recorded in `card_rewards`
+  (migration 038). *"Earn a real asset, not points locked in a platform."* `GET /api/cards/rewards`
+  surfaces the total; `card_cashback_total` metric.
+
+`cards-cashback.test.ts` (3): 3% USDC cashback on capture + rewards history; off at 0 bps; a USDC-funded
+card authorizes on the native rail.
+
+> **Per the North Star, the Visa card is a BRIDGE, not the destination** — legacy acceptance on day one
+> (Corp B, BIN-sponsor + PCI ⚖), while every transaction that *can* settle on the native rail (USDC
+> funding, native P2P, Argus Pay) does — migrating volume off Visa over time toward the self-contained rail.
+
+## Features 5–6 (subsequent)
+
 - **F5 — Collector/creator drops:** extend `sellerCollectibleService` for creator-issued authenticated
   drops.
 - **F6 — Global packaging:** the FX/cross-border seam exists (`RAILS-CURRENCY-STRATEGY.md`); package for

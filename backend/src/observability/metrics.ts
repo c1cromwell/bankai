@@ -123,6 +123,13 @@ export const treasuryAccrualTotal = new client.Counter({
   registers: [registry],
 });
 
+// X-Money response F4 — card cashback paid (USDC, on capture).
+export const cardCashbackTotal = new client.Counter({
+  name: "card_cashback_total",
+  help: "Card cashback rewards paid (USDC)",
+  registers: [registry],
+});
+
 // Phase 20 — ledger⇄chain reconciliation (invariant n).
 export const reconciliationRunTotal = new client.Counter({
   name: "reconciliation_run_total",
