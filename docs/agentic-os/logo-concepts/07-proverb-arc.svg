@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Argus logo concept 7  proverb arc">
+  <rect width="120" height="120" fill="#0b0d10"/>
+  <path id="arc" d="M 18 78 A 42 42 0 0 1 102 78" fill="none"/>
+  <text font-family="serif" font-size="8" fill="#2dd4a7" opacity="0.35">
+    <textPath href="#arc" startOffset="8%">ckMck{Y</textPath>
+  </text>
+  <ellipse cx="60" cy="52" rx="26" ry="19" fill="none" stroke="#2dd4a7" stroke-width="2.5"/>
+  <circle cx="60" cy="52" r="6" fill="#2dd4a7"/>
+  <circle cx="50" cy="46" r="1.5" fill="#2dd4a7" opacity="0.6"/>
+  <circle cx="70" cy="46" r="1.5" fill="#2dd4a7" opacity="0.6"/>
+</svg>

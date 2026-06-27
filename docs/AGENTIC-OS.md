@@ -178,6 +178,38 @@ Append-only, in-DB (reuse append-only trigger pattern).
 
 ---
 
+## CEO approval — how you sign off (M2 design)
+
+Two different “approvals” exist: **milestone deploy sign-offs** (M1, M2, …) and **runtime agent gates** (money, launch, legal). Both get tracked; M2 automates the runtime path.
+
+### Runtime gates (automated queue — M2)
+
+When an agent hits a CEO-gated output class, `runOperation` escalates to `agent_reviews` with `requires_role: ceo` (CS backup if CEO is unavailable).
+
+| Step | What happens |
+|---|---|
+| 1. Agent proposes | CFO/CLO/CPO skill completes `invoke` → `gate()` returns `escalate` |
+| 2. Queue | Row in `agent_reviews` (pending) with recommendation, reason, SLA `due_at` |
+| 3. Notify you | M2+: email/push via `notificationService` (“Approval required: financial output”) |
+| 4. You decide | **CEO Approvals** admin UI — list pending, read context + run trail, Approve / Reject + reason |
+| 5. Auth | Admin session today; M2 adds `ceo` role. Optional: **WebAuthn passkey** on approve (same pattern as customer passkeys — step-up for money/legal) |
+| 6. Audit | `resolveReview` writes `decided_by`, `decision_reason`, append-only `agent_runs` + `audit_logs`; M3 adds KG edges |
+
+**Already built (compliance/admin path):** `GET /api/admin/agent-ops/reviews`, `POST .../reviews/:id/decision` — M2 extends roles to `ceo` / `chief_of_staff` and adds a dedicated Approvals surface in the admin console (filter: “My queue”, output class, overdue).
+
+**CS backup:** If `requires_role` is `ceo` and CEO is unavailable, CS (`chief_of_staff`) can resolve the same review — logged as backup approver.
+
+### Milestone sign-offs (M1, M2 deploy)
+
+Manual for M1 (you review webview + doc). M2 adds optional **`ceo_milestone_signoffs`** table: milestone id, approver, timestamp, note — surfaced in the same Approvals UI under a “Deploy gates” tab so M1→M2→… sign-offs are not lost in email.
+
+### What we are not doing in M2
+
+- SMS as primary channel (email + in-app first; SMS optional later)
+- Auto-approve on timeout for financial/legal/launch gates (SLA alerts only)
+
+---
+
 ## Milestone roadmap (CEO sign-off each deploy)
 
 | Milestone | Deliverable | Backend code? |

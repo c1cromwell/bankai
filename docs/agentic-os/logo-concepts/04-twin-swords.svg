@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Argus logo concept 4  twin swords">
+  <rect width="120" height="120" fill="#0b0d10"/>
+  <line x1="38" y1="18" x2="38" y2="102" stroke="#2dd4a7" stroke-width="1.5" opacity="0.4"/>
+  <line x1="82" y1="18" x2="82" y2="102" stroke="#2dd4a7" stroke-width="1.5" opacity="0.4"/>
+  <rect x="34" y="14" width="8" height="10" fill="#2dd4a7" opacity="0.5" rx="1"/>
+  <rect x="78" y="14" width="8" height="10" fill="#2dd4a7" opacity="0.5" rx="1"/>
+  <ellipse cx="60" cy="56" rx="22" ry="16" fill="#15181d" stroke="#2dd4a7" stroke-width="2.5"/>
+  <circle cx="60" cy="56" r="7" fill="#2dd4a7"/>
+</svg>
