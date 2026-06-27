@@ -58,6 +58,7 @@ import { reconciliationAdminRouter } from "./routes/reconciliationAdmin";
 import { warehouseAdminRouter } from "./routes/warehouseAdmin";
 import { agentOpsAdminRouter } from "./routes/agentOpsAdmin";
 import { bankRouter } from "./routes/bank";
+import { onrampRouter } from "./routes/onramp";
 import { bankAdminRouter } from "./routes/bankAdmin";
 import { cardsRouter } from "./routes/cards";
 import { billpayRouter } from "./routes/billpay";
@@ -246,6 +247,9 @@ async function bootstrap(): Promise<void> {
   // ---- Phase 19 Stage-1 — full-bank rails (fiat on/off-ramp + ACH/wire) ----
   app.use("/api/bank", bankRouter);
   app.use("/api/admin", bankAdminRouter);
+
+  // ---- Fiat → USDC on-ramp (buy USDC with fiat — the activation gap) ----
+  app.use("/api/onramp", onrampRouter);
 
   // ---- Phase 19.4 — debit cards ----
   app.use("/api/cards", cardsRouter);

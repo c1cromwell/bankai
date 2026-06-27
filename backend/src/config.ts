@@ -162,6 +162,14 @@ const schema = z.object({
   BANK_RAILS_ENABLED: boolish,
   BANK_RAIL_PROVIDER: z.enum(["simulated", "column", "treasuryprime", "unit"]).default("simulated"),
 
+  // Fiat → USDC on-ramp (prototype seam). Off by default; prod-fatal while simulated.
+  // The real providers (MoonPay/Stripe Crypto/Coinbase) take the fiat + do KYC under
+  // THEIR license (Phase-A safe — Argus never custodies the fiat); USDC is delivered to
+  // the user. ONRAMP_FEE_BPS is the on-ramp spread/fee (100 = 1%).
+  ONRAMP_ENABLED: boolish,
+  ONRAMP_PROVIDER: z.enum(["simulated", "moonpay", "stripe", "coinbase"]).default("simulated"),
+  ONRAMP_FEE_BPS: z.coerce.number().int().nonnegative().max(1_000).default(100),
+
   // Phase 19.4 — debit cards (prototype seam). Off by default; a kill-switch gating card
   // issuance/auth. CARD_PROCESSOR selects the processor (simulated; marqeta/lithic/stripe stubs).
   CARDS_ENABLED: boolish,
@@ -337,6 +345,9 @@ export function productionFatals(c: z.infer<typeof schema>): string[] {
   }
   if (c.EQUITIES_ENABLED) {
     fatal.push("EQUITIES_ENABLED must be false in production — the Phase-18.6 tokenized-equities seam is a prototype (regulated issuer/transfer-agent/ATS + securities counsel pending).");
+  }
+  if (c.ONRAMP_ENABLED && c.ONRAMP_PROVIDER === "simulated") {
+    fatal.push("ONRAMP_ENABLED with ONRAMP_PROVIDER=simulated must not run in production — wire a licensed on-ramp (moonpay/stripe/coinbase) that takes the fiat + KYC under its own license.");
   }
   if (c.BANK_RAILS_ENABLED) {
     fatal.push("BANK_RAILS_ENABLED must be false in production — the Phase-19 Stage-1 bank rails are simulated (BaaS/partner-bank + FinCEN MSB + KYC/AML vendor pending).");

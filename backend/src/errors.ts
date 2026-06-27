@@ -55,6 +55,9 @@ export enum ErrorCode {
   // Creator drops (X-Money response F5)
   CREATOR_DROPS_DISABLED = "CREATOR_DROPS_DISABLED",
 
+  // Fiat → USDC on-ramp
+  ONRAMP_DISABLED = "ONRAMP_DISABLED",
+
   // Reconciliation (Phase 20 — ledger⇄chain drift gates on-chain settlement)
   RECONCILIATION_HOLD = "RECONCILIATION_HOLD",
 
@@ -120,6 +123,7 @@ const DEFAULT_HTTP_STATUS: Record<ErrorCode, number> = {
   [ErrorCode.PAY_DISABLED]: 503,
   [ErrorCode.FX_DISABLED]: 503,
   [ErrorCode.CREATOR_DROPS_DISABLED]: 503,
+  [ErrorCode.ONRAMP_DISABLED]: 503,
   [ErrorCode.AGENT_DISABLED]: 503,
   [ErrorCode.EQUITIES_DISABLED]: 503,
   [ErrorCode.BANK_RAILS_DISABLED]: 503,

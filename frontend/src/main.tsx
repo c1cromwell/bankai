@@ -33,6 +33,7 @@ import { CollectPurchases } from "./pages/CollectPurchases";
 import { Pay } from "./pages/Pay";
 import { Fx } from "./pages/Fx";
 import { Earn } from "./pages/Earn";
+import { AddCash } from "./pages/AddCash";
 import { Requests } from "./pages/Requests";
 import { Drops } from "./pages/Drops";
 import { SendAbroad } from "./pages/SendAbroad";
@@ -108,6 +109,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/escrow" element={<Escrow />} />
               <Route path="/pay" element={<Pay />} />
               <Route path="/fx" element={<Fx />} />
+              <Route path="/add-cash" element={<AddCash />} />
               <Route path="/earn" element={<Earn />} />
               <Route path="/requests" element={<Requests />} />
               <Route path="/drops" element={<Drops />} />

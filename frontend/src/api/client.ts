@@ -506,6 +506,19 @@ export interface CheckoutChallenge {
   memo: string | null;
 }
 
+// Fiat → USDC on-ramp
+export interface OnRampQuote {
+  provider: string; fiatAmountMinor: string; fiatCurrency: string; asset: string;
+  usdcGrossMinor: string; feeMinor: string; usdcNetMinor: string; ratePpm: number; feeBps: number;
+}
+export interface OnRampOrder {
+  id: string; provider: string; status: string;
+  fiatAmountMinor: string; fiatCurrency: string; asset: string;
+  usdcGrossMinor: string; feeMinor: string; usdcNetMinor: string; ratePpm: number;
+  externalRef: string | null; redirectUrl: string | null; journalId: string | null;
+  createdAt: string; completedAt: string | null;
+}
+
 // X-Money response F1–F6 types
 export interface TreasuryPosition {
   symbol: string;
@@ -758,6 +771,11 @@ export const userApi = {
     umoney<CardAuth>(`/cards/${cardId}/authorize`, { amountMinor, merchant }, key),
   cardVoid: (authId: string) => upost<{ voided: boolean }>(`/cards/authorizations/${authId}/void`),
   cardRewards: () => uget<{ totalMinor: string; currency: string; rewards: CardReward[] }>("/cards/rewards"),
+
+  // --- Fiat → USDC on-ramp (buy USDC with fiat — the activation gap) ---
+  onrampQuote: (fiatAmountMinor: string) => upost<OnRampQuote>("/onramp/quote", { fiatAmountMinor }),
+  onrampOrder: (fiatAmountMinor: string, key: string) => umoney<OnRampOrder>("/onramp/order", { fiatAmountMinor }, key),
+  onrampOrders: () => uget<OnRampOrder[]>("/onramp/orders"),
 
   // --- X-Money response F1 — tokenized Treasury (Earn) ---
   treasury: () => uget<TreasuryPosition>("/treasury"),

@@ -204,6 +204,14 @@ export const bankTransferTotal = new client.Counter({
   registers: [registry],
 });
 
+// Fiat → USDC on-ramp (buy USDC with fiat — the activation gap).
+export const onrampOrderTotal = new client.Counter({
+  name: "onramp_order_total",
+  help: "Fiat→USDC on-ramp orders",
+  labelNames: ["provider", "result"], // result: completed | pending | failed
+  registers: [registry],
+});
+
 export const cardAuthTotal = new client.Counter({
   name: "card_auth_total",
   help: "Card authorization lifecycle events",
