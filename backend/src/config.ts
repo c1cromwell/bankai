@@ -283,6 +283,8 @@ const schema = z.object({
   OPERATIONS_ENABLED: boolishDefaultTrue,
   /** M3 — append-only decision KG for agent runs, human gates, milestone sign-offs. */
   DECISION_KG_ENABLED: boolishDefaultTrue,
+  /** M4 — task-class model router + append-only model_invocations telemetry. */
+  MODEL_ROUTER_ENABLED: boolishDefaultTrue,
   OPERATIONS_ORCHESTRATOR: z.enum(["simulated", "anthropic"]).default("simulated"),
   OPERATIONS_REVIEW_FLOOR: z.coerce.number().min(0).max(1).default(0.3),
 

@@ -11,6 +11,7 @@
 
 import { config } from "../../config";
 import { logger } from "../../observability/logger";
+import { invokeModel } from "../modelRouter/router";
 import { ensureProfile, getProfile, screenSanctions, completeKycDecision } from "../../services/identityService";
 import { defineSkill } from "../skillRegistry";
 import {
@@ -113,21 +114,20 @@ const SUBMIT_TOOL = {
 };
 
 async function recommendAnthropic(i: RecModelInput): Promise<{ rec: KycRec; confidence: number }> {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const Anthropic = require("@anthropic-ai/sdk").default ?? require("@anthropic-ai/sdk");
-  const client = new Anthropic({ apiKey: config.ANTHROPIC_API_KEY });
-  const message = await client.messages.create({
-    model: config.ANTHROPIC_MODEL,
-    max_tokens: 256,
+  const result = await invokeModel({
+    taskClass: "kyc_review",
+    skill: "kyc-review",
     system:
       "You are a KYC analyst. Given only minimized, non-identifying flags (sanctions clear, " +
       "document present, name present), recommend approve, reject, or request_info. A sanctions " +
       "match must be a reject. Always call submit_kyc_recommendation.",
+    userContent: JSON.stringify(i),
     tools: [SUBMIT_TOOL],
-    tool_choice: { type: "tool", name: SUBMIT_TOOL.name },
-    messages: [{ role: "user", content: JSON.stringify(i) }],
+    toolChoice: { type: "tool", name: SUBMIT_TOOL.name },
+    maxTokens: 256,
   });
-  const toolUse = (message.content as Array<{ type: string; name?: string; input?: unknown }>).find(
+  const message = result.raw as { content?: Array<{ type: string; name?: string; input?: unknown }> };
+  const toolUse = (message.content ?? []).find(
     (b) => b.type === "tool_use" && b.name === SUBMIT_TOOL.name
   );
   if (!toolUse || typeof toolUse.input !== "object") throw new Error("no tool_use block");

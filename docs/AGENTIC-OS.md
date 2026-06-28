@@ -1,6 +1,6 @@
 # Argus Agentic OS — Corporate Brain Design
 
-**Status:** M3 — decision knowledge graph **BUILT** (CEO sign-off gate for deploy)  
+**Status:** M4 — model router **BUILT** (CEO sign-off gate for deploy)  
 **Authoritative webview:** [`agentic-os/index.html`](agentic-os/index.html)  
 **Related:** [`agenticos_argus.rtf`](agenticos_argus.rtf) (CEO brief)
 
@@ -21,7 +21,7 @@
 1. **Agents decide; deterministic code executes; humans gate material outcomes** — already encoded in `runOperation` → `resolveReview` (`backend/src/operations/operationsWorkflow.ts`).
 2. **Corporate brain + product squads** — C-suite agents route portfolio work; per-product squads run PDLC.
 3. **Append-only audit everywhere** — corporate decision log + product KG; no silent overwrites.
-4. **Model-agnostic PDLC** — Claude-tiered router now; vendor seam for OpenAI/Google/local later (M4).
+4. **Model-agnostic PDLC** — Claude-tiered router live in `operations/modelRouter/`; vendor seam for OpenAI/Google/local (M4 **built**).
 5. **CEO primary, Chief of Staff backup** — three gated output classes only escalate to humans when required.
 
 ---
@@ -217,7 +217,7 @@ Manual for M1 (you review webview + doc). M2 adds optional **`ceo_milestone_sign
 | **M1** | This doc + branding + webview | **No** |
 | **M2** | `ceo`/`chief_of_staff` RBAC, gate-policy, Approvals admin UI | Yes |
 | **M3** | `kg_nodes`/`kg_edges`, `decisionGraph` service, graph API | Yes |
-| **M4** | `modelRouter`, `model_invocations`, skill refactor | Yes |
+| **M4** | `modelRouter`, `model_invocations`, skill refactor | Yes — **built** (CEO sign-off pending) |
 | **M5** | Corporate agent fleet as runner skills | Yes |
 | **M6** | Product squad + PDLC orchestrator + product KG | Yes |
 

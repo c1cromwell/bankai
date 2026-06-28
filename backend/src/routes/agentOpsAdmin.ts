@@ -25,6 +25,12 @@ import {
   getNeighborhood,
   listRecentDecisions,
 } from "../services/decisionGraphService";
+import {
+  MODEL_REGISTRY,
+  invocationStats,
+  listInvocations,
+  routingPreview,
+} from "../operations/modelRouter/router";
 import "../operations/skills";
 
 export const agentOpsAdminRouter = Router();
@@ -219,6 +225,44 @@ agentOpsAdminRouter.get(
     try {
       const hops = req.query.hops ? Number(req.query.hops) : 2;
       res.json(await getNeighborhood(req.params.id!, hops));
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+/** M4 — model router registry, routing preview, invocation telemetry. */
+agentOpsAdminRouter.get(
+  "/agent-ops/models/registry",
+  requireAdmin,
+  async (_req: AdminRequest, res: Response, next: NextFunction) => {
+    try {
+      res.json({ registry: MODEL_REGISTRY, routing: routingPreview() });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+agentOpsAdminRouter.get(
+  "/agent-ops/models/invocations",
+  requireAdmin,
+  async (req: AdminRequest, res: Response, next: NextFunction) => {
+    try {
+      const limit = req.query.limit ? Number(req.query.limit) : 50;
+      res.json({ invocations: await listInvocations(limit) });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+agentOpsAdminRouter.get(
+  "/agent-ops/models/stats",
+  requireAdmin,
+  async (_req: AdminRequest, res: Response, next: NextFunction) => {
+    try {
+      res.json(await invocationStats());
     } catch (e) {
       next(e);
     }

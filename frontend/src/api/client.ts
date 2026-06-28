@@ -1062,6 +1062,12 @@ export const api = {
   kgWorkflow: (workflowRun: string) => adminRequest<KgGraph>(`/admin/agent-ops/kg/workflow/${workflowRun}`),
   kgExport: (scope?: "corporate" | "product") =>
     adminRequest<KgGraph>(`/admin/agent-ops/kg/export${scope ? `?scope=${scope}` : ""}`),
+
+  modelRegistry: () =>
+    adminRequest<{ registry: ModelRegistryEntry[]; routing: ModelRoutingPreview[] }>("/admin/agent-ops/models/registry"),
+  modelInvocations: (limit = 25) =>
+    adminRequest<{ invocations: ModelInvocationRow[] }>(`/admin/agent-ops/models/invocations?limit=${limit}`),
+  modelStats: () => adminRequest<ModelInvocationStats>("/admin/agent-ops/models/stats"),
 };
 
 export interface KgNode {
@@ -1111,4 +1117,45 @@ export interface MilestoneStatus {
   signedAt: string | null;
   approverRole: string | null;
   note: string | null;
+}
+
+export interface ModelRegistryEntry {
+  id: string;
+  vendor: string;
+  tier: string;
+  model: string;
+  contextWindow: number;
+  inputMicroUsdPer1k: number;
+  outputMicroUsdPer1k: number;
+  latencyClass: string;
+  enabled: boolean;
+}
+
+export interface ModelRoutingPreview {
+  taskClass: string;
+  tier: string;
+  primaryModel: string;
+  vendor: string;
+}
+
+export interface ModelInvocationRow {
+  id: string;
+  taskClass: string;
+  modelId: string;
+  vendor: string;
+  skill: string | null;
+  workflowRun: string | null;
+  inputTokens: number;
+  outputTokens: number;
+  costMicroUsd: number;
+  latencyMs: number;
+  status: string;
+  errorCode: string | null;
+  createdAt: string;
+}
+
+export interface ModelInvocationStats {
+  totalInvocations: number;
+  totalCostMicroUsd: number;
+  byTaskClass: Record<string, { count: number; costMicroUsd: number }>;
 }

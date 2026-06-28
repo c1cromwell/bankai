@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api, clearToken, getToken, getAdminRole, type AgentReviewRow, type MilestoneStatus, type KgGraph, type KgNode } from "../api/client";
+import { api, clearToken, getToken, getAdminRole, type AgentReviewRow, type MilestoneStatus, type KgGraph, type KgNode, type ModelRegistryEntry, type ModelRoutingPreview, type ModelInvocationRow, type ModelInvocationStats } from "../api/client";
 
 export function AdminApprovals() {
   const nav = useNavigate();
@@ -8,6 +8,10 @@ export function AdminApprovals() {
   const [milestones, setMilestones] = useState<MilestoneStatus[]>([]);
   const [recentKg, setRecentKg] = useState<KgNode[]>([]);
   const [kgGraph, setKgGraph] = useState<KgGraph | null>(null);
+  const [modelRegistry, setModelRegistry] = useState<ModelRegistryEntry[]>([]);
+  const [modelRouting, setModelRouting] = useState<ModelRoutingPreview[]>([]);
+  const [modelInvocations, setModelInvocations] = useState<ModelInvocationRow[]>([]);
+  const [modelStats, setModelStats] = useState<ModelInvocationStats | null>(null);
   const [role, setRole] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
@@ -21,10 +25,21 @@ export function AdminApprovals() {
   const refresh = useCallback(async () => {
     setError(null);
     try {
-      const [a, m, kg] = await Promise.all([api.agentApprovals(), api.milestones(), api.kgRecent(15)]);
+      const [a, m, kg, models, inv, stats] = await Promise.all([
+        api.agentApprovals(),
+        api.milestones(),
+        api.kgRecent(15),
+        api.modelRegistry(),
+        api.modelInvocations(20),
+        api.modelStats(),
+      ]);
       setReviews(a.reviews);
       setMilestones(m.milestones);
       setRecentKg(kg.decisions);
+      setModelRegistry(models.registry);
+      setModelRouting(models.routing);
+      setModelInvocations(inv.invocations);
+      setModelStats(stats);
     } catch (err) {
       const msg = (err as Error).message;
       if (msg.includes("UNAUTHENTICATED") || msg.includes("FORBIDDEN")) logout();
@@ -224,6 +239,70 @@ export function AdminApprovals() {
             </ul>
             <p className="muted">Edges: {kgGraph.edges.map((e) => `${e.edgeType}`).join(" · ") || "none"}</p>
           </div>
+        )}
+      </section>
+
+      <section className="card">
+        <h2>Model router (M4)</h2>
+        <p className="muted">
+          Task class → capability tier → cheapest model. Invocations logged append-only for cost/usage policy.
+          {modelStats && (
+            <> Total OK invocations: <strong>{modelStats.totalInvocations}</strong>
+              {" · "}micro-USD cost: <strong>{modelStats.totalCostMicroUsd}</strong></>
+          )}
+        </p>
+        {modelRouting.length > 0 && (
+          <table style={{ marginBottom: "1rem" }}>
+            <thead>
+              <tr>
+                <th>Task class</th>
+                <th>Tier</th>
+                <th>Primary model</th>
+              </tr>
+            </thead>
+            <tbody>
+              {modelRouting.map((r) => (
+                <tr key={r.taskClass}>
+                  <td>{r.taskClass}</td>
+                  <td>{r.tier}</td>
+                  <td>{r.primaryModel}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {modelRegistry.length > 0 && (
+          <p className="muted" style={{ fontSize: "0.85rem" }}>
+            Registry: {modelRegistry.filter((e) => e.enabled).map((e) => `${e.id} (${e.tier})`).join(" · ")}
+          </p>
+        )}
+        {modelInvocations.length === 0 ? (
+          <p className="muted">No model invocations yet — run a skill with OPERATIONS_ORCHESTRATOR=anthropic.</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Model</th>
+                <th>Skill</th>
+                <th>Tokens</th>
+                <th>Status</th>
+                <th>When</th>
+              </tr>
+            </thead>
+            <tbody>
+              {modelInvocations.map((inv) => (
+                <tr key={inv.id}>
+                  <td>{inv.taskClass}</td>
+                  <td>{inv.modelId}</td>
+                  <td>{inv.skill ?? "—"}</td>
+                  <td>{inv.inputTokens}+{inv.outputTokens}</td>
+                  <td>{inv.status}{inv.errorCode ? ` (${inv.errorCode})` : ""}</td>
+                  <td>{new Date(inv.createdAt).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </section>
     </div>

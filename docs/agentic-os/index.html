@@ -191,7 +191,7 @@
           <tr><td>Fast</td><td>Haiku-class</td><td>Triage, summaries, high-volume reads</td></tr>
         </tbody>
       </table>
-      <p style="margin-top:1rem;font-size:0.88rem;color:var(--text-2)">Registry + routing policy: task class → capability + token budget → cheapest qualifying model + fallback chain. Providers: Anthropic (live) · OpenAI · Google · Local (stubs). Telemetry in <code>model_invocations</code> replaces direct <code>ANTHROPIC_MODEL</code> calls in skills.</p>
+      <p style="margin-top:1rem;font-size:0.88rem;color:var(--text-2)">Registry + routing policy: task class → capability + token budget → cheapest qualifying model + fallback chain. Providers: Anthropic (live) · OpenAI · Google · Local (stubs). Telemetry in <code>model_invocations</code> replaces direct <code>ANTHROPIC_MODEL</code> calls in skills. Admin: <code>/admin/approvals</code> → Model router panel · API <code>/api/admin/agent-ops/models/*</code>.</p>
     </div>
   </section>
 
@@ -200,8 +200,8 @@
     <ul class="milestones">
       <li class="current"><strong>M1</strong> — Design + branding + this webview (no backend code) ← <em>you are here</em></li>
       <li class="current"><strong>M3</strong> — Decision KG: <code>kg_nodes</code>/<code>kg_edges</code>, <code>decisionGraphService</code>, graph API + admin panel ← <em>built — CEO sign-off pending</em></li>
+      <li class="current"><strong>M4</strong> — Model router + <code>model_invocations</code>; <code>kycReviewSkill</code> routed via task class ← <em>built — CEO sign-off pending</em></li>
       <li><strong>M2</strong> — Governance core: <code>ceo</code>/<code>chief_of_staff</code> RBAC, gate-policy, Approvals admin UI</li>
-      <li><strong>M4</strong> — Model router + <code>model_invocations</code>; refactor skills to task classes</li>
       <li><strong>M5</strong> — Corporate agent fleet (CFO/CLO/CISO/CPO/CMO/Compliance/SRE skills)</li>
       <li><strong>M6</strong> — Product squad + PDLC orchestrator + product KG + Agentic Builder loop</li>
     </ul>
