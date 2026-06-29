@@ -1,6 +1,6 @@
 # Goeman Global Finance — full rebrand & repo migration plan
 
-**Status: R2 complete (June 2026). R3 verify ✅. R4 repo rename next.**
+**Status: R4 local complete — finish GitHub rename in Settings (link in §6 R4).**
 
 | Field | Value |
 |---|---|
@@ -232,7 +232,14 @@ cd backend && npm run typecheck && npm test
 cd fraud-engine && npm test
 ```
 
-### Phase R4 — Repo rename (§5.1) + local `mv bankai goeman`
+### Phase R4 — Repo rename (§5.1) + local `mv bankai goeman` — **in progress**
+
+- [x] Push R1+R2 to `origin/main` (2026-06-29)
+- [x] Local `git remote set-url origin https://github.com/c1cromwell/goeman.git`
+- [x] Local directory `~/Projects/bankai` → `~/Projects/goeman`
+- [ ] **GitHub UI (one step):** [bankai Settings → General](https://github.com/c1cromwell/bankai/settings) → Repository name → **`goeman`** → Rename
+
+After GitHub rename, verify: `cd ~/Projects/goeman && git fetch origin`
 
 ### Phase R5 — External surfaces
 
