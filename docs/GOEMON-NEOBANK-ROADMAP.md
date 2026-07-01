@@ -51,6 +51,12 @@ Design docs: `docs/PHASE-25-SMB-BUSINESS-BANKING.md`, `docs/PHASE-26-AGENTIC-TRA
 Prioritized menu; each tagged with the model it follows and its compliance gate. **Goemon holds the
 token, mirrors the position, and partners the issuer** — it does not become the fund/BD/TA.
 
+> **Full tokenization universe:** the RWA menu below is a subset. The complete "one engine, many
+> verticals" plan — platform capabilities (self-serve issuance, compliance-as-a-service, management
+> tools, employee equity, capital formation, secondary/ATS) **and** the broader asset verticals (land,
+> farmland/agriculture, commodities, carbon, SMB revenue-share, IP/royalties, receivables, luxury
+> collectibles, equipment) — is `docs/TOKENIZATION-MASTER-PLAN.md` (roadmap: Phase 29).
+
 | # | Product | Model to follow | Gate | Ramp |
 |---|---|---|---|---|
 | 1 | **Tokenized-treasury yield** ("cash that earns") — the #1 retail wedge | Ondo **USDY** (Reg S yieldcoin) / Franklin **BENJI** (’40-Act MMF token) — distribute, don't issue the wrapper | Reg S distribution / partner the registered fund + custodian; Goemon's reconciliation = the transfer-agent pattern | A→B |

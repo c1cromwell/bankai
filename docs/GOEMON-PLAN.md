@@ -1419,6 +1419,20 @@ yield (Maple wrap), issuance-as-a-service (Tokeny ERC-3643 + Securitize-style pa
 funds/equities (Phase 18.6), tokenized real estate (RealT-style issuer partner). Distribute + reconcile;
 don't issue. **Design: `docs/PHASE-28-RWA-EXPANSION.md`.**
 
+## Phase 29 — Tokenization Platform ("one engine, many verticals") → **Corp A/B/C** (DESIGN)
+The umbrella over the Phase-28 RWA menu: turn Goemon's **already asset-agnostic** engine (assets =
+ledger currency codes + Compliance Module + escrow issuance + corporate actions + redemption) into a
+**universal compliant tokenization platform** where a new asset class = a compliance profile + metadata
++ issuer seam + config flag, not a rewrite. **Platform tracks:** P1 self-serve issuance console · P2
+compliance-as-a-service (accreditation/lockups/§12(g)/whitelists) · P3 investment-management tools
+(portfolio/NAV/tax docs) · P4 employee equity comp (ties to `docs/legal/EQUITY-INCENTIVE-PLAN.md`) ·
+P5 capital formation (Reg CF/D/A+) · P6 secondary liquidity/ATS. **Vertical menu:** V1 land · V2
+farmland/agriculture · V3 commodities/metals · V4 carbon/renewables · V5 SMB equity + revenue-share ·
+V6 IP & royalties · V7 invoices/receivables · V8 luxury/alt collectibles (MVP-adjacent) · V9
+vehicles/equipment leasing. First engineering step: generalize `AssetKind` + a compliance-profile
+registry + the P1 console — then verticals are "onboard a profile." MVP (collectibles) unchanged.
+**Full design: `docs/TOKENIZATION-MASTER-PLAN.md`.**
+
 ---
 
 ## Quick Start (After Build)

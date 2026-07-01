@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tokenization Master Plan — Goemon Global Finance</title>
+<style>/* Goemon Global Finance strategy-doc print theme — "Quiet Premium": monochrome surfaces, a
+   single jade accent, type-led hierarchy. Tuned for Letter PDF + standalone HTML. */
+
+:root {
+  --ink: #14171a;
+  --ink-2: #3a4147;
+  --ink-3: #6b747c;
+  --line: #e3e6e8;
+  --line-2: #f0f2f3;
+  --accent: #1f7a5a;      /* jade */
+  --accent-weak: #e9f4ef;
+  --accent-ink: #145239;
+  --warn: #9a6b00;
+  --warn-weak: #fbf3e0;
+  --surface: #f7f8f8;
+  --max: 760px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  font-size: 11.2pt;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+/* ---- Cover ---------------------------------------------------------------- */
+.cover {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 64px;
+  page-break-after: always;
+  border-left: 6px solid var(--accent);
+}
+.cover .mark {
+  display: inline-grid; place-items: center;
+  width: 46px; height: 46px; border-radius: 12px;
+  background: var(--accent); color: #fff;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-weight: 800; font-size: 24px; margin-bottom: 30px;
+}
+.cover h1 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 33pt; line-height: 1.08; letter-spacing: -0.02em;
+  margin: 0 0 14px; color: var(--ink); border: 0; padding: 0;
+}
+.cover .sub { font-size: 14pt; color: var(--ink-2); margin: 0 0 34px; max-width: 30em; }
+.cover .meta { font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 9.5pt; color: var(--ink-3); letter-spacing: 0.02em; text-transform: uppercase; }
+.cover .meta b { color: var(--ink); font-weight: 600; }
+
+.disclaimer {
+  margin-top: 30px; padding: 14px 16px;
+  background: var(--warn-weak); border: 1px solid #efe2bf; border-radius: 8px;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  font-size: 8.6pt; line-height: 1.5; color: #6c4f10; max-width: 40em;
+}
+
+/* ---- Headings ------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
+}
+h1 { font-size: 21pt; margin: 0 0 6px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h2 {
+  font-size: 15.5pt; margin: 30px 0 10px; padding-top: 6px;
+  border-top: 1px solid var(--line); padding-top: 16px;
+  page-break-after: avoid;
+}
+h3 { font-size: 12.5pt; margin: 20px 0 6px; color: var(--accent-ink); page-break-after: avoid; }
+h4 { font-size: 11pt; margin: 16px 0 4px; color: var(--ink-2); }
+
+p { margin: 0 0 11px; }
+strong { color: var(--ink); font-weight: 700; }
+em { color: var(--ink-2); }
+a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-weak); }
+
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin: 3px 0; }
+li::marker { color: var(--accent); }
+
+hr { border: 0; border-top: 1px solid var(--line); margin: 26px 0; }
+
+blockquote {
+  margin: 12px 0; padding: 10px 16px;
+  background: var(--accent-weak); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+  color: var(--accent-ink);
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10pt;
+}
+blockquote p { margin: 0; }
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9.4pt; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 1px 5px; color: var(--accent-ink);
+}
+pre {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; overflow-x: auto; page-break-inside: avoid;
+}
+pre code { background: none; border: 0; padding: 0; color: var(--ink-2); font-size: 8.8pt; line-height: 1.5; }
+
+/* ---- Tables --------------------------------------------------------------- */
+table {
+  width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 9.6pt;
+  font-family: ui-sans-serif, -apple-system, system-ui, sans-serif;
+  page-break-inside: avoid;
+}
+thead th {
+  text-align: left; background: var(--ink); color: #fff; font-weight: 600;
+  padding: 7px 10px; font-size: 8.8pt; letter-spacing: 0.01em;
+}
+tbody td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+tbody tr:nth-child(even) td { background: var(--line-2); }
+
+/* ---- TOC ------------------------------------------------------------------ */
+.toc { page-break-after: always; padding-top: 8px; }
+.toc h2 { border: 0; padding: 0; margin: 0 0 12px; }
+.toc ol { list-style: none; padding: 0; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 5px 0; font-family: ui-sans-serif, -apple-system, system-ui, sans-serif; font-size: 10.5pt; }
+.toc li.lvl-3 { padding-left: 24px; font-size: 9.6pt; color: var(--ink-2); }
+.toc a { border: 0; color: var(--ink); }
+.toc li.lvl-2 a::before { content: counter(toc) ".  "; color: var(--accent); font-weight: 700; }
+
+/* ---- Section number badges via h2 ---------------------------------------- */
+.content { counter-reset: h2; }
+.content h2 { counter-increment: h2; }
+.content h2::before {
+  content: counter(h2); display: inline-grid; place-items: center;
+  width: 24px; height: 24px; margin-right: 10px; border-radius: 6px;
+  background: var(--accent-weak); color: var(--accent-ink);
+  font-size: 11pt; font-weight: 700; vertical-align: middle;
+}
+
+@page { margin: 18mm 0; }
+@media print {
+  .wrap { padding: 0 18mm; }
+  h2, h3, h4 { page-break-after: avoid; }
+  table, pre, blockquote, figure { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<section class="cover">
+  <div class="mark">B</div>
+  <h1>Tokenization Master Plan</h1>
+  <p class="sub">Goemon Global Finance — one engine, many verticals</p>
+  <div class="meta">Goemon Global Finance &nbsp;·&nbsp; Confidential — Founder &nbsp;·&nbsp; <b>July 1, 2026</b></div>
+  <div class="disclaimer">Strategic guidance only — not legal, financial, tax, or investment advice. Securities, money-transmission, and corporate-formation decisions must be reviewed by licensed counsel and a CPA before you act. Sections flagged “⚖ see counsel” are where this matters most.</div>
+</section>
+<div class="wrap">
+  <nav class="toc"><h2>Contents</h2><ol><li class="lvl-2"><a href="#1-the-thesis-dont-build-15-products-build-one-platform-n-profiles">1. The thesis — don&#39;t build 15 products; build ONE platform + N profiles</a></li><li class="lvl-2"><a href="#2-what-you-already-have-already-planned-so-new-is-clear">2. What you already have / already planned (so &quot;new&quot; is clear)</a></li><li class="lvl-2"><a href="#3-the-top-15-mini-business-case-each">3. The Top 15 — mini business-case each</a></li><li class="lvl-3"><a href="#part-a-platform-capabilities-what-makes-it-one-size-fits-all">Part A — Platform capabilities (what makes it &quot;one-size-fits-all&quot;)</a></li><li class="lvl-3"><a href="#part-b-asset-class-verticals-what-to-tokenize-beyond-the-current-plan">Part B — Asset-class verticals (what to tokenize, beyond the current plan)</a></li><li class="lvl-2"><a href="#4-prioritization-sequencing">4. Prioritization &amp; sequencing</a></li><li class="lvl-2"><a href="#5-compliance-ramp-abc-mapping">5. Compliance ramp (A→B→C) mapping</a></li><li class="lvl-2"><a href="#6-keep-it-simple-first-the-one-engineering-step-that-unlocks-the-rest">6. Keep it simple first — the one engineering step that unlocks the rest</a></li></ol></nav>
+  <main class="content">
+<h1 id="goemon-tokenization-master-plan">Goemon — Tokenization Master Plan</h1>
+<p><strong>One engine, many verticals.</strong> The future architecture for Goemon as a universal, compliant,
+non-custodial tokenization platform for the entire industry — <em>without</em> displacing the MVP.</p>
+<blockquote>
+<p><strong>Keep it simple first.</strong> The MVP ships as-is (collectibles). Nothing here changes that. This is
+the future map: the top 15 focus areas — platform capabilities <strong>and</strong> asset-class verticals —
+most of which reuse the engine Goemon <strong>already has</strong>. Strategy, not legal advice; every regulated
+step is ⚖ counsel-gated. Companion: <code>docs/PHASE-28-RWA-EXPANSION.md</code>,
+<code>docs/business/RWA-NEOBANK-COMPETITIVE-REVIEW.md</code>, <code>docs/business/CORPORATE-STRUCTURE.md</code> (A→B→C ramp).</p>
+</blockquote>
+<hr>
+<h2 id="1-the-thesis-dont-build-15-products-build-one-platform-n-profiles">1. The thesis — don&#39;t build 15 products; build ONE platform + N profiles</h2>
+<p>Goemon&#39;s tokenization engine is <strong>already asset-agnostic</strong>. That is the whole game: the cost of a
+new asset class is a <em>profile</em>, not a <em>rewrite</em>. Concretely, these primitives are kind-agnostic today:</p>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th>What it does</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Asset = ledger currency code</strong></td>
+<td>Every asset is <code>ASSET:&lt;id&gt;</code>; supply/holdings tracked as a distinct currency so the ledger balances money <strong>and</strong> units atomically</td>
+<td><code>services/ledgerService.ts</code>, <code>services/tokenizationService.ts</code> (AssetKind, <code>createAsset</code>)</td>
+</tr>
+<tr>
+<td><strong>Compliance Module</strong></td>
+<td><code>checkTransfer</code>: identity registry + min-tier (all kinds) + jurisdiction allow-list + holder-cap (auto-applied only when the asset <code>isSecurity</code>)</td>
+<td><code>services/complianceService.ts:32-64</code></td>
+</tr>
+<tr>
+<td><strong>Primary issuance (escrow)</strong></td>
+<td><code>subscribe → close/refund</code>: cash into escrow, one atomic journal delivers units from treasury + releases to issuer + collects fee</td>
+<td><code>services/marketplaceService.ts</code></td>
+</tr>
+<tr>
+<td><strong>Secondary trading</strong></td>
+<td><code>placeOrder</code> buy/sell as one atomic cash+asset+fee journal (compliance-gated on the buyer)</td>
+<td><code>services/marketplaceService.ts</code></td>
+</tr>
+<tr>
+<td><strong>Transfer</strong></td>
+<td>P2P asset move; securities route through compliance, others check tier only</td>
+<td><code>services/marketplaceService.ts</code></td>
+</tr>
+<tr>
+<td><strong>Corporate actions</strong></td>
+<td><code>distributeDividend</code>/<code>declareCorporateAction</code>: pro-rata by on-chain balance, one idempotent journal per holder; splits</td>
+<td><code>services/corporateActionService.ts</code></td>
+</tr>
+<tr>
+<td><strong>Redemption</strong></td>
+<td><code>redeem</code>: burn units → deliver proceeds, one atomic journal; <strong>swappable issuer</strong> seam</td>
+<td><code>services/redemptionService.ts</code></td>
+</tr>
+<tr>
+<td><strong>Listings + pricing</strong></td>
+<td>Versioned insert-only lifecycle (staging→soft→public→paused→delisted); price source + staleness</td>
+<td><code>services/listingService.ts</code>, <code>services/pricingService.ts</code></td>
+</tr>
+<tr>
+<td><strong>Kill-switch pattern</strong></td>
+<td><code>&lt;VERTICAL&gt;_ENABLED</code> + <code>&lt;VERTICAL&gt;_PROVIDER</code> + prod-fatal guard</td>
+<td><code>config.ts</code>, <code>productionFatals()</code></td>
+</tr>
+</tbody></table>
+<p><strong>So adding a vertical = new <code>AssetKind</code> value + a compliance profile + domain metadata + an optional
+issuer seam + a config flag.</strong> The moat is this engine&#39;s four properties, which no single-asset
+competitor combines: <strong>non-custodial · compliance-as-code · agent-native · ledger⇄chain reconciled.</strong></p>
+<p><strong>The strategic consequence:</strong> the highest-leverage thing to build after the MVP is <strong>not</strong> any one
+vertical — it&#39;s the <strong>platform layer (P1–P3, P6)</strong> that turns every future asset class into &quot;onboard
+a profile.&quot; Build the engine once; the 9 verticals become configuration.</p>
+<hr>
+<h2 id="2-what-you-already-have-already-planned-so-new-is-clear">2. What you already have / already planned (so &quot;new&quot; is clear)</h2>
+<ul>
+<li><strong>LIVE (MVP):</strong> <code>collectible</code> + <code>gaming</code> (HTS, tier-only, free transfer).</li>
+<li><strong>Prototype (ERC-3643, <code>*_ENABLED</code> prod-fatal):</strong> <code>security</code>, <code>equity</code> (Phase 18.6, Dinari-style
+1:1 equities), <code>treasury</code> (Ondo-style yield).</li>
+<li><strong>Planned — Phase 28 RWA Expansion:</strong> tokenized-treasury yield, private credit, real estate, funds/
+indices, issuance-as-a-service. (Real estate = the Lofty/RealT lane you already named.)</li>
+</ul>
+<p><strong>The 15 below go beyond these</strong> — the land/farmland/commodities/SMB/royalties/receivables verticals
+and the platform capabilities (issuance console, compliance-as-a-service, management tools, employee
+equity, capital formation, secondary/ATS) you flagged.</p>
+<hr>
+<h2 id="3-the-top-15-mini-business-case-each">3. The Top 15 — mini business-case each</h2>
+<p>Format per item: <strong>what · why/underserved · model to follow · Goemon reuse · compliance gate · ramp.</strong></p>
+<h3 id="part-a-platform-capabilities-what-makes-it-one-size-fits-all">Part A — Platform capabilities (what makes it &quot;one-size-fits-all&quot;)</h3>
+<p><strong>P1 — Self-serve compliant issuance console (&quot;tokenize anything&quot;).</strong></p>
+<ul>
+<li><em>What:</em> a guided console where any issuer creates a compliant token in minutes — pick asset kind,
+jurisdiction rules, holder cap, transfer restrictions, docs, price source; mint to treasury; list.</li>
+<li><em>Why:</em> this is the product that converts the other 14 into &quot;onboard a profile,&quot; and it&#39;s the
+industry&#39;s real bottleneck (issuance is slow, bespoke, lawyer-heavy).</li>
+<li><em>Model:</em> Tokeny / Securitize self-serve issuance.</li>
+<li><em>Reuse:</em> <code>tokenizationService.createAsset</code> + <code>listingService</code> lifecycle + Compliance Module —
+already the whole flow; needs a UI/console + a <strong>compliance-profile registry</strong> (see P2).</li>
+<li><em>Gate:</em> the console is Phase-A software; what the issuer <em>sells</em> carries its own gate.</li>
+<li><em>Ramp:</em> <strong>A</strong> (build) → per-asset <strong>B/C</strong>.</li>
+</ul>
+<p><strong>P2 — Compliance-as-a-service (programmable transfer rules).</strong></p>
+<ul>
+<li><em>What:</em> extend the Compliance Module beyond tier/jurisdiction/holder-cap to a library of
+<strong>reusable per-asset compliance profiles</strong>: accreditation checks, <strong>lockups (Reg D 1-yr)</strong>,
+max-investor (§12(g)), whitelists, sanctions/OFAC, transfer windows, tax-lot rules — driven by
+<strong>ONCHAINID / W3C VC</strong> identity.</li>
+<li><em>Why:</em> the regulatory logic is the moat; make it declarative and every vertical inherits it.</li>
+<li><em>Model:</em> ERC-3643 T-REX + ONCHAINID (already in the PRD).</li>
+<li><em>Reuse:</em> <code>complianceService.checkTransfer</code> is the exact seam — add dimensions + a profile record on
+the asset.</li>
+<li><em>Gate:</em> <strong>A</strong> (software); ⚖ counsel defines each profile.</li>
+<li><em>Ramp:</em> <strong>A</strong>.</li>
+</ul>
+<p><strong>P3 — Investment-management tools (the holder cockpit).</strong></p>
+<ul>
+<li><em>What:</em> the &quot;tools to manage your tokens&quot; you asked for — portfolio dashboard, NAV/valuation,
+distributions history, <strong>tax documents (1099-DIV / 1099-B / K-1)</strong>, performance, statements,
+DRIP/rebalancing, corporate-action notices.</li>
+<li><em>Why:</em> holders won&#39;t hold what they can&#39;t track/report; this is table stakes for real money and a
+retention/AUM lever.</li>
+<li><em>Model:</em> Carta (cap-table/portfolio) + brokerage statements.</li>
+<li><em>Reuse:</em> <code>corporateActionService</code> (distributions) + ledger projections + <code>pricingService</code> — the data
+exists; this is a reporting/UX layer.</li>
+<li><em>Gate:</em> <strong>A</strong> (software); tax-doc generation ⚖ CPA.</li>
+<li><em>Ramp:</em> <strong>A</strong>.</li>
+</ul>
+<p><strong>P4 — Employee participation / equity compensation.</strong></p>
+<ul>
+<li><em>What:</em> tokenized <strong>equity / options / profits-interests as compensation</strong>, with on-chain vesting,
+a live cap table, 83(b) tracking, and exercise — for Goemon&#39;s own team and as a product for other
+companies.</li>
+<li><em>Why:</em> underserved and Goemon has a <strong>head start</strong> — the <code>docs/legal/EQUITY-INCENTIVE-PLAN.md</code>
+already models units/options/profits-interests + vesting + 83(b); the ledger + compliance enforce it.</li>
+<li><em>Model:</em> Carta + on-chain vesting; ties to P5 (capital formation) and Phase 25 (SMB).</li>
+<li><em>Reuse:</em> <code>equity</code> AssetKind + Compliance Module (transfer restrictions/lockups) + corporate actions
+(for distributions) + the Equity Incentive Plan legal spine.</li>
+<li><em>Gate:</em> private-company securities (Rule 701 / Reg D), 409A valuation ⚖.</li>
+<li><em>Ramp:</em> <strong>A/B</strong>.</li>
+</ul>
+<p><strong>P5 — Capital formation / corporate financing (primary-raise rails).</strong></p>
+<ul>
+<li><em>What:</em> a business raises capital by issuing tokenized <strong>equity / debt / revenue-share</strong> under
+<strong>Reg CF / D 506(c) / A+</strong> — accreditation checks, escrow-close, cap table, investor comms.</li>
+<li><em>Why:</em> your &quot;corporate/scalable financing&quot; ask; the primary-market on-ramp for most of Part B.</li>
+<li><em>Model:</em> Republic / StartEngine (Reg CF) + Securitize (Reg D).</li>
+<li><em>Reuse:</em> escrow <code>subscribe → close/refund</code> <strong>is</strong> a compliant primary raise; add accreditation
+(P2) + funding-portal/BD partner.</li>
+<li><em>Gate:</em> <strong>B/C</strong> — funding portal (CF) or BD (D/A+); ⚖.</li>
+<li><em>Ramp:</em> <strong>B → C</strong>.</li>
+</ul>
+<p><strong>P6 — Secondary liquidity — ATS + AMM (the liquidity unlock).</strong></p>
+<ul>
+<li><em>What:</em> the trading venue that makes any tokenized asset <em>actually sellable</em> — a regulated <strong>ATS</strong>
+for securities, and bonding-curve/orderbook AMM for exempt assets (collectibles/commodities).</li>
+<li><em>Why:</em> <strong>illiquidity is the #1 reason RWA tokens die.</strong> Solving it turns &quot;fractional&quot; into
+&quot;fractional <em>and</em> liquid&quot; — the &quot;accessible investment&quot; you asked for.</li>
+<li><em>Model:</em> tZERO / Securitize Markets (ATS); AMM for exempt assets.</li>
+<li><em>Reuse:</em> <code>marketplaceService.placeOrder</code> is the secondary engine — route it to a real venue/partner.</li>
+<li><em>Gate:</em> <strong>C</strong> — broker-dealer + ATS registration (partner first).</li>
+<li><em>Ramp:</em> <strong>C</strong> (cross-cutting; unlocks every vertical).</li>
+</ul>
+<h3 id="part-b-asset-class-verticals-what-to-tokenize-beyond-the-current-plan">Part B — Asset-class verticals (what to tokenize, beyond the current plan)</h3>
+<p><strong>V1 — Land (raw / undeveloped / entitled).</strong> <em>(You asked: &quot;what about land?&quot;)</em></p>
+<ul>
+<li><em>What:</em> raw parcels, land banking, entitled lots, development rights — distinct from Lofty&#39;s <em>built</em>
+housing. <em>Why:</em> huge, illiquid, underserved; simple title story vs operating property. <em>Model:</em>
+LLC-per-parcel + Reg D. <em>Reuse:</em> <code>security</code> profile + attestation metadata (deed/survey/title).
+<em>Gate:</em> Reg D/S, per-parcel LLC ⚖. <em>Ramp:</em> <strong>B→C.</strong></li>
+</ul>
+<p><strong>V2 — Farmland &amp; agriculture.</strong> <em>(You asked: &quot;agriculture.&quot;)</em></p>
+<ul>
+<li><em>What:</em> farmland (AcreTrader model), crop/harvest <strong>revenue-share</strong>, livestock, <strong>ag receivables,
+water rights</strong>. <em>Why:</em> large, income-producing, inflation-hedge, underserved by crypto. <em>Model:</em>
+AcreTrader / FarmTogether. <em>Reuse:</em> security profile + corporate actions (harvest/rent
+distributions). <em>Gate:</em> Reg D + ag/land counsel ⚖. <em>Ramp:</em> <strong>B→C.</strong></li>
+</ul>
+<p><strong>V3 — Commodities &amp; precious metals.</strong> <em>(You asked: &quot;commodities.&quot;)</em></p>
+<ul>
+<li><em>What:</em> gold/silver (1:1 vaulted), energy, <strong>timber</strong>, industrial metals. <em>Why:</em> proven demand;
+clean 1:1-backing story. <em>Model:</em> PAXG (gold) / vaulted-metal tokens. <em>Reuse:</em> <code>commodity</code> AssetKind<ul>
+<li><strong>proof-of-reserve / custody attestation</strong> (<code>custodyAttestationUri</code>) + reconciliation. <em>Gate:</em>
+custodian + assayer; commodity/MSB posture ⚖. <em>Ramp:</em> <strong>B.</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>V4 — Carbon &amp; environmental / renewable-energy revenue.</strong></p>
+<ul>
+<li><em>What:</em> carbon credits, solar/wind <strong>project revenue-share</strong>, RECs. <em>Why:</em> ESG demand + real yield;
+registry rails maturing. <em>Model:</em> Toucan / KlimaDAO (carbon) + project-revenue tokens. <em>Reuse:</em>
+security/commodity profile + oracle/registry integration + corporate actions (revenue). <em>Gate:</em>
+registry integration, double-count controls ⚖. <em>Ramp:</em> <strong>B.</strong></li>
+</ul>
+<p><strong>V5 — Small business — equity + revenue-based financing.</strong> <em>(You asked: &quot;small business.&quot;)</em></p>
+<ul>
+<li><em>What:</em> tokenize SMB ownership or <strong>revenue-share</strong> notes for Main-Street businesses; local/community
+investing. <em>Why:</em> enormous underserved capital gap; complements Phase 25 (SMB banking). <em>Model:</em>
+Honeycomb / Mainvest (Reg CF revenue-share). <em>Reuse:</em> escrow issuance (P5) + Compliance Module +
+corporate actions (revenue payouts). <em>Gate:</em> Reg CF portal / Reg D ⚖. <em>Ramp:</em> <strong>B.</strong></li>
+</ul>
+<p><strong>V6 — IP &amp; royalties.</strong></p>
+<ul>
+<li><em>What:</em> music, film, patents, publishing, brand-licensing — <strong>recurring royalty streams</strong>. <em>Why:</em>
+creator-economy demand; predictable cash flows map perfectly to pro-rata distribution. <em>Model:</em>
+Royal (music) / IP-royalty marketplaces. <em>Reuse:</em> security profile + <code>corporateActionService</code>
+(royalty distributions are just dividends by another name). <em>Gate:</em> Reg D/A+, IP/royalty admin ⚖.
+<em>Ramp:</em> <strong>B→C.</strong></li>
+</ul>
+<p><strong>V7 — Invoices / trade receivables / supply-chain finance.</strong></p>
+<ul>
+<li><em>What:</em> tokenized <strong>receivables</strong> + working-capital pools. <em>Why:</em> B2B, high-velocity, real yield,
+proven on-chain. <em>Model:</em> Centrifuge (receivables/private credit). <em>Reuse:</em> security/debt profile +
+redemption (maturity payout) + corporate actions (coupons). <em>Gate:</em> Reg D, underwriting/servicer
+partner ⚖. <em>Ramp:</em> <strong>B→C.</strong></li>
+</ul>
+<p><strong>V8 — Luxury &amp; alternative collectibles (MVP-adjacent extension).</strong></p>
+<ul>
+<li><em>What:</em> art, watches, wine/whisky, rare cars, sneakers, memorabilia — fractional. <em>Why:</em> the
+<strong>closest expansion to the collectibles MVP</strong> — same HTS rail, tier-only gating, no securities
+overhead (until fractional-as-security). <em>Model:</em> Masterworks (art) / Rally. <em>Reuse:</em> the LIVE
+<code>collectible</code> path + escrow (<code>COLLECTIBLES_ESCROW_ENABLED</code>) + provenance metadata. <em>Gate:</em> A for
+whole-item; <strong>fractional may be a security</strong> ⚖. <em>Ramp:</em> <strong>A → B (fractional).</strong></li>
+</ul>
+<p><strong>V9 — Vehicles, equipment &amp; machinery.</strong></p>
+<ul>
+<li><em>What:</em> asset-backed <strong>leasing</strong> — fleets, aircraft/marine fractional, equipment finance; yield from
+lease income. <em>Why:</em> tangible collateral + recurring lease yield. <em>Model:</em> equipment-finance /
+fractional-jet platforms. <em>Reuse:</em> security profile + attestation + corporate actions (lease
+distributions). <em>Gate:</em> Reg D, servicer/lessor partner ⚖. <em>Ramp:</em> <strong>B→C.</strong></li>
+</ul>
+<p><strong>Frontier bin (noted, not in the 15):</strong> fund-LP secondaries, sports/creator income-share, muni /
+SME / consumer debt, insurance / parametric risk pools — revisit once the platform + first verticals prove out.</p>
+<hr>
+<h2 id="4-prioritization-sequencing">4. Prioritization &amp; sequencing</h2>
+<p>Scored by <strong>reuse-ease</strong> (how much of the engine is already there), <strong>market</strong> (size/underserved),
+<strong>compliance gate</strong> (A cheap → C expensive), and <strong>MVP-adjacency</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Wave</th>
+<th>Items</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>0 — MVP</strong></td>
+<td>Collectibles (LIVE)</td>
+<td>Ship as-is. No change.</td>
+</tr>
+<tr>
+<td><strong>1 — Engine</strong></td>
+<td><strong>P1</strong> issuance console · <strong>P2</strong> compliance-as-a-service · <strong>P3</strong> mgmt tools</td>
+<td>Highest leverage: turns every later vertical into &quot;onboard a profile.&quot; Mostly Phase-A software on existing primitives.</td>
+</tr>
+<tr>
+<td><strong>2 — MVP-adjacent</strong></td>
+<td><strong>V8</strong> luxury/alt collectibles</td>
+<td>Same HTS rail, tier-only; fastest new revenue after the MVP.</td>
+</tr>
+<tr>
+<td><strong>3 — Real assets</strong></td>
+<td><strong>V1</strong> land · <strong>V2</strong> farmland · <strong>V3</strong> commodities · <strong>V4</strong> carbon</td>
+<td>Security profile + attestation/proof-of-reserve; issuer/custodian partners (B).</td>
+</tr>
+<tr>
+<td><strong>4 — Capital formation</strong></td>
+<td><strong>V5</strong> SMB · <strong>P5</strong> corporate financing · <strong>P4</strong> employee equity</td>
+<td>The primary-raise cluster; leverages escrow issuance + the Equity Incentive Plan.</td>
+</tr>
+<tr>
+<td><strong>5 — Income streams</strong></td>
+<td><strong>V6</strong> royalties · <strong>V7</strong> receivables</td>
+<td>Pure fit for the corporate-actions engine (recurring pro-rata).</td>
+</tr>
+<tr>
+<td><strong>Cross-cutting</strong></td>
+<td><strong>P6</strong> secondary/ATS</td>
+<td>Pursue in parallel once volume justifies the BD/ATS partner — it unlocks liquidity for <strong>all</strong> verticals.</td>
+</tr>
+</tbody></table>
+<h2 id="5-compliance-ramp-abc-mapping">5. Compliance ramp (A→B→C) mapping</h2>
+<ul>
+<li><strong>A — non-custodial software:</strong> the platform layer (P1–P3), whole-item collectibles (V8), and every
+vertical&#39;s <em>software</em> (issuance/compliance/mgmt) with no customer-fund custody.</li>
+<li><strong>B — partnered:</strong> issuer / custodian / transfer-agent / funding-portal + FinCEN MSB — unlocks the
+security verticals (V1–V7, V9), capital formation (P5), employee equity (P4).</li>
+<li><strong>C — licensed:</strong> broker-dealer / <strong>ATS</strong> / transfer-agent registration — unlocks secondary
+liquidity (P6) and self-operated primary/secondary securities markets.</li>
+</ul>
+<p>Consistent with <code>docs/business/CORPORATE-STRUCTURE.md</code>. The rule holds throughout: <strong>distribute and
+operate the rails; partner the regulated issuer/venue — don&#39;t become the issuer of record</strong> until
+scale justifies it.</p>
+<h2 id="6-keep-it-simple-first-the-one-engineering-step-that-unlocks-the-rest">6. Keep it simple first — the one engineering step that unlocks the rest</h2>
+<p>None of this displaces the collectibles MVP. When you&#39;re ready to build beyond it, the single
+highest-leverage move is <strong>not</strong> a vertical — it&#39;s:</p>
+<blockquote>
+<p><strong>Generalize <code>AssetKind</code> into a data-driven asset-type registry + a compliance-profile registry, and
+build the P1 issuance console on top.</strong></p>
+</blockquote>
+<p>After that step, each of V1–V9 is a <strong>profile + metadata + (optional) issuer seam + a config flag</strong> —
+days, not projects — exactly the pattern already used for <code>equity</code>/<code>treasury</code>
+(<code>*_ENABLED</code> + <code>*_PROVIDER</code> + prod-fatal). That is how &quot;one-size-fits-all for the entire industry&quot;
+becomes real without building fifteen separate products.</p>
+<hr>
+<p><em>Roadmap home: Phase 29 (<code>docs/GOEMON-PLAN.md</code>) — Tokenization Platform, the umbrella over the
+Phase-28 RWA menu. This document is the detailed design; the phase entry is the pointer.</em></p>
+
+  </main>
+</div>
+</body></html>
